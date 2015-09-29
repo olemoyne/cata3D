@@ -1,7 +1,6 @@
 package model.math;
 
-import tarpeia.com.model.TarpeiaField;
-import tarpeia.com.model.TarpeiaObject;
+import java.io.Serializable;
 
 
 /**
@@ -11,8 +10,12 @@ import tarpeia.com.model.TarpeiaObject;
  * @author olemoyne
  *
  */
-@TarpeiaObject
-public class Vecteur {
+public class Vecteur implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 237903479162147361L;
 	
 	public static final Decimal METER = new Decimal("10000");
 	public static final double LMETER = 10000d;
@@ -20,11 +23,8 @@ public class Vecteur {
 	
 	
 	/** Coordonnées en microns - int - 4km **/
-	@TarpeiaField
 	private long x;
-	@TarpeiaField
 	private long y;
-	@TarpeiaField
 	private long z;
 
 	public long getX() { return x;}
@@ -67,7 +67,7 @@ public class Vecteur {
 
 	public Vecteur(String str) {
 		String[] strs = str.split(";");
-		if (strs.length < 3) throw new NullPointerException("Vecteur illisible "+str);
+		if (strs.length < 3) throw new NumberFormatException("Vecteur illisible "+str);
 		x = new Decimal(strs[0]).multiply(METER).longValue();
 		y  = new Decimal(strs[1]).multiply(METER).longValue();
 		z = new Decimal(strs[2]).multiply(METER).longValue();
