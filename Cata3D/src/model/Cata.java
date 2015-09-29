@@ -1,12 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
 import model.math.Vecteur;
-import tarpeia.com.model.TarpeiaField;
-import tarpeia.com.model.TarpeiaObject;
 
 
 /**
@@ -27,19 +26,18 @@ import tarpeia.com.model.TarpeiaObject;
  * @author olemoyne
  *
  */
-@TarpeiaObject
-public class Cata {
-   // Définition des 16 points 
-	@TarpeiaField
-	public ArrayList<Vecteur> points;
+public class Cata implements Serializable{
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5490545959071227392L;
 
-	@TarpeiaField
-	public Decimal rooFDistance;
+	// Définition des xx points 
+	public int x, y;
+	public ArrayList<Vecteur> points;
 	
 	/** Précision de calcul et d'affichage **/
-	@TarpeiaField
 	public Decimal precisionDeCalcul;
-	@TarpeiaField
 	public Decimal precisionDAffichage;
 	
 	/** Modèles matematiques d'affichage et de calcul **/
@@ -47,22 +45,21 @@ public class Cata {
 	private MapDeVecteurs mapCalcul;
 
 	/** Flottaison **/
-	@TarpeiaField
 	public Flottaison mer;
 	
 	/** Poids **/
-	@TarpeiaField
 	public ArrayList<Poids> poids;
 	
 	/** Gabarits **/
-	@TarpeiaField
 	public ArrayList<Gabarit> gabarit;
 	
 	/** Poutres **/
-	@TarpeiaField
 	public ArrayList<Poutre> poutres;
 	
 	public Cata () {
 		
 	}
+	
+	
+	
 }

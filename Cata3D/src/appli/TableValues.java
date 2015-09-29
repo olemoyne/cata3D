@@ -16,11 +16,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import math.Composant;
-import math.Dessin;
-import math.InvalidGeomAction;
-
-public class TableFormes extends JPanel implements ActionListener, ListSelectionListener{
+/***
+ * Permet d'éditer les éléments de conception de la coque
+ * 
+ * @author olemoyne
+ *
+ */
+public class TableValues extends JPanel implements ActionListener, ListSelectionListener{
 	
 	/**
 	 * 
@@ -29,10 +31,10 @@ public class TableFormes extends JPanel implements ActionListener, ListSelection
 	
 	private FormesTableModel model;
 	private JTable table;
-
-	private JButton supprime, recopie;
 	
-	public TableFormes () {
+	private JButton ajoute, supprime;
+	
+	public TableValues () {
 		super();
 		
 		Color buttonColor = this.getBackground();
@@ -54,73 +56,30 @@ public class TableFormes extends JPanel implements ActionListener, ListSelection
 		JPanel sub = new JPanel();
 		sub.setLayout(new FlowLayout(FlowLayout.LEADING));
 
-		// Ajoute les boutons de gestion 
-		JButton label = new JButton("Ajoute");
-		label.setForeground(Color.black);
-		label.setBackground(buttonColor);
-		label.setToolTipText("Ajoute une forme dans le dessin");
-		label.setActionCommand("ajoute");
-		label.addActionListener(this);		
-		sub.add(label);
+// Ajoute les boutons de gestion 
+		ajoute = new JButton("Ajoute");
+		ajoute.setForeground(Color.black);
+		ajoute.setBackground(buttonColor);
+		ajoute.setToolTipText("Ajoute un élément dans le tableau");
+		ajoute.setActionCommand("ajoute");
+		ajoute.addActionListener(this);		
+		sub.add(ajoute);
 
 		// Ajoute les boutons de gestion 
-		label = new JButton("Supprime");
-		label.setForeground(Color.black);
-		label.setBackground(buttonColor);
-		label.setToolTipText("Supprime une forme dans le dessin");
-		label.setActionCommand("supprime");
-		label.setEnabled(false);
-		label.addActionListener(this);		
-		sub.add(label);
-		supprime = label;
+		supprime = new JButton("Supprime");
+		supprime.setForeground(Color.black);
+		supprime.setBackground(buttonColor);
+		supprime.setToolTipText("Supprime un élément dans le tableau");
+		supprime.setActionCommand("supprime");
+		supprime.addActionListener(this);		
+		sub.add(supprime);
 
-
-		// Ajoute les boutons de gestion 
-		label = new JButton("Recopie");
-		label.setToolTipText("Recopie la forme");
-		label.setActionCommand("copie");
-		label.setEnabled(false);
-		label.addActionListener(this);		
-		sub.add(label);
-		recopie = label;
-
-/**
- 
- 		// Ajoute les boutons de gestion 
-		label = new JButton("Affiche");
-		label.setToolTipText("Affiche ou masque la forme");
-		label.setActionCommand("affiche");
-		label.addActionListener(this);		
-		sub.add(label);
-
- 		// Ajoute les boutons de gestion 
-		label = new JButton("Refresh");
-		label.setForeground(Color.black);
-		label.setBackground(buttonColor);
-		label.setToolTipText("Mise à jour du dessin");
-		label.setActionCommand("refresh");
-		label.addActionListener(this);		
-		sub.add(label);
-
-		// Ajoute les boutons de gestion 
-		label = new JButton("Exporte");
-		label.setToolTipText("Exporte la forme");
-		label.setActionCommand("export");
-		label.addActionListener(this);		
-		sub.add(label);
-**/
-		this.add(sub, BorderLayout.SOUTH);
-	}
-
-	public void setDessin(Dessin dessin) {
-		model.dessin = dessin;
-		this.repaint();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
 
-		/** Ajoute une ligne dans le tableau **/
+		/** Ajoute une ligne dans le tableau **
 		if (action.getActionCommand().equals("ajoute")) {
 			try {
 				Composant cmp = new Composant ("TRIANGLE:Test:987987:[(0;0;0),(1;1;0),(1;1;1)]");
@@ -131,7 +90,7 @@ public class TableFormes extends JPanel implements ActionListener, ListSelection
 			}
 		}
 
-		/** recopie une ligne du tableau **/
+		** recopie une ligne du tableau **
 		if (action.getActionCommand().equals("copie")) {
 			try {
 				int pos = table.getSelectedRow();
@@ -144,12 +103,14 @@ public class TableFormes extends JPanel implements ActionListener, ListSelection
 			}
 		}
 
-		/** supprime une ligne du tableau **/
+		** supprime une ligne du tableau **
 		if (action.getActionCommand().equals("supprime")) {
 			int pos = table.getSelectedRow();
 			model.dessin.removeForme(pos);
 			model.fireTableDataChanged();
 		}
+
+		**/
 
 	}
 
@@ -159,13 +120,11 @@ public class TableFormes extends JPanel implements ActionListener, ListSelection
         if (lsm.isSelectionEmpty()) {
             /** disable des buttons **/
         	supprime.setEnabled(false);
-        	recopie.setEnabled(false);
         }
         else{
         	table.setEditingRow(lsm.getMaxSelectionIndex());
             /** enable des buttons **/
         	supprime.setEnabled(true);
-        	recopie.setEnabled(true);
         }
 	}
 
