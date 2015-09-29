@@ -4,11 +4,8 @@ import java.awt.Color;
 
 import javax.swing.table.AbstractTableModel;
 
-import math.Composant;
-import math.Dessin;
-import math.InvalidGeomAction;
-import math.Triangle;
-import math.Vecteur;
+import appli.values.CataValuesProperties;
+import model.math.Vecteur;
 
 public class FormesTableModel extends AbstractTableModel {
 
@@ -17,9 +14,9 @@ public class FormesTableModel extends AbstractTableModel {
 	 */
 	private static final long serialVersionUID = 1421834489650905810L;
 
-	public Dessin dessin;
+	private final String[] entetes = { "Nom", "Valeur" };	
 	
-	private final String[] entetes = { "Nom", "Type", "Couleur", "Point 1", "Point 2", "Point 3" };	
+	private CataValuesProperties dataProvider;
 	
 	@Override
 	public int getColumnCount() {
@@ -44,7 +41,7 @@ public class FormesTableModel extends AbstractTableModel {
 	
 	@Override
 	public Object getValueAt(int row, int col) {
-		Composant comp = dessin.getFormes().get(row);
+/**		Composant comp = dessin.getFormes().get(row);
 
 		if (comp == null) return null;
 
@@ -60,12 +57,13 @@ public class FormesTableModel extends AbstractTableModel {
 			default:
 				throw new IllegalArgumentException();
 		}
+**/
 	}
 
 	@Override
 	public int getRowCount() {
-		if (dessin == null) return 1;
-		return dessin.getFormes().size();
+/**		if (dessin == null) return 1;
+		return dessin.getFormes().size();  **/
 	}
 
 	public Composant getElementAt(int pos) {

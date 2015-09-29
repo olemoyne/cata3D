@@ -76,7 +76,7 @@ public class Viewer extends JFrame implements WindowListener {
 
         //Create and set up the window.
 		setTitle(title);
-		this.setIconImage(new ImageIcon("./data/conf/appli.png").getImage());
+		this.setIconImage(new ImageIcon("./imgs/poolboat.png").getImage());
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension dim = getToolkit().getScreenSize();
@@ -98,13 +98,13 @@ public class Viewer extends JFrame implements WindowListener {
 		/**
 		 * Creation du manager de formes
 		 */
-		DessinViewUpdate upd = new DessinViewUpdate("0.25");
+		CataViewUpdate upd = new CataViewUpdate("0.25");
 		viewPanel = new View3D(upd);
 		
 		arbre = new ArbreDesign(viewPanel);
 
 //		fond.add(menuFormes, BorderLayout.NORTH);
-		fond.add(arbre, BorderLayout.EAST);
+		fond.add(arbre, BorderLayout.WEST);
 		
 		fond.add(viewPanel, BorderLayout.CENTER);
 		setContentPane(fond);
