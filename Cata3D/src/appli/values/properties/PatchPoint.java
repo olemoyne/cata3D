@@ -1,5 +1,6 @@
 package appli.values.properties;
 
+import model.Cata;
 import model.math.Vecteur;
 import appli.values.CataValuesException;
 import appli.values.CataValuesProperty;
@@ -8,32 +9,28 @@ public class PatchPoint extends CataValuesProperty {
 	int posX = 0;
 	int posY = 0;
 	
-	public PatchPoint (int x, int y, Vecteur val) {
-		posX = x;
-		posY = y;
+	public PatchPoint (int x, int y) {
+		super("");
 		
-		value = val;
-	}
-	
-	@Override
-	public String getPropertyName() {
 		StringBuilder sb = new StringBuilder("Point ");
 		sb.append(posX);
 		sb.append(", ");
 		sb.append(posX);
 		
-		return sb.toString();
+		super.setName(sb.toString());
+
+		posX = x;
+		posY = y;
 	}
 
-	@Override
-	public String getPropertyValue() {
-		return ((Vecteur)value).toString();
+	public String getPropertyValue(Cata data) {
+		Vecteur v = data.patch.points[posX][posY];
+		return v.toString();
 	}
-
-	@Override
-	public Object validateProperty(String val) throws CataValuesException{
+	
+	public String setProperty (Cata data, String val) throws CataValuesException {
 		try {
-			value = new Vecteur(val);
+			Vecteur value = new Vecteur(val);
 			return value.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);

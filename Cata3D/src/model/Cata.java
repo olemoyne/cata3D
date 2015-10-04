@@ -3,9 +3,8 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import model.math.Decimal;
 import model.math.MapDeVecteurs;
-import model.math.Vecteur;
+import model.patch.Patch;
 
 
 /**
@@ -32,13 +31,11 @@ public class Cata implements Serializable{
 	 */
 	private static final long serialVersionUID = -5490545959071227392L;
 
-	// Définition des xx points 
-	public int x, y;
-	public ArrayList<Vecteur> points;
+	public Patch patch;
 	
 	/** Précision de calcul et d'affichage **/
-	public Decimal precisionDeCalcul;
-	public Decimal precisionDAffichage;
+	public int precisionDeCalcul;
+	public int precisionDAffichage;
 	
 	/** Modèles matematiques d'affichage et de calcul **/
 	private MapDeVecteurs mapAffichage;
@@ -51,15 +48,46 @@ public class Cata implements Serializable{
 	public ArrayList<Poids> poids;
 	
 	/** Gabarits **/
-	public ArrayList<Gabarit> gabarit;
+	public ArrayList<Gabarit> gabarits;
 	
 	/** Poutres **/
 	public ArrayList<Poutre> poutres;
 	
+	/** Données calculées **/
+	public Poids poussee;
+	public Poids gravite;
+	
+	/**
+	 * Constructeur --> intialisation des listes
+	 */
 	public Cata () {
+		patch = new Patch();
+		precisionDeCalcul = 20;
+		precisionDAffichage = 10;
+		mapAffichage = patch.getMap(precisionDAffichage);
+		mapCalcul = patch.getMap(precisionDeCalcul);
 		
+		mer = new Flottaison();
+		
+		gabarits = new ArrayList<Gabarit> ();
+		poutres = new ArrayList<Poutre> ();
+	
 	}
 	
+
+	/**
+	 * Si les donneés de patch sont modifiées 
+	 * 
+	 * @param y 
+	 * @param x 
+	 */
+	public void recalculePatch(int x, int y) {
+		
+		patch.recalcule(x, y);
+		mapAffichage = patch.getMap(precisionDAffichage);
+		mapCalcul = patch.getMap(precisionDeCalcul);
+		
+	}
 	
 	
 }

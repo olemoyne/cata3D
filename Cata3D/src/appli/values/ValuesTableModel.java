@@ -1,0 +1,109 @@
+package appli.values;
+
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
+
+
+/**
+ * Le value table model est automatiquement géré sous la forme de :
+ *    Nom --> Statique (String)
+ *    Valeur --> Editable (avec validation)
+ *     
+ * @author olemoyne
+ *
+ */
+public class ValuesTableModel extends AbstractTableModel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1421834489650905810L;
+
+	private final String[] entetes = { "Nom", "Valeur" };	
+	
+	private CataDataManager dataProvider;
+
+	private String nodeName;
+	
+	public ValuesTableModel (CataDataManager cdm) {
+		dataProvider = cdm;
+		nodeName = "Patch";
+	}
+	
+	@Override
+	public int getColumnCount() {
+		return entetes.length;
+	}
+
+	@Override
+	public String getColumnName(int columnIndex) {
+		return entetes[columnIndex];
+	}
+		
+	@Override
+	public Object getValueAt(int row, int col) {
+		
+		try {
+			if (col ==0 )return this.dataProvider.getPropertyName(nodeName, row);
+			if (col ==1 ) return this.dataProvider.getPropertyValue(nodeName, row);	
+			return "Wrong structure";
+		} catch (CataValuesException e) {
+			e.printStackTrace();
+			return e.getLocalizedMessage();
+		}
+	}
+
+	@Override
+	public int getRowCount() {
+		try {
+			return dataProvider.getPropertiesCount(this.nodeName);
+		} catch (CataValuesException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public Class<?> getColumnClass(int col) {
+		switch (col) {
+		case 0: return String.class;
+		case 1: return String.class;
+		default:
+			throw new IllegalArgumentException();
+		}
+	}
+
+	
+    /*
+     * Détermine si la cellule peut être éditée.
+     */
+    public boolean isCellEditable(int row, int col) {
+        if (col == 1) return true;
+        return false;
+    }
+
+    
+    /**
+     * En cas de modification de la cellule
+     */
+    public void setValueAt(Object value, int row, int col) {    	
+    	try {
+			dataProvider.setPropertyValue(this.nodeName, row, value);
+
+			fireTableCellUpdated(row, col);
+		} catch (CataValuesException e) {
+			e.printStackTrace();
+		}
+    }
+
+    /**
+     * Premet de positionner les données d'un noeud
+     * En mettant à jour les donneés du tableau
+     * 
+     * @param name
+     */
+	public void setNodeName(String name) {
+		nodeName = name;
+		fireTableChanged(new TableModelEvent (this));
+	}
+}

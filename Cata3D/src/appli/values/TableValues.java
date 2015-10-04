@@ -1,4 +1,4 @@
-package appli;
+package appli.values;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,17 +29,19 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 	 */
 	private static final long serialVersionUID = -2179527244572915851L;
 	
-	private FormesTableModel model;
+	private ValuesTableModel model;
 	private JTable table;
 	
 	private JButton ajoute, supprime;
 	
-	public TableValues () {
+	private CataDataManager dataManager;
+	
+	public TableValues (CataDataManager cdm) {
 		super();
 		
 		Color buttonColor = this.getBackground();
 
-		model = new FormesTableModel ();
+		model = new ValuesTableModel (cdm);
 		table = new JTable(model);
 		table.setAutoscrolls(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -74,6 +76,23 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		supprime.addActionListener(this);		
 		sub.add(supprime);
 
+	}
+	
+	/** 
+	 * Affiche les données d'un noeuds
+	 * 
+	 */
+	public void showNode (String nodeName) throws CataValuesException{
+		// Modifie l'affichage des boutons
+		if (dataManager.areButtonsNeeded(nodeName)) {
+			supprime.setEnabled(true);
+			ajoute.setEnabled(true);
+		} else {
+			supprime.setEnabled(false);
+			ajoute.setEnabled(false);
+		}
+		// Modifie les données de la table
+		model.setNodeName (nodeName);
 	}
 
 	@Override

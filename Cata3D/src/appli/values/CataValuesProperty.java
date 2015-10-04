@@ -1,11 +1,29 @@
 package appli.values;
 
-public abstract class CataValuesProperty {
+import model.Cata;
+
+public class CataValuesProperty {
+
+	private String name;
 	
-	public Object value;
+	public CataValuesProperty (String str) {
+		name = str;
+	}
 	
-	public abstract String getPropertyName();
-	public abstract String getPropertyValue();
+	public String getPropertyName() {
+		return name;
+	}
 	
-	public abstract Object validateProperty(String value) throws CataValuesException;
+	public String getPropertyValue(Cata data) {
+		return "Not defined";
+	}
+	
+	public String setProperty (Cata data, String val) throws CataValuesException {
+		return "Empty";
+	}
+
+	public void setName(String string) {
+		name = string;
+	}
+	
 }

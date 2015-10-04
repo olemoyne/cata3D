@@ -1,4 +1,4 @@
-package appli;
+package appli.values;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;

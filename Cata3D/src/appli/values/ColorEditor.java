@@ -1,4 +1,4 @@
-package appli;
+package appli.values;
 
 import java.awt.Color;
 import java.awt.Component;

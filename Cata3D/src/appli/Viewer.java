@@ -1,15 +1,12 @@
 package appli;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import view.View3D;
@@ -39,17 +36,6 @@ public class Viewer extends JFrame implements WindowListener {
 	 * Titre de la fenetre
 	 */
 	private String title;
-	
-	/**
-	 * Menu de définition de la coque
-	 */
-	private ArbreDesign arbre;
-	
-	/**
-	 *  Affichage d'un message d'erreur
-	 */
-	private JLabel message;
-	
 	
 	/**
 	 * @param name
@@ -87,27 +73,10 @@ public class Viewer extends JFrame implements WindowListener {
         JPanel fond = new JPanel();
         fond.setLayout(new BorderLayout());
         
+		new Controleur(fond);
         
-        JPanel bas = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		  // Message d'erreur
-		message = new JLabel();
-		message.setForeground(Color.red);
-		bas.add(message);
-		fond.add(bas, BorderLayout.SOUTH);
-
-		/**
-		 * Creation du manager de formes
-		 */
-		CataViewUpdate upd = new CataViewUpdate("0.25");
-		viewPanel = new View3D(upd);
-		
-		arbre = new ArbreDesign(viewPanel);
-
-//		fond.add(menuFormes, BorderLayout.NORTH);
-		fond.add(arbre, BorderLayout.WEST);
-		
-		fond.add(viewPanel, BorderLayout.CENTER);
 		setContentPane(fond);
+		
 		
 		//Display the window.
 		setVisible(true);
@@ -167,15 +136,4 @@ public class Viewer extends JFrame implements WindowListener {
 			}
 		});
 	}
-
-
-	/**
-	 * Affiche un message d'erreur sur la console
-	 * 
-	 * @param msg
-	 */
-	public void printMessage(String msg) {
-		this.message.setText(msg);
-	}
-
 }

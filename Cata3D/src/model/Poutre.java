@@ -18,5 +18,7 @@ public class Poutre {
 
 	@TarpeiaField
 	public Vecteur arrivee; 
+	
+	public Vecteur taille;
 
 }

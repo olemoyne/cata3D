@@ -309,4 +309,21 @@ public class Vecteur implements Serializable{
 		System.out.println("Surface = "+dec);
 	}
 	
+	
+	public Vecteur set(int axis, long pos) {
+		
+		if (axis == Axis.XAxis) return new Vecteur (pos, y, z);
+		if (axis == Axis.YAxis) return new Vecteur (x, pos, z);
+		if (axis == Axis.ZAxis) return new Vecteur (x, y, pos);
+		return null;
+	}
+	
+	
+	public long get(int axis) {
+		if (axis == Axis.XAxis) return x;
+		if (axis == Axis.YAxis) return y;
+		if (axis == Axis.ZAxis) return z;
+		return -1;
+	}
+	
 }

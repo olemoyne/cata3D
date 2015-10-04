@@ -1,33 +1,27 @@
 package appli.values.properties;
 
+import model.Cata;
 import appli.values.CataValuesException;
 import appli.values.CataValuesProperty;
 
 public class VerticalPatchSize extends CataValuesProperty {
 
-	public VerticalPatchSize (int val) {
-		value = new Integer(val);
+	public VerticalPatchSize () {
+		super("Nombre de points verticaux");
 	}
 	
 
-	@Override
-	public String getPropertyName() {
-		return "Nombre de points verticaux";
+	public String getPropertyValue(Cata data) {
+		return Integer.toString(data.patch.y);
 	}
-
-	@Override
-	public String getPropertyValue() {
-		return ((Integer)value).toString();
-	}
-
-	@Override
-	public Object validateProperty(String val) throws CataValuesException{
+	
+	public String setProperty (Cata data, String val) throws CataValuesException {
 		try {
 			int v = Integer.parseInt(val);
 			if (v-1%3 != 0) 
 				throw new CataValuesException("Le nombre de points doit être compatible avec le patch");
-			value = new Integer(v);
-			return value.toString();
+			data.recalculePatch(data.patch.x, v);
+			return Integer.toString(v);
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);
 		}
