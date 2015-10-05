@@ -37,6 +37,10 @@ public class Viewer extends JFrame implements WindowListener {
 	 */
 	private String title;
 	
+	private Controleur ctrl;
+	
+	private Logger log;
+	
 	/**
 	 * @param name
 	 * @param title
@@ -44,6 +48,8 @@ public class Viewer extends JFrame implements WindowListener {
 	 */
 	public Viewer(String name, String t, String c) {
 		super();
+		log = new Logger();
+		log.writeLog("Starting");
 		title = t;
 	}	
 	
@@ -58,25 +64,29 @@ public class Viewer extends JFrame implements WindowListener {
         //decorate all windows.  This must be invoked before
         //creating the JFrame.  Native look and feels will
         //ignore this hint.
+		log.writeLog("Decorating");
         JFrame.setDefaultLookAndFeelDecorated(false);
 
         //Create and set up the window.
 		setTitle(title);
 		this.setIconImage(new ImageIcon("./imgs/poolboat.png").getImage());
 
+		log.writeLog("Sizing");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension dim = getToolkit().getScreenSize();
 		setBounds(0, 0, dim.width, dim.height-30);
      
         addWindowListener(this);
         
+		log.writeLog("Building panels");
         JPanel fond = new JPanel();
         fond.setLayout(new BorderLayout());
         
-		new Controleur(fond);
+		ctrl = new Controleur(fond, log);
         
 		setContentPane(fond);
 		
+		log.writeLog("Show GUI");
 		
 		//Display the window.
 		setVisible(true);
@@ -100,6 +110,7 @@ public class Viewer extends JFrame implements WindowListener {
 	 * @see java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
 	 */
 	public void windowClosing(WindowEvent arg0) {
+		ctrl.saveContext();
 	}
 	/* (non-Javadoc)
 	 * @see java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent)

@@ -1,8 +1,8 @@
 package model;
 
+import java.io.Serializable;
+
 import model.math.Vecteur;
-import tarpeia.com.model.TarpeiaField;
-import tarpeia.com.model.TarpeiaObject;
 
 /**
  * Poutre de soustient entre les gabarits
@@ -10,13 +10,15 @@ import tarpeia.com.model.TarpeiaObject;
  * @author olemoyne
  *
  */
-@TarpeiaObject
-public class Poutre {
+public class Poutre implements Serializable{
 
-	@TarpeiaField
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1538624996389463009L;
+
 	public Vecteur depart; 
 
-	@TarpeiaField
 	public Vecteur arrivee; 
 	
 	public Vecteur taille;

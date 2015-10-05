@@ -248,9 +248,9 @@ public class Vecteur implements Serializable{
 	public String toString() {
 		StringBuilder sb = new StringBuilder("("); 
 		sb.append(new Decimal(x).divide(METER)); 
-		sb.append(","); 
+		sb.append(";"); 
 		sb.append(new Decimal(y).divide(METER)); 
-		sb.append(","); 
+		sb.append(";"); 
 		sb.append(new Decimal(z).divide(METER)); 
 		sb.append(")");
 		return sb.toString();

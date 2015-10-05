@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import model.Cata;
+import model.patch.Patch;
 
 /** 
  * Permet d'afficher le nom du fichier en cours d'adition
@@ -52,7 +53,7 @@ public class CataFileManager extends JPanel {
 		ajoute.setBackground(buttonColor);
 		ajoute.setToolTipText("Ouvre un fichier de catamaran");
 		ajoute.setActionCommand("Ouvre");
-		ajoute.addActionListener(mngr);		
+		if (mngr != null) ajoute.addActionListener(mngr);		
 		this.add(ajoute);
 
 		// Ajoute les boutons de gestion 
@@ -61,11 +62,21 @@ public class CataFileManager extends JPanel {
 		supprime.setBackground(buttonColor);
 		supprime.setToolTipText("Sauvegarde le fichier en cours");
 		supprime.setActionCommand("Sauve");
-		supprime.addActionListener(mngr);		
+		if (mngr != null) supprime.addActionListener(mngr);		
 		this.add(supprime);
 
 	}
 
+	
+	public void setFile(String str) {
+		this.editeur.setText(str);
+	}
+	
+	public String getFile() {
+		return this.editeur.getText();
+	}
+
+	
 	/**
 	 * Extrait le Catamaran du fichier 
 	 * 
@@ -83,6 +94,7 @@ public class CataFileManager extends JPanel {
 		    ObjectInputStream ois = new ObjectInputStream(fis);
 		    
 		    Cata bato = (Cata)ois.readObject();
+		    bato.recalculePatch(bato.patch.x, bato.patch.y);
 		    ois.close();
 		    
 		    return bato;
@@ -114,4 +126,45 @@ public class CataFileManager extends JPanel {
 		}	
 	}
 	
+	
+	
+	/*** 
+	 * Test purpose  
+	 * **/
+	public static void main(String [ ] args) {
+		// sauvegarde d'un bateau
+		Cata boat = new Cata();
+		// Construit un patch de test
+		boat.patch = Patch.getPatch();
+		//Sauvegarde du bateau
+		CataFileManager mngr = new CataFileManager (null); 
+		mngr.editeur.setText("D:/dev/GIT/cata3D/Cata3D/data/testFile.boat");
+		try {
+			mngr.saveCataToFile(boat);
+			// lecture du bateau
+			Cata nBoat = mngr.getCataFromFile();
+			if (nBoat.patch == null) {
+				System.err.println("Sauvegarde KO : patch null");
+				System.exit(12);
+			}
+			if (nBoat.patch.x != 4) {
+				System.err.println("Sauvegarde KO : patch de mauvaise taille");
+				System.exit(12);
+			}
+			if (nBoat.patch.y != 4) {
+				System.err.println("Sauvegarde KO : patch de mauvaise taille");
+				System.exit(12);
+			}
+			if (nBoat.patch.points.length != 4) {
+				System.err.println("Sauvegarde KO : patch de mauvaise taille");
+				System.exit(12);
+			}
+			System.err.println("Test OK - Sauvegarde réussie");
+			System.out.println(nBoat.toString());
+		} catch (CataAppliException e) {
+			e.printStackTrace();
+			System.exit(12);
+		}
+	}
+
 }

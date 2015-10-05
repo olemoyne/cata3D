@@ -1,9 +1,9 @@
 package model;
 
+import java.io.Serializable;
+
 import model.math.Decimal;
 import model.math.Vecteur;
-import tarpeia.com.model.TarpeiaField;
-import tarpeia.com.model.TarpeiaObject;
 
 /** 
  * Poids appliqué à la coque
@@ -11,13 +11,15 @@ import tarpeia.com.model.TarpeiaObject;
  * @author olemoyne
  *
  */
-@TarpeiaObject
-public class Poids {
+public class Poids implements Serializable {
 
-	@TarpeiaField
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2766347239318331795L;
+
 	public Vecteur position;
 	
-	@TarpeiaField
 	public Decimal force; // Exprimée en KG
 	
 	public Poids () { 

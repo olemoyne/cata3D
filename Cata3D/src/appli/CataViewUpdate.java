@@ -1,21 +1,20 @@
 package appli;
 
-import model.Cata;
-
 import com.jogamp.opengl.GL2;
 
 import view.ViewUpdate;
+import view.scene.PrintableScene;
 
 public class CataViewUpdate extends ViewUpdate {
 
-	private Cata dessin;
+	private PrintableScene scene;
 	
 	public CataViewUpdate(String inc) {
 		super(inc);
 	}
 	
-	public void setCata (Cata dsn) {
-		dessin = dsn;
+	public void setScene (PrintableScene scn) {
+		scene = scn;
 	}
 	
 	/**
@@ -26,18 +25,10 @@ public class CataViewUpdate extends ViewUpdate {
     public void drawInside(GL2 gl) {
     	super.drawInside(gl);
 		
-    	if (dessin == null) return ;
+    	if (scene == null) return ;
     	
-    	drawCata(gl);
+    	scene.printScene(gl);
 	}
-
-
-    /** 
-     * Doit être mise à jour en fonction du type de dessin à faire avec le Cata
-     */
-	public void drawCata(GL2 gl) {
-	}
-
 
 
 }

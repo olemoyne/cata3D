@@ -1,5 +1,6 @@
 package model.math;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -14,8 +15,13 @@ import tarpeia.com.model.TarpeiaObject;
  *
  */
 @TarpeiaObject
-public class Decimal implements Comparable<Decimal>{
+public class Decimal implements Comparable<Decimal>, Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7883021320037952384L;
+
 	public static final Decimal ZERO = new Decimal("0");
 
 	public static final Decimal UN = new Decimal("1");

@@ -2,6 +2,7 @@ package appli.values;
 
 import java.util.ArrayList;
 
+import view.scene.PrintableScene;
 import model.Cata;
 
 public class CataValuesProvider {
@@ -43,4 +44,8 @@ public class CataValuesProvider {
 		return "Not founds";
 	}
 
+	
+	public PrintableScene getScene (Cata bateau ) {
+		return new PrintableScene();
+	}
 }

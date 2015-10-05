@@ -17,5 +17,9 @@ public class PrintableScene {
 			obj.drawObject(gl);
 		}
 	}
+
+	public void add(PrintableObject obj) {
+		allObjects.add(obj);
+	}
 	
 }

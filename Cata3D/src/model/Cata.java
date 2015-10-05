@@ -38,8 +38,8 @@ public class Cata implements Serializable{
 	public int precisionDAffichage;
 	
 	/** Modèles matematiques d'affichage et de calcul **/
-	private MapDeVecteurs mapAffichage;
-	private MapDeVecteurs mapCalcul;
+	public MapDeVecteurs mapAffichage;
+	public MapDeVecteurs mapCalcul;
 
 	/** Flottaison **/
 	public Flottaison mer;
@@ -68,7 +68,9 @@ public class Cata implements Serializable{
 		mapCalcul = patch.getMap(precisionDeCalcul);
 		
 		mer = new Flottaison();
-		
+
+		poids = new ArrayList<Poids> ();
+
 		gabarits = new ArrayList<Gabarit> ();
 		poutres = new ArrayList<Poutre> ();
 	
@@ -89,5 +91,17 @@ public class Cata implements Serializable{
 		
 	}
 	
+	
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Cata = ");
+        sb.append(patch.toString());
+        sb.append(" ");
+        if (mer != null) sb.append(mer.toString());
+        if (poids != null) for (Poids pds : poids) sb.append(pds.toString());
+        if (gabarits != null) for (Gabarit gab : gabarits) sb.append(gab.toString());
+        if (poutres != null) for (Poutre poutre : poutres) sb.append(poutre.toString());
+        return sb.toString();
+    }
+
 	
 }

@@ -1,12 +1,23 @@
 package model.math;
 
-public class MapDeVecteurs {
+import java.io.Serializable;
+
+public class MapDeVecteurs implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2991526300922823875L;
 
 	int xSize;
 	
 	int ySize;
 	
 	Vecteur[][] data;
+	
+	public MapDeVecteurs () {
+		
+	}
 		
 	public MapDeVecteurs (int x, int y) {
 		data = new Vecteur[x][y];

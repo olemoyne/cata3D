@@ -1,5 +1,6 @@
 package model.patch;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import model.math.MapDeVecteurs;
@@ -11,7 +12,12 @@ import model.math.Vecteur;
  * @author olemoyne
  *
  */
-public class Patch {
+public class Patch implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3819829819391630423L;
 
 	// Définition des xx points 
 	public int x, y;
@@ -36,6 +42,7 @@ public class Patch {
 	 * @return
 	 */
 	public MapDeVecteurs getMap(int nbPoints) {
+		if (x+y == 0) return new MapDeVecteurs(0, 0);
 		// Détermine compbien de sous éléments sont nécessaires
 		int nbX = (x-1)/3;
 		int nbY = (y-1)/3;
@@ -84,6 +91,8 @@ public class Patch {
 			}
 		}
 		
+		this.x= xVal;
+		this.y = yVal;
 		points=  refresh;
 	}
 	
@@ -139,4 +148,49 @@ public class Patch {
 		
 		return map;
 	}
+	
+	
+	public static Patch getPatch() {
+		Patch patch = new Patch();
+		patch.x = 4;
+		patch.y = 4;
+		patch.points = new Vecteur[4][4];
+		patch.points[0][0] = new Vecteur("0.12;0.2;0");
+		patch.points[0][1] = new Vecteur("0.2;0.1;0");
+		patch.points[0][2] = new Vecteur("0.16;-0.08;0");
+		patch.points[0][3] = new Vecteur("0.05;-0.15;0");
+		patch.points[1][0] = new Vecteur("0.16;0.2;0.75");
+		patch.points[1][1] = new Vecteur("0.28;0.12;0.75");
+		patch.points[1][2] = new Vecteur("0.2;-0.25;0.75");
+		patch.points[1][3] = new Vecteur("0.08;-0.32;0.75");
+		patch.points[2][0] = new Vecteur("0.05;0.15;3");
+		patch.points[2][1] = new Vecteur("0.2;0.08;3");
+		patch.points[2][2] = new Vecteur("0.16;-0.12;3");
+		patch.points[2][3] = new Vecteur("0.02;-0.4;3");
+		patch.points[3][0] = new Vecteur("0.004;0.1;5");
+		patch.points[3][1] = new Vecteur("0.01;0;5");
+		patch.points[3][2] = new Vecteur("0.01;-0.1;5");
+		patch.points[3][3] = new Vecteur("0.004;-0.22;5");
+		
+		return patch;
+	}
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Patch = ");
+        sb.append(x);
+        sb.append(" ");
+        sb.append(y);
+        sb.append(" : \n");
+
+		for (int ysm = 0 ; ysm < y; ysm++) {					
+			for (int xsm = 0 ; xsm < x; xsm ++) {
+				sb.append (points[xsm][ysm].toString());
+			}
+			sb.append("\n"); 
+		}
+
+        return sb.toString();
+    }
+
+	
 }

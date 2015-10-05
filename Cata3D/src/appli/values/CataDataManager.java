@@ -2,6 +2,7 @@ package appli.values;
 
 import java.util.Hashtable;
 
+import view.scene.PrintableScene;
 import appli.values.properties.PatchValuesProvider;
 import model.Cata;
 
@@ -97,6 +98,17 @@ public class CataDataManager {
 		if (prv == null) throw new CataValuesException("Node name not defined : "+nodeName);
 		
 		return prv.getPropertyName(row);
+	}
+
+	public PrintableScene getView(String nodeName) throws CataValuesException {
+		CataValuesProvider prv = providers.get(nodeName);
+		if (prv == null) throw new CataValuesException("Node name not defined : "+nodeName);
+		
+		return prv.getScene(data);
+	}
+
+	public void setData(Cata dessin) {
+		this.data = dessin;
 	}
 
 	

@@ -12,15 +12,15 @@ public class PatchPoint extends CataValuesProperty {
 	public PatchPoint (int x, int y) {
 		super("");
 		
+		posX = x;
+		posY = y;
+		
 		StringBuilder sb = new StringBuilder("Point ");
 		sb.append(posX);
 		sb.append(", ");
-		sb.append(posX);
+		sb.append(posY);
 		
 		super.setName(sb.toString());
-
-		posX = x;
-		posY = y;
 	}
 
 	public String getPropertyValue(Cata data) {

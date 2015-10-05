@@ -1,9 +1,9 @@
 package model;
 
+import java.io.Serializable;
+
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
-import tarpeia.com.model.TarpeiaField;
-import tarpeia.com.model.TarpeiaObject;
 
 /***************************
  *  Permet de définir le niveau de la mer par rapport à la coque
@@ -13,16 +13,17 @@ import tarpeia.com.model.TarpeiaObject;
  ***********************************************************/
 
 
-@TarpeiaObject
-public class Flottaison {
+public class Flottaison implements Serializable {
 
-	@TarpeiaField
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8873722559801931229L;
+
 	public Decimal pilonnement;
 	
-	@TarpeiaField
 	public Decimal tangage;
 	
-	@TarpeiaField
 	public Decimal gite;
 	
 	public Flottaison () {

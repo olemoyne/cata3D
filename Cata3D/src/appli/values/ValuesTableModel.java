@@ -3,6 +3,8 @@ package appli.values;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
+import appli.Message;
+
 
 /**
  * Le value table model est automatiquement géré sous la forme de :
@@ -25,9 +27,12 @@ public class ValuesTableModel extends AbstractTableModel {
 
 	private String nodeName;
 	
-	public ValuesTableModel (CataDataManager cdm) {
+	private Message log;
+	
+	public ValuesTableModel (CataDataManager cdm, Message l) {
 		dataProvider = cdm;
 		nodeName = "Patch";
+		log = l;
 	}
 	
 	@Override
@@ -49,6 +54,7 @@ public class ValuesTableModel extends AbstractTableModel {
 			return "Wrong structure";
 		} catch (CataValuesException e) {
 			e.printStackTrace();
+			log.logError(e.getLocalizedMessage());
 			return e.getLocalizedMessage();
 		}
 	}
@@ -58,6 +64,7 @@ public class ValuesTableModel extends AbstractTableModel {
 		try {
 			return dataProvider.getPropertiesCount(this.nodeName);
 		} catch (CataValuesException e) {
+			log.logError(e.getLocalizedMessage());
 			e.printStackTrace();
 			return 0;
 		}
@@ -92,6 +99,7 @@ public class ValuesTableModel extends AbstractTableModel {
 
 			fireTableCellUpdated(row, col);
 		} catch (CataValuesException e) {
+			log.logError(e.getLocalizedMessage());
 			e.printStackTrace();
 		}
     }

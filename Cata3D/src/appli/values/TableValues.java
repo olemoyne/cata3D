@@ -16,6 +16,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import appli.Message;
+
 /***
  * Permet d'éditer les éléments de conception de la coque
  * 
@@ -36,12 +38,13 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 	
 	private CataDataManager dataManager;
 	
-	public TableValues (CataDataManager cdm) {
+	public TableValues (CataDataManager cdm, Message log) {
 		super();
 		
 		Color buttonColor = this.getBackground();
+		dataManager = cdm;
 
-		model = new ValuesTableModel (cdm);
+		model = new ValuesTableModel (cdm, log);
 		table = new JTable(model);
 		table.setAutoscrolls(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

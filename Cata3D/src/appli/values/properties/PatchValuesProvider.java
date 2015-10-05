@@ -1,9 +1,15 @@
 package appli.values.properties;
 
+import java.awt.Color;
+
+import view.scene.PrintableScene;
+import view.scene.PrintedMap;
+import view.scene.PrintedPoint;
 import appli.values.CataValuesException;
 import appli.values.CataValuesProperty;
 import appli.values.CataValuesProvider;
 import model.Cata;
+import model.math.Vecteur;
 /**
  * Permet de gérer la mise à jour des données de patch
  * 
@@ -100,6 +106,23 @@ public class PatchValuesProvider extends CataValuesProvider {
 		return prop.getPropertyName();
 	}
 
-	
+	/** 
+	 * Permet d'afficher la scene correspondant à la vue définie
+	 * 
+	 */
+	public PrintableScene getScene ( Cata bateau) {
+		PrintableScene ret = super.getScene(bateau);
+
+		// Affiche les points en jaune
+		for (int y = 0; y < bateau.patch.y; y++) 
+			for (int x = 0; x < bateau.patch.x; x++) 
+				ret.add(new PrintedPoint(bateau.patch.points[x][y], Color.yellow));
+
+		// Affiche la coque en gris
+		ret.add(new PrintedMap (bateau.mapAffichage, false, Color.lightGray));
+					
+		return ret;
+	}
+
 
 }
