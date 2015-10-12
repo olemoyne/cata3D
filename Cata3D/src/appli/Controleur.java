@@ -12,6 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Cata;
 import view.View3D;
+import view.scene.PrintableScene;
 import appli.values.CataDataManager;
 import appli.values.CataValuesException;
 import appli.values.TableValues;
@@ -70,23 +71,25 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		/** Lecture du catamaran du dernier fichier **/
 		dessin = new Cata();
 		dataManager = new CataDataManager();
+		
+		log.writeLog("Drawing the value table");
+		values = new TableValues (dataManager, this, message);
+		
 		if ((ctx != null)&&(ctx.lastCataFile != null)) {
 			mngr.setFile (ctx.lastCataFile);
 			try {
 				dessin = mngr.getCataFromFile();
 				dataManager.setData(dessin);
+				
+				if (ctx.lastTreePath != null)
+					arbre.gotToPath(ctx.lastTreePath);
 			} catch (CataAppliException e) {
 				log.writeLog("Last boat file not found "+ctx.lastCataFile);
 			} 
 		}
-		
-
-		log.writeLog("Drawing the value table");
-		values = new TableValues (dataManager, message);
-		arbre.add(values, BorderLayout.SOUTH);
 	
-		
-		
+		arbre.add(values, BorderLayout.SOUTH);
+
 	}
 	
 	/**
@@ -113,6 +116,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 			if (node.isLeaf()) {
 				// Positionne la bonne view
 				upd.setScene(dataManager.getView(nodeName));
+				viewer.display();
 				// Positionne les bonnes valeurs
 				values.showNode(nodeName);
 			} else {
@@ -158,6 +162,23 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 	public void saveContext() {
 		Context ctx = new Context();
 		ctx.lastCataFile = mngr.getFile();
+		ctx.lastTreePath = arbre.getPath();
+		System.out.println("Actual path = "+ctx.lastTreePath);
 		Context.saveTofile(ctx);
+	}
+
+	public void updateView(PrintableScene view) {
+		this.upd.setScene(view);
+	}
+
+	public void showDessin(String nodeName) {
+		// Positionne la bonne view
+		try {
+			upd.setScene(dataManager.getView(nodeName));
+			viewer.display();
+		} catch (CataValuesException e) {
+			e.printStackTrace();
+			this.message.logError(e.getLocalizedMessage());
+		}
 	}
 }

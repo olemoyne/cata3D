@@ -15,8 +15,11 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
 
+import appli.Controleur;
 import appli.Message;
+import appli.values.updater.PropertyValueUpdater;
 
 /***
  * Permet d'éditer les éléments de conception de la coque
@@ -38,13 +41,25 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 	
 	private CataDataManager dataManager;
 	
-	public TableValues (CataDataManager cdm, Message log) {
+	private PropertyValueUpdater fields;
+	
+	private int selectedRow;
+	private boolean buttonsShown;
+	
+	private Controleur control;
+	
+	private Message msg;
+	
+	public TableValues (CataDataManager cdm, Controleur ctrl, Message log) {
 		super();
+		
 		
 		Color buttonColor = this.getBackground();
 		dataManager = cdm;
+		msg = log;
+		control = ctrl;
 
-		model = new ValuesTableModel (cdm, log);
+		model = new ValuesTableModel (cdm, log, ctrl);
 		table = new JTable(model);
 		table.setAutoscrolls(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -78,6 +93,11 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		supprime.setActionCommand("supprime");
 		supprime.addActionListener(this);		
 		sub.add(supprime);
+		
+		this.add(sub, BorderLayout.NORTH);
+		
+		fields = new PropertyValueUpdater(this);
+		this.add(fields, BorderLayout.SOUTH);
 
 	}
 	
@@ -90,50 +110,48 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		if (dataManager.areButtonsNeeded(nodeName)) {
 			supprime.setEnabled(true);
 			ajoute.setEnabled(true);
+			buttonsShown = true;
 		} else {
 			supprime.setEnabled(false);
 			ajoute.setEnabled(false);
+			buttonsShown = false;
 		}
 		// Modifie les données de la table
 		model.setNodeName (nodeName);
+		selectedRow = 0;
+    	/** Mise à jour des données dans l'éditeur **/
+		Object val = model.getValueAt(0, 1);
+		
+    	fields.setValue(val, model.isDataEditable(0, 1));
+    	repaint();
 	}
 
+	/***
+	 * Gestion des boutons d'ajout / suppression 
+	 * 
+	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
 
-		/** Ajoute une ligne dans le tableau **
+		/** Ajoute une ligne dans le tableau **/
 		if (action.getActionCommand().equals("ajoute")) {
-			try {
-				Composant cmp = new Composant ("TRIANGLE:Test:987987:[(0;0;0),(1;1;0),(1;1;1)]");
-				model.dessin.addForme(cmp);
-				model.fireTableDataChanged();
-			} catch (InvalidGeomAction e) {
-				e.printStackTrace();
-			}
+			model.addRow();
 		}
-
-		** recopie une ligne du tableau **
-		if (action.getActionCommand().equals("copie")) {
-			try {
-				int pos = table.getSelectedRow();
-				Composant cmp = model.getElementAt(pos);
-				Composant duplic = new Composant (cmp);
-				model.dessin.addForme(duplic);
-				model.fireTableDataChanged();
-			} catch (InvalidGeomAction e) {
-				e.printStackTrace();
-			}
-		}
-
-		** supprime une ligne du tableau **
+		/** supprime une ligne du tableau **/
 		if (action.getActionCommand().equals("supprime")) {
-			int pos = table.getSelectedRow();
-			model.dessin.removeForme(pos);
-			model.fireTableDataChanged();
+			model.deleteRow(selectedRow);
 		}
-
-		**/
-
+		/** Modification de la valeur dans le tableau  **/
+		if (action.getActionCommand().equals("modifie")) {
+			try {
+				dataManager.setPropertyValue(model.getNodeName(), selectedRow, fields.getValue());
+				model.fireTableChanged(new TableModelEvent(model));
+		    	control.showDessin(model.getNodeName());
+			} catch (CataValuesException e) {
+				e.printStackTrace();
+				msg.logError(e.getLocalizedMessage());
+			}
+		}
 	}
 
 	@Override
@@ -144,9 +162,17 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
         	supprime.setEnabled(false);
         }
         else{
-        	table.setEditingRow(lsm.getMaxSelectionIndex());
-            /** enable des buttons **/
-        	supprime.setEnabled(true);
+        	this.selectedRow = lsm.getMaxSelectionIndex();
+        	table.setEditingRow(selectedRow);
+        	
+            /** enable des buttons si necessaire**/
+        	supprime.setEnabled(this.buttonsShown);
+        	
+        	/** Mise à jour des données dans l'éditeur **/
+    		Object val = model.getValueAt(selectedRow, 1);
+    		if (val == null) this.msg.logError("Null value returned");
+        	fields.setValue(val, model.isDataEditable(selectedRow, 1));
+        	this.repaint();
         }
 	}
 

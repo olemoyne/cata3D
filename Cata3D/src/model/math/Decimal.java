@@ -40,6 +40,8 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 
 	public static final MathContext ROUNDING_CTX = new MathContext(8, RoundingMode.HALF_UP);
 
+	public static final Decimal DEMI = new Decimal("0.5");;
+
 	/**
 	 * montant à payer
 	 */
@@ -282,6 +284,14 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 		if (d2 == null) return d1;
 		
 		if (d1.compareTo(d2) == -1) return d1;
+		return d2;
+	}
+
+	public static Decimal max(Decimal d1, Decimal d2) {
+		if (d1 == null) return d2;
+		if (d2 == null) return d1;
+		
+		if (d1.compareTo(d2) == 1) return d1;
 		return d2;
 	}
 

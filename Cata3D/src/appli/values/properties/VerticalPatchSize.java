@@ -11,13 +11,13 @@ public class VerticalPatchSize extends CataValuesProperty {
 	}
 	
 
-	public String getPropertyValue(Cata data) {
-		return Integer.toString(data.patch.y);
+	public Object getPropertyValue(Cata data) {
+		return new Integer(data.patch.y);
 	}
 	
-	public String setProperty (Cata data, String val) throws CataValuesException {
+	public String setProperty (Cata data, Object val) throws CataValuesException {
 		try {
-			int v = Integer.parseInt(val);
+			int v = ((Integer)val).intValue();
 			if ((v-1)%3 != 0) 
 				throw new CataValuesException("Le nombre de points doit être compatible avec le patch");
 			data.recalculePatch(data.patch.x, v);

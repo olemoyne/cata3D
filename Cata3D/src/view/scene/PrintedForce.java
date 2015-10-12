@@ -39,7 +39,7 @@ public class PrintedForce extends PrintableObject {
 	    
         gl.glBegin(GL.GL_LINE_STRIP);
 			gl.glVertex3f(pds.position.getDecX().floatValue(), pds.position.getDecY().floatValue(), pds.position.getDecZ().floatValue());
-			gl.glVertex3f(pds.position.getDecX().floatValue(), pds.position.getDecY().floatValue()+pds.force.floatValue(), pds.position.getDecZ().floatValue());
+			gl.glVertex3f(pds.position.getDecX().floatValue(), pds.position.getDecY().floatValue()-pds.force.floatValue()/20f, pds.position.getDecZ().floatValue());
         gl.glEnd();
 
 			

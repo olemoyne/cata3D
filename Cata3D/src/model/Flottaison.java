@@ -2,8 +2,14 @@ package model;
 
 import java.io.Serializable;
 
+import model.math.Axis;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
+import model.math.Plan3D;
+import model.math.Vecteur;
+import model.math.transfo.Rotation;
+import model.math.transfo.Transformation;
+import model.math.transfo.Translation;
 
 /***************************
  *  Permet de définir le niveau de la mer par rapport à la coque
@@ -26,6 +32,21 @@ public class Flottaison implements Serializable {
 	
 	public Decimal gite;
 	
+	public Decimal densiteSurfaciqueCoque;
+	
+	
+	/**
+	 * Elements calculés pour affichage
+	 */
+	public MapDeVecteurs coque;
+	public MapDeVecteurs carene;
+	
+	public Poids poidsDeLaCoque;
+	public Poids poidsTotal;
+	public Poids pousseeArchimede;
+	
+	public String flottabilite;
+	
 	public Flottaison () {
 		pilonnement = new Decimal(0);
 		tangage = new Decimal(0); // Angle de tangage (rotation selon Y )
@@ -33,13 +54,23 @@ public class Flottaison implements Serializable {
 	}
 
 	/**
-	 * Applique la déformation à la coque
+	 * Get Transformation 
+	 */
+	public Transformation getTransformation () {
+		Rotation rotgite = new Rotation(Axis.ZAxis, gite, null);
+		Rotation rottang = new Rotation(Axis.XAxis, tangage, rotgite);
+		Translation transPil = new Translation (new Vecteur (Decimal.ZERO, pilonnement.negate(), Decimal.ZERO), rottang);
+		
+		return transPil;
+	}
+	
+	/**
+	 * Détermine le plan correspondant à la surface de la mer
 	 * 
-	 * @param map
 	 * @return
 	 */
-	public MapDeVecteurs applyToMap (MapDeVecteurs map) {
-		// TODO 
-		return null;
+	public Plan3D getPlan() {
+		// plan Z= 0
+		return new Plan3D(new Vecteur(1, 0, 0), new Vecteur(0, 0, 0), new Vecteur(0, 0, 1));		
 	}
 }

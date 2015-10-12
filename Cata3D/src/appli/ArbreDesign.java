@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 /**
@@ -96,6 +97,17 @@ public class ArbreDesign extends JPanel {
 	}
 
 	public DefaultMutableTreeNode getTheNode() {
-		return (DefaultMutableTreeNode) this.arbre.getLastSelectedPathComponent();	}
+		return (DefaultMutableTreeNode) this.arbre.getLastSelectedPathComponent();	
+	}
+	
+	public TreePath getPath () {
+		TreePath pth = arbre.getAnchorSelectionPath();
+		return pth;
+	}
+	
+	public void gotToPath(TreePath path) { 
+		arbre.expandPath(path);
+		arbre.addSelectionPath(path);
+	}
 	
 }

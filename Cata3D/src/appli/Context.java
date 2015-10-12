@@ -9,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import javax.swing.tree.TreePath;
+
 
 public class Context implements Serializable {
 
@@ -18,7 +20,7 @@ public class Context implements Serializable {
 	private static final long serialVersionUID = 6098160960455857365L;
 	
 	public String lastCataFile;
-	public String lastTreePath;
+	public TreePath lastTreePath;
 	
 	public Context() {
 		
@@ -61,6 +63,8 @@ public class Context implements Serializable {
 		} catch (IOException e) {
 			return null;
 		} catch (ClassNotFoundException e) {
+			return null;
+		} catch (ClassCastException e) {
 			return null;
 		}		
 	}

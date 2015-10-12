@@ -3,7 +3,9 @@ package appli.values;
 import java.util.Hashtable;
 
 import view.scene.PrintableScene;
+import appli.values.properties.FlottaisonValuesProvider;
 import appli.values.properties.PatchValuesProvider;
+import appli.values.properties.PoidsValuesProvider;
 import model.Cata;
 
 /**
@@ -22,6 +24,8 @@ public class CataDataManager {
 	public CataDataManager() {
 		providers = new Hashtable<String, CataValuesProvider>();
 		providers.put("Patch", new PatchValuesProvider());
+		providers.put("Poids", new PoidsValuesProvider());
+		providers.put("Flottaison", new FlottaisonValuesProvider());
 		
 		// par défaut, le cata est initialisé
 		data = new Cata();
@@ -63,7 +67,7 @@ public class CataDataManager {
 	 * @param row
 	 * @param value
 	 */
-	public String getPropertyValue(String nodeName, int row) throws CataValuesException{
+	public Object getPropertyValue(String nodeName, int row) throws CataValuesException{
 		CataValuesProvider prv = providers.get(nodeName);
 		if (prv == null) throw new CataValuesException("Node name not defined : "+nodeName);
 		
@@ -82,6 +86,20 @@ public class CataDataManager {
 		if (prv == null) throw new CataValuesException("Node name not defined : "+nodeName);
 		
 		return prv.getPropertyCount(data);
+	}
+
+	/**
+	 * Si une valeur peut être mise à jour
+	 * 
+	 * @param nodeName
+	 * @return
+	 * @throws CataValuesException
+	 */
+	public boolean isUpdatable(String nodeName, int position) throws CataValuesException{
+		CataValuesProvider prv = providers.get(nodeName);
+		if (prv == null) throw new CataValuesException("Node name not defined : "+nodeName);
+		
+		return prv.isUpdatable(data, position);
 	}
 
 	
@@ -109,6 +127,24 @@ public class CataDataManager {
 
 	public void setData(Cata dessin) {
 		this.data = dessin;
+		for (CataValuesProvider prv : providers.values()) {
+			prv.setProperties(dessin);
+		}
+	}
+
+	public void addProperty(String nodeName) throws CataValuesException {
+		CataValuesProvider prv = providers.get(nodeName);
+		if (prv == null) throw new CataValuesException("Node name not defined : "+nodeName);
+		
+		prv.ajouter(data, 0);
+		
+	}
+
+	public void deleteProperty(String nodeName, int position) throws CataValuesException {
+		CataValuesProvider prv = providers.get(nodeName);
+		if (prv == null) throw new CataValuesException("Node name not defined : "+nodeName);
+		
+		prv.supprimer(data, position);
 	}
 
 	

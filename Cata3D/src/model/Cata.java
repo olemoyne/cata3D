@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import model.calcul.CalculCoque;
 import model.math.MapDeVecteurs;
 import model.patch.Patch;
 
@@ -53,9 +54,6 @@ public class Cata implements Serializable{
 	/** Poutres **/
 	public ArrayList<Poutre> poutres;
 	
-	/** Données calculées **/
-	public Poids poussee;
-	public Poids gravite;
 	
 	/**
 	 * Constructeur --> intialisation des listes
@@ -63,7 +61,7 @@ public class Cata implements Serializable{
 	public Cata () {
 		patch = new Patch();
 		precisionDeCalcul = 20;
-		precisionDAffichage = 10;
+		precisionDAffichage = 80;
 		mapAffichage = patch.getMap(precisionDAffichage);
 		mapCalcul = patch.getMap(precisionDeCalcul);
 		
@@ -84,13 +82,19 @@ public class Cata implements Serializable{
 	 * @param x 
 	 */
 	public void recalculePatch(int x, int y) {
-		
 		patch.recalcule(x, y);
-		mapAffichage = patch.getMap(precisionDAffichage);
-		mapCalcul = patch.getMap(precisionDeCalcul);
+		recalculeMaps();
 		
 	}
-	
+
+	/**
+	 * Changement de patch sans resizing
+	 */
+	public void recalculeMaps() {
+		// Recalcul des coques
+		mapAffichage = CalculCoque.createCoque(patch, precisionDAffichage);
+	}
+
 	
     public String toString() {
         StringBuilder sb = new StringBuilder("Cata = ");
@@ -102,6 +106,15 @@ public class Cata implements Serializable{
         if (poutres != null) for (Poutre poutre : poutres) sb.append(poutre.toString());
         return sb.toString();
     }
+
+
+	public void recalculeFlottaison() {
+		CalculCoque.calculeCarene(this);
+		this.mer.poidsDeLaCoque = CalculCoque.calculePoidsCoque(this);
+		CalculCoque.calculeFlottaison(this);
+	}
+
+
 
 	
 }

@@ -23,14 +23,15 @@ public class PatchPoint extends CataValuesProperty {
 		super.setName(sb.toString());
 	}
 
-	public String getPropertyValue(Cata data) {
+	public Object getPropertyValue(Cata data) {
 		Vecteur v = data.patch.points[posX][posY];
-		return v.toString();
+		return v;
 	}
 	
-	public String setProperty (Cata data, String val) throws CataValuesException {
+	public String setProperty (Cata data, Object value) throws CataValuesException {
 		try {
-			Vecteur value = new Vecteur(val);
+			data.patch.points[posX][posY] = (Vecteur)value;
+			data.recalculeMaps();
 			return value.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);

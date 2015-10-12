@@ -23,7 +23,8 @@ public class Reflexion extends Transformation {
 	 * @param ax
 	 * @param angle
 	 */
-	public Reflexion(int ax) {
+	public Reflexion(int ax, Transformation u) {
+		super(u);
 		axis = ax;		
 	}
 

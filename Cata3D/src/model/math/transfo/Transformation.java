@@ -17,6 +17,9 @@ public abstract class Transformation {
 	private Transformation upper;
 	
 
+	public Transformation (Transformation u) {
+		upper = u;
+	}
 
 	/**
 	 * Transformation d'un point unitaire

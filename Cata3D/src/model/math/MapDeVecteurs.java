@@ -2,6 +2,8 @@ package model.math;
 
 import java.io.Serializable;
 
+import model.math.transfo.Transformation;
+
 public class MapDeVecteurs implements Serializable {
 
 	/**
@@ -26,6 +28,9 @@ public class MapDeVecteurs implements Serializable {
 	}
 	
 	public MapDeVecteurs(MapDeVecteurs map) {
+		this.xSize = map.xSize;
+		this.ySize = map.ySize;
+		
 		data = new Vecteur[map.xSize][map.ySize];
 
 		for (int x = 0; x < xSize; x ++) {
@@ -59,14 +64,14 @@ public class MapDeVecteurs implements Serializable {
 		
 		if (map.xSize() != this.xSize()) return null;
 
-		MapDeVecteurs ret = new MapDeVecteurs(xSize, ySize + map.ySize());
+		MapDeVecteurs ret = new MapDeVecteurs(xSize+ map.xSize(), ySize );
 
-		for (int pos = 0; pos < this.xSize; pos ++) {
-			for (int ypos = 0; ypos < this.ySize; ypos ++) {
-				ret.setPoint(pos, ypos, getPoint(pos, ypos));
+		for (int pos = 0; pos < this.ySize; pos ++) {
+			for (int xpos = 0; xpos < this.xSize; xpos ++) {
+				ret.setPoint(xpos, pos, getPoint(xpos, pos));
 			}
-			for (int ypos = 0; ypos < map.ySize(); ypos ++) {
-				ret.setPoint(pos, ySize + ypos, map.getPoint(pos, ypos));
+			for (int xpos = 0; xpos < map.xSize(); xpos ++) {
+				ret.setPoint(xSize + xpos, pos, map.getPoint(map.xSize -1 - xpos, pos));
 			}
 		}
 		return ret;
@@ -75,5 +80,44 @@ public class MapDeVecteurs implements Serializable {
 
 	public Vecteur[] getTranche(int x) {
 		return this.data[x];
+	}
+
+	public MapDeVecteurs transforme(Transformation ref) {
+		MapDeVecteurs ret = new MapDeVecteurs (this.xSize, this.ySize);
+		for (int pos = 0; pos < this.xSize; pos ++) {
+			for (int ypos = 0; ypos < this.ySize; ypos ++) {
+				ret.setPoint(pos, ypos, ref.transforme(getPoint(pos, ypos)));
+			}
+		}	
+		return ret;
+	}
+
+	/** Calcule le résultat entre une map et un plan
+	 * 
+	 * @param surface
+	 * @return
+	 */
+	public MapDeVecteurs truncate(Plan3D surface) {
+		// Recopie les éléments de la map
+		MapDeVecteurs ret = new MapDeVecteurs(this);
+		
+		//Parcours tous les points verticaux
+		for (int ypos = 0; ypos < this.ySize; ypos ++) {
+			// calcul l'intersection avec le plan
+			Vecteur inter = null;
+			for (int pos = 1; pos < this.xSize; pos ++) {
+				Vecteur v = surface.intersection(this.getPoint(pos-1, ypos), this.getPoint(pos, ypos));
+				if (v != null) inter = v;
+			}
+			if (inter == null) inter = new Vecteur (0, 0, 0);
+			for (int pos = 0; pos < this.xSize; pos ++) {
+				if (surface.donneCote(getPoint(pos, ypos)) < 0) 
+					ret.setPoint(pos, ypos, inter);
+				else 
+					ret.setPoint(pos, ypos, this.getPoint(pos, ypos));
+			}									
+		}	
+		
+		return ret;
 	}
 }

@@ -66,6 +66,12 @@ public class Vecteur implements Serializable{
 	}
 
 	public Vecteur(String str) {
+		if (str.startsWith("(")) {
+			str = str.substring(1);
+		}
+		if (str.endsWith(")")) {
+			str = str.substring(0, str.length()-1);
+		}
 		String[] strs = str.split(";");
 		if (strs.length < 3) throw new NumberFormatException("Vecteur illisible "+str);
 		x = new Decimal(strs[0]).multiply(METER).longValue();

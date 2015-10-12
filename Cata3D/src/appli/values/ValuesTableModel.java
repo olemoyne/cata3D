@@ -3,6 +3,7 @@ package appli.values;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
+import appli.Controleur;
 import appli.Message;
 
 
@@ -29,10 +30,13 @@ public class ValuesTableModel extends AbstractTableModel {
 	
 	private Message log;
 	
-	public ValuesTableModel (CataDataManager cdm, Message l) {
+	private Controleur control;
+	
+	public ValuesTableModel (CataDataManager cdm, Message l, Controleur ctrl) {
 		dataProvider = cdm;
 		nodeName = "Patch";
 		log = l;
+		control = ctrl;
 	}
 	
 	@Override
@@ -85,8 +89,9 @@ public class ValuesTableModel extends AbstractTableModel {
      * Détermine si la cellule peut être éditée.
      */
     public boolean isCellEditable(int row, int col) {
-        if (col == 1) return true;
-        return false;
+    	return false;
+//        if (col == 1) return true;
+//        return false;
     }
 
     
@@ -96,7 +101,8 @@ public class ValuesTableModel extends AbstractTableModel {
     public void setValueAt(Object value, int row, int col) {    	
     	try {
 			dataProvider.setPropertyValue(this.nodeName, row, value);
-
+			// Mise à jour de la vue
+			this.control.updateView(dataProvider.getView(nodeName));
 			fireTableCellUpdated(row, col);
 		} catch (CataValuesException e) {
 			log.logError(e.getLocalizedMessage());
@@ -114,4 +120,43 @@ public class ValuesTableModel extends AbstractTableModel {
 		nodeName = name;
 		fireTableChanged(new TableModelEvent (this));
 	}
+
+	
+	public String getNodeName() {
+		return nodeName;
+	}
+
+	public void addRow() {
+		// Ajoute une nouvelle propriete
+		try {
+			dataProvider.addProperty(nodeName);
+			fireTableChanged(new TableModelEvent (this));
+		} catch (CataValuesException e) {
+			log.logError(e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+	}
+
+	
+	public void deleteRow(int position) {
+		// Ajoute une nouvelle propriete
+		try {
+			dataProvider.deleteProperty(nodeName, position);
+			fireTableChanged(new TableModelEvent (this));
+		} catch (CataValuesException e) {
+			log.logError(e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+	}
+
+	public boolean isDataEditable(int selectedRow, int i) {
+		try {
+			return dataProvider.isUpdatable(nodeName, i);
+		} catch (CataValuesException e) {
+			log.logError(e.getLocalizedMessage());
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 }

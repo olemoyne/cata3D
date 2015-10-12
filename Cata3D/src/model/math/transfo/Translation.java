@@ -17,7 +17,8 @@ public class Translation extends Transformation {
 	 * 
 	 * @param tr
 	 */
-	public Translation(Vecteur tr) {
+	public Translation(Vecteur tr, Transformation u) {
+		super(u);
 		trans = tr;
 	}
 
