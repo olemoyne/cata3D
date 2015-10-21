@@ -67,7 +67,7 @@ public class Patch implements Serializable {
 				}
 			}
 		}
-		return map;		
+		return map.reverse();		
 	}
 
 	/**
@@ -130,20 +130,21 @@ public class Patch implements Serializable {
 		Vecteur[] quille = getPoints(x, y, 3, nbPoints);
 	
 		for (int pos = 0; pos < nbPoints; pos ++) {
-			ArrayList<Vecteur> al = CourbeParametree3D.getCurvePoints(haut[pos], flott[pos], flanc[pos], quille[pos], nbPoints-4);
+			ArrayList<Vecteur> al = CourbeParametree3D.getCurvePoints(haut[pos], flott[pos], flanc[pos], quille[pos], nbPoints-2);
 			for (int h = 0; h < al.size(); h ++) {
-				map [pos][h+1] = (Vecteur)al.get(h);
-			}
-			Vecteur v = map[pos][1];
+//				map [pos][h+1] = (Vecteur)al.get(h);
+				map [pos][h] = (Vecteur)al.get(h);
+						}
+//			Vecteur v = map[pos][1];
 			
 			// Gestion de la SKIN
-			map[pos][0] = new Vecteur(0, v.getY(), v.getZ());
-			v = map[pos][al.size()];
+//			map[pos][0] = new Vecteur(0, v.getY(), v.getZ());
+//			Vecteur v = map[pos][al.size()];
 			// Rajoute des points vides équivalents au dernier point
-			for (int h = al.size()+1; h < nbPoints; h++ ) {
+//			for (int h = al.size()+1; h < nbPoints; h++ ) {
 				// Gestion de la SKIN
-				map[pos][h] = new Vecteur(0, v.getY(), v.getZ());
-			}
+//				map[pos][h] = new Vecteur(0, v.getY(), v.getZ());
+//			}
 		}
 		
 		return map;

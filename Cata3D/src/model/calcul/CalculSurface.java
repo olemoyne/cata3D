@@ -43,6 +43,30 @@ public class CalculSurface {
 	}
 
 
+	
+	/***
+	 * Calcule le coefficient de résistance de chaque pavé de la carène
+	 * 
+	 * --> pour chaque élément, je calule la surface totale et la surface projetée sur le plan z = 0
+	 * --> retourne une valeu entre 0 et 256 
+	 */
 
+	public static Decimal getCoeficient (ArrayList<Vecteur> lst) {
+		if (lst == null) return Decimal.ZERO;
+		if (lst.size() != 4 ) return Decimal.ZERO;
+		
+		
+		Decimal srf = CalculSurface.getSurface(lst);
+		if (srf.isZero()) return Decimal.ZERO;
+
+		ArrayList<Vecteur> pts = new ArrayList<Vecteur> (4);
+		for (Vecteur v : lst) pts.add(new Vecteur(v.getDecX(), v.getDecY(), Decimal.ZERO));
+
+		Decimal frein = CalculSurface.getSurface(pts);
+
+		
+		Decimal res = frein.divide(srf).multiply(new Decimal(10f));
+		return res;
+	}
 
 }

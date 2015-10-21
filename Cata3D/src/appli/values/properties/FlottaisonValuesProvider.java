@@ -42,6 +42,7 @@ public class FlottaisonValuesProvider extends CataValuesProvider {
 		liste.add(new PoidsDeCoque());
 		liste.add(new PoidsTotal());
 		liste.add(new PousseeDeCarene());
+
 	}
 
 	@Override

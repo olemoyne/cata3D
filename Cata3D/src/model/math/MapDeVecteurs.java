@@ -64,14 +64,14 @@ public class MapDeVecteurs implements Serializable {
 		
 		if (map.xSize() != this.xSize()) return null;
 
-		MapDeVecteurs ret = new MapDeVecteurs(xSize+ map.xSize(), ySize );
+		MapDeVecteurs ret = new MapDeVecteurs(xSize, ySize+ map.ySize() );
 
-		for (int pos = 0; pos < this.ySize; pos ++) {
-			for (int xpos = 0; xpos < this.xSize; xpos ++) {
-				ret.setPoint(xpos, pos, getPoint(xpos, pos));
+		for (int pos = 0; pos < this.xSize; pos ++) {
+			for (int xpos = 0; xpos < this.ySize; xpos ++) {
+				ret.setPoint(pos, xpos, getPoint(pos, xpos));
 			}
-			for (int xpos = 0; xpos < map.xSize(); xpos ++) {
-				ret.setPoint(xSize + xpos, pos, map.getPoint(map.xSize -1 - xpos, pos));
+			for (int xpos = 0; xpos < map.ySize(); xpos ++) {
+				ret.setPoint(pos, ySize + xpos,  map.getPoint(pos, map.ySize -1 - xpos));
 			}
 		}
 		return ret;
@@ -101,23 +101,50 @@ public class MapDeVecteurs implements Serializable {
 		// Recopie les éléments de la map
 		MapDeVecteurs ret = new MapDeVecteurs(this);
 		
-		//Parcours tous les points verticaux
-		for (int ypos = 0; ypos < this.ySize; ypos ++) {
+		//Parcours tous les points verticaux. Attention les points entre et sortent de l'eau
+		for (int xpos = 0; xpos < this.xSize; xpos ++) {
 			// calcul l'intersection avec le plan
 			Vecteur inter = null;
-			for (int pos = 1; pos < this.xSize; pos ++) {
-				Vecteur v = surface.intersection(this.getPoint(pos-1, ypos), this.getPoint(pos, ypos));
-				if (v != null) inter = v;
+			// Recherche la première intersection
+			for (int ypos = 1; ypos < this.ySize; ypos ++) {
+				Vecteur v = surface.intersection(this.getPoint(xpos, ypos-1), this.getPoint(xpos, ypos));
+				if ((v != null)&&(inter == null)) inter = v;
 			}
-			if (inter == null) inter = new Vecteur (0, 0, 0);
-			for (int pos = 0; pos < this.xSize; pos ++) {
-				if (surface.donneCote(getPoint(pos, ypos)) < 0) 
-					ret.setPoint(pos, ypos, inter);
+
+			boolean auDessus = true;
+			if (surface.donneCote(getPoint(xpos, 0)) > 0) auDessus = false; 
+			
+			if (auDessus)
+				ret.setPoint(xpos, 0, inter);
+			else 
+				ret.setPoint(xpos, 0, this.getPoint(xpos, 0));
+				
+			for (int ypos = 1; ypos < this.ySize; ypos ++) {
+				Vecteur v = surface.intersection(this.getPoint(xpos, ypos-1), this.getPoint(xpos, ypos));
+				if (v != null) {
+					auDessus = !auDessus;
+					inter = v;
+				}
+				if (auDessus)
+					ret.setPoint(xpos, ypos, inter);
 				else 
-					ret.setPoint(pos, ypos, this.getPoint(pos, ypos));
+					ret.setPoint(xpos, ypos, this.getPoint(xpos, ypos));
 			}									
 		}	
 		
+		return ret;
+	}
+
+	/** 
+	 * Retourne la map 
+	 * **/
+	public MapDeVecteurs reverse() {
+		MapDeVecteurs ret = new MapDeVecteurs (this.ySize, this.xSize);
+		for (int xpos = 0; xpos < this.xSize; xpos ++) {
+			for (int ypos = 0; ypos < this.ySize; ypos ++) {
+				ret.setPoint(ypos, xpos, this.getPoint(xpos, ypos));
+			}
+		}
 		return ret;
 	}
 }

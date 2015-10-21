@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 import view.scene.PrintableScene;
 import appli.values.properties.FlottaisonValuesProvider;
+import appli.values.properties.FluiditeValuesProvider;
 import appli.values.properties.PatchValuesProvider;
 import appli.values.properties.PoidsValuesProvider;
 import model.Cata;
@@ -26,6 +27,7 @@ public class CataDataManager {
 		providers.put("Patch", new PatchValuesProvider());
 		providers.put("Poids", new PoidsValuesProvider());
 		providers.put("Flottaison", new FlottaisonValuesProvider());
+		providers.put("Fluidité", new FluiditeValuesProvider());
 		
 		// par défaut, le cata est initialisé
 		data = new Cata();

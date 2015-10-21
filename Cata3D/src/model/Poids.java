@@ -43,9 +43,9 @@ public class Poids implements Serializable {
 	public String toString () {
 		StringBuilder sb = new StringBuilder(nom);
 		sb.append(" : ");
-		sb.append(position.toString());
-		sb.append(" - ");
 		sb.append(force.toString());
+		sb.append(" - ");
+		sb.append(position.toString());
 		
 		return sb.toString();
 	}

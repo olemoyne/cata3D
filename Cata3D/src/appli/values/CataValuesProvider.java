@@ -28,12 +28,15 @@ public class CataValuesProvider {
 	}
 
 	public void setProperty(Cata data, int row, Object value) throws CataValuesException {
+		if (liste.size() == 0) return;
+
 		// Identifie le type de données en fonction de la position
 		CataValuesProperty prop = liste.get(row);
 		prop.setProperty(data, value);
 	}
 
 	public boolean isUpdatable(Cata data, int row) throws CataValuesException {
+		if (liste.size() == 0) return false;
 		// Identifie le type de données en fonction de la position
 		CataValuesProperty prop = liste.get(row);
 		return prop.isUpdatable();
@@ -42,6 +45,7 @@ public class CataValuesProvider {
 
 	
 	public Object getProperty(Cata data, int row) {
+		if (liste.size() == 0) return null;
 		CataValuesProperty prop = liste.get(row);
 		return prop.getPropertyValue(data);
 	}
@@ -61,6 +65,8 @@ public class CataValuesProvider {
 
 
 	public String getPropertyName(int row) {
+		if (liste.size() == 0) return "";
+
 		CataValuesProperty prop = liste.get(row);
 		return prop.getPropertyName();
 	}
