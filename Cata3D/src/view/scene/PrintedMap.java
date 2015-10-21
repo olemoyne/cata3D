@@ -13,11 +13,10 @@ public class PrintedMap extends PrintableObject {
 	private MapDeVecteurs map;
 	private boolean fillup;
 	
-	public PrintedMap (MapDeVecteurs mp, boolean isFilled, Color col) {
-		super();
+	public PrintedMap (MapDeVecteurs mp, String nom, boolean isFilled, Color col) {
+		super(nom, col);
 		map = mp;
 		fillup = isFilled;
-		color = col;
 	}
 	
 	public void setColor(GL2 gl, ArrayList<Vecteur> pts) {

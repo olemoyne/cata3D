@@ -12,10 +12,9 @@ public class PrintedPoint extends PrintableObject {
 
 	private Vecteur point;
 	
-	public PrintedPoint (Vecteur mp, Color col) {
-		super();
+	public PrintedPoint (Vecteur mp, String nom, Color col) {
+		super(nom, col);
 		point = mp;
-		color = col;
 	}
 	
 	@Override

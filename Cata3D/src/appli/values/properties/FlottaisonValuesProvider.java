@@ -58,11 +58,11 @@ public class FlottaisonValuesProvider extends CataValuesProvider {
 		PrintableScene ret = super.getScene(bateau);
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (bateau.mer.coque, false, Color.lightGray));
+//		ret.add(new PrintedMap (bateau.mer.coque, "Coque", false, Color.lightGray));
 
 		// Affiche la carène en bleu
 		if (bateau.mer.carene != null)
-			ret.add(new PrintedMap (bateau.mer.carene, false, Color.blue));
+			ret.add(new PrintedMap (bateau.mer.carene, "Carène", false, Color.blue));
 
 		// Affiche la mer en bleu ciel 
 		

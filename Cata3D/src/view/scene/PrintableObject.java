@@ -8,7 +8,17 @@ public abstract class PrintableObject {
 	
 	public Color color;
 	
+	public String name;
 	
-	public abstract void drawObject (GL2 gl);
+	public boolean toBePrinted;
+	
+	
+	public PrintableObject (String n, Color c) {
+		name = n;
+		color = c;
+		toBePrinted = true;
+	}
+	
+	public abstract void drawObject (GL2 gl) ;
 
 }

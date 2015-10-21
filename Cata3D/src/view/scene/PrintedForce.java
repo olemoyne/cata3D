@@ -14,9 +14,8 @@ public class PrintedForce extends PrintableObject {
 	private Poids pds;
 	
 	public PrintedForce (Poids p, Color col) {
-		super();
+		super(p.nom, col);
 		pds = p;
-		color = col;
 	}
 	
 	@Override

@@ -48,21 +48,21 @@ public class Patch implements Serializable {
 		int nbY = (y-1)/3;
 		
 		// Agrégation totale
-		MapDeVecteurs map = new MapDeVecteurs(nbX*(nbPoints-1)+1, nbY*(nbPoints-1)+1);
+		MapDeVecteurs map = new MapDeVecteurs(nbX*(nbPoints), nbY*(nbPoints));
 		
-		for (int posY = 0; posY < nbY; posY++) {
+		for (int posX = 0; posX < nbX; posX++) {
 			// Parcours toutes les zones par les X
-			for (int posX = 0; posX < nbX; posX++) {
+			for (int posY = 0; posY < nbY; posY++) {
 				// Récupère la MAP asssociée
 				Vecteur[][] subMap = this.getSubMap(posX*3, posY*3, nbPoints);
 				// Ajout la MAP dans la MAP générale
-				int maxy = nbPoints-1;
-				if (posY == nbY-1) maxy ++;
-				int maxx = nbPoints-1;
-				if (posX == nbX-1) maxx ++;
+				int maxy = nbPoints;
+//				if (posY == nbY-1) maxy ++;
+				int maxx = nbPoints;
+//				if (posX == nbX-1) maxx ++;
 				for (int ysm = 0 ; ysm < maxy; ysm++) {					
 					for (int xsm = 0 ; xsm < maxx; xsm ++) {
-						map.setPoint(posX*(nbPoints-1)+xsm, posY*(nbPoints-1)+ysm, subMap[xsm][ysm]);
+						map.setPoint(posY*(nbPoints)+ysm, posX*(nbPoints)+xsm, subMap[xsm][ysm]);
 					}
 				}
 			}

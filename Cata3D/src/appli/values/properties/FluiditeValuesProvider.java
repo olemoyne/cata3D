@@ -40,11 +40,11 @@ public class FluiditeValuesProvider extends CataValuesProvider {
 		PrintableScene ret = super.getScene(bateau);
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (bateau.mer.coque, false, Color.lightGray));
+		ret.add(new PrintedMap (bateau.mer.coque, "Coque", false, Color.lightGray));
 
 		// Affiche la carène en bleu
 		if (bateau.mer.carene != null)
-			ret.add(new PrintedFluidityMap (bateau.mer.carene));
+			ret.add(new PrintedFluidityMap ("Carène", bateau.mer.carene));
 		
 		return ret;
 	}

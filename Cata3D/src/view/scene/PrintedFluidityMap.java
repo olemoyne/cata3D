@@ -11,8 +11,8 @@ import com.jogamp.opengl.GL2;
 
 public class PrintedFluidityMap extends PrintedMap {
 
-	public PrintedFluidityMap (MapDeVecteurs mp) {
-		super(mp, true, Color.blue);
+	public PrintedFluidityMap (String nom, MapDeVecteurs mp) {
+		super(mp, nom, true, Color.blue);
 	}
 	
 	public void setColor(GL2 gl, ArrayList<Vecteur> pts) {

@@ -57,10 +57,10 @@ public class PatchValuesProvider extends CataValuesProvider {
 		// Affiche les points en jaune
 		for (int y = 0; y < bateau.patch.y; y++) 
 			for (int x = 0; x < bateau.patch.x; x++) 
-				ret.add(new PrintedPoint(bateau.patch.points[x][y], Color.yellow));
+				ret.add(new PrintedPoint(bateau.patch.points[x][y], "", Color.yellow));
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (bateau.mapAffichage, false, Color.lightGray));
+		ret.add(new PrintedMap (bateau.mapAffichage, "Coque", false, Color.lightGray));
 					
 		return ret;
 	}

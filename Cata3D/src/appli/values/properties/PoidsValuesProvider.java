@@ -54,7 +54,7 @@ public class PoidsValuesProvider extends CataValuesProvider {
 				ret.add(new PrintedForce(pds, Color.red));
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (bateau.mapAffichage, false, Color.lightGray));
+		ret.add(new PrintedMap (bateau.mapAffichage, "Coque", false, Color.lightGray));
 					
 		return ret;
 	}
