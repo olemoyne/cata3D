@@ -37,6 +37,7 @@ public class CataValuesProvider {
 
 	public boolean isUpdatable(Cata data, int row) throws CataValuesException {
 		if (liste.size() == 0) return false;
+		if (liste.size() <= row) return false;
 		// Identifie le type de données en fonction de la position
 		CataValuesProperty prop = liste.get(row);
 		return prop.isUpdatable();
@@ -51,8 +52,8 @@ public class CataValuesProvider {
 	}
 
 
-	public int getPropertyCount(Cata data) {
-		return 0;
+	protected int getPropertyCount(Cata data) {
+		return liste.size();
 	}
 
 	public void ajouter(Cata data, int pos) {

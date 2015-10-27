@@ -9,8 +9,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class ViewListener implements KeyListener, MouseMotionListener, MouseListener, MouseWheelListener  {
+
+public class ViewListener implements KeyListener, MouseMotionListener, MouseListener, MouseWheelListener, ListSelectionListener  {
 
     private View3D upper;
     private Point lastPosition = null;
@@ -143,5 +146,10 @@ public class ViewListener implements KeyListener, MouseMotionListener, MouseList
 	      	upper.display();
 		}
 		
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		// TODO : 
 	}
 }

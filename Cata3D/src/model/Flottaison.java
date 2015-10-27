@@ -70,7 +70,7 @@ public class Flottaison implements Serializable {
 	 * @return
 	 */
 	public Plan3D getPlan() {
-		// plan Z= 0
+		// plan Y= 0
 		return new Plan3D(new Vecteur(1, 0, 0), new Vecteur(0, 0, 0), new Vecteur(0, 0, 1));		
 	}
 }

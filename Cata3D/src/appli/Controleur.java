@@ -11,7 +11,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Cata;
-import view.View3D;
+import view.PrintableObjectViewer;
+import view.PrintableViewUpdate;
 import view.scene.PrintableScene;
 import appli.values.CataDataManager;
 import appli.values.CataValuesException;
@@ -27,8 +28,8 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 	/** Gestion des outils affichés**/
 	private Message message;
 	private CataFileManager mngr;
-	private View3D viewer;
-	private CataViewUpdate upd;
+	private PrintableObjectViewer viewer;
+	private PrintableViewUpdate upd;
 	private TableValues values;
 	private ArbreDesign arbre;
 	
@@ -52,15 +53,14 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		 * Creation du manager de formes
 		 */
 		log.writeLog("Starting the view");
-		upd = new CataViewUpdate("0.25");
-		viewer = new View3D(upd);
+		upd = new PrintableViewUpdate("0.25");
+		viewer = new PrintableObjectViewer(upd);
 
 		fond.add(viewer, BorderLayout.CENTER);
 
 		log.writeLog("Drawing the tree");
 		arbre = new ArbreDesign(this);
 		fond.add(arbre, BorderLayout.WEST);
-
 
 		
 		log.writeLog("File manager starting");
@@ -69,7 +69,6 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		
 
 		/** Lecture du catamaran du dernier fichier **/
-		dessin = new Cata();
 		dataManager = new CataDataManager();
 		
 		log.writeLog("Drawing the value table");
@@ -87,7 +86,12 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 				log.writeLog("Last boat file not found "+ctx.lastCataFile);
 			} 
 		}
-	
+
+		if (dessin == null) {
+			dessin = new Cata();
+			dataManager.setData(dessin);
+		}
+
 		arbre.add(values, BorderLayout.SOUTH);
 
 	}
@@ -115,8 +119,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		try {
 			if (node.isLeaf()) {
 				// Positionne la bonne view
-				upd.setScene(dataManager.getView(nodeName));
-				viewer.display();
+				viewer.setScene(dataManager.getView(nodeName));
 				// Positionne les bonnes valeurs
 				values.showNode(nodeName);
 			} else {
@@ -168,14 +171,13 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 	}
 
 	public void updateView(PrintableScene view) {
-		this.upd.setScene(view);
+		this.viewer.setScene(view);
 	}
 
 	public void showDessin(String nodeName) {
 		// Positionne la bonne view
 		try {
-			upd.setScene(dataManager.getView(nodeName));
-			viewer.display();
+			viewer.setScene(dataManager.getView(nodeName));
 		} catch (CataValuesException e) {
 			e.printStackTrace();
 			this.message.logError(e.getLocalizedMessage());

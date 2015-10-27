@@ -9,8 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import view.View3D;
-
 /**
  * Permet de visualiser et de tester la forme d'une coque de cata
  * 
@@ -28,10 +26,6 @@ public class Viewer extends JFrame implements WindowListener {
 	 * 
 	 */
 	private static final long serialVersionUID = -8973743370089212343L;
-	/** 
-	 * Affichage 3D 
-	 */
-	protected View3D viewPanel;
 	/**
 	 * Titre de la fenetre
 	 */

@@ -16,9 +16,9 @@ public class View3D extends JPanel {
 	private static final long serialVersionUID = 8333100250653626930L;
 
 	private GLCanvas canvas;
-	ViewListener rsl;
-	ViewUpdate calc;
-	
+	private ViewListener rsl;
+	private ViewUpdate calc;
+
 	private JLabel position;
 	
 	public View3D (ViewUpdate viewMgr) {
@@ -54,7 +54,7 @@ public class View3D extends JPanel {
  	public void display() {
 		String pos = calc.camera.toString();
 		this.position.setText(pos);		
-
+		
  		canvas.display();
  	}
 

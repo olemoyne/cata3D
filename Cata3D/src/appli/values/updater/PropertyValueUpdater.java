@@ -10,7 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.Gabarit;
 import model.Poids;
+import model.Poutre;
 import model.math.Decimal;
 import model.math.Vecteur;
 
@@ -42,6 +44,12 @@ public class PropertyValueUpdater extends JPanel {
 		ObjectUpdater o = new VecteurUpdater();
 		panels.put(Vecteur.class.toString(), o);
 		
+		o = new GabaritUpdater();
+		panels.put(Gabarit.class.toString(), o);
+
+		o = new PoutreUpdater();
+		panels.put(Poutre.class.toString(), o);
+
 		o = new PoidsUpdater();
 		panels.put(Poids.class.toString(), o);
 

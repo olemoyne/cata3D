@@ -47,13 +47,10 @@ public class Cata implements Serializable{
 	
 	/** Poids **/
 	public ArrayList<Poids> poids;
-	
-	/** Gabarits **/
-	public ArrayList<Gabarit> gabarits;
-	
-	/** Poutres **/
-	public ArrayList<Poutre> poutres;
-	
+
+	/** Structure du bateau **/
+	public Structure structure;
+		
 	
 	/**
 	 * Constructeur --> intialisation des listes
@@ -68,10 +65,8 @@ public class Cata implements Serializable{
 		mer = new Flottaison();
 
 		poids = new ArrayList<Poids> ();
-
-		gabarits = new ArrayList<Gabarit> ();
-		poutres = new ArrayList<Poutre> ();
-	
+		
+		structure = new Structure();
 	}
 	
 
@@ -84,7 +79,8 @@ public class Cata implements Serializable{
 	public void recalculePatch(int x, int y) {
 		patch.recalcule(x, y);
 		recalculeMaps();
-		
+		recalculeFlottaison();
+		recalculeStructure();
 	}
 
 	/**
@@ -102,8 +98,7 @@ public class Cata implements Serializable{
         sb.append(" ");
         if (mer != null) sb.append(mer.toString());
         if (poids != null) for (Poids pds : poids) sb.append(pds.toString());
-        if (gabarits != null) for (Gabarit gab : gabarits) sb.append(gab.toString());
-        if (poutres != null) for (Poutre poutre : poutres) sb.append(poutre.toString());
+        if (structure != null) sb.append(structure.toString());
         return sb.toString();
     }
 
@@ -112,6 +107,14 @@ public class Cata implements Serializable{
 		CalculCoque.calculeCarene(this);
 		this.mer.poidsDeLaCoque = CalculCoque.calculePoidsCoque(this);
 		CalculCoque.calculeFlottaison(this);
+	}
+
+
+	/** 
+	 * En cas de modification de la structure du bateau 
+	 * **/
+	public void recalculeStructure() {
+		
 	}
 
 

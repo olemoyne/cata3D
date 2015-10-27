@@ -3,10 +3,12 @@ package appli.values;
 import java.util.Hashtable;
 
 import view.scene.PrintableScene;
-import appli.values.properties.FlottaisonValuesProvider;
-import appli.values.properties.FluiditeValuesProvider;
-import appli.values.properties.PatchValuesProvider;
-import appli.values.properties.PoidsValuesProvider;
+import appli.values.properties.build.GabaritsValuesProvider;
+import appli.values.properties.build.PoutresValuesProvider;
+import appli.values.properties.design.PatchValuesProvider;
+import appli.values.properties.design.PoidsValuesProvider;
+import appli.values.properties.optimize.FlottaisonValuesProvider;
+import appli.values.properties.optimize.FluiditeValuesProvider;
 import model.Cata;
 
 /**
@@ -28,9 +30,11 @@ public class CataDataManager {
 		providers.put("Poids", new PoidsValuesProvider());
 		providers.put("Flottaison", new FlottaisonValuesProvider());
 		providers.put("Fluidité", new FluiditeValuesProvider());
+		providers.put("Gabarits", new GabaritsValuesProvider());
+		providers.put("Poutres", new PoutresValuesProvider());
 		
 		// par défaut, le cata est initialisé
-		data = new Cata();
+//		data = new Cata();
 	}
 	
 	/**

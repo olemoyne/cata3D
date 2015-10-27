@@ -19,8 +19,8 @@ public class PrintedFluidityMap extends PrintedMap {
 
 		
 		float r = CalculSurface.getCoeficient(pts).floatValue();
-		float g = 0.5f; // color.getGreen()/(float)256;
-		float b = 0.5f; //color.getBlue()/(float)256;
+		float g = 0f; // color.getGreen()/(float)256;
+		float b = 1f; //color.getBlue()/(float)256;
 		
 		gl.glColor3f(r, g, b);		
 	}

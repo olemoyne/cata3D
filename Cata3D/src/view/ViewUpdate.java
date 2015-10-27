@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL;

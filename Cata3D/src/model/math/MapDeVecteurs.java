@@ -2,7 +2,21 @@ package model.math;
 
 import java.io.Serializable;
 
+import model.Area;
 import model.math.transfo.Transformation;
+
+
+/**
+ *  Maillage de vecteurs qui correspondent à une coque
+ *   --> X étalonnage vertical 
+ *   --> Y étalonnage horizontal
+ * 
+ *   point X Y --> point sur la position verticale X (plus ou moins haut dans le bateau) 
+ *      et horizontale en Y (plus ou moins vers l'avant)
+ * 
+ * @author olemoyne
+ *
+ */
 
 public class MapDeVecteurs implements Serializable {
 
@@ -60,18 +74,19 @@ public class MapDeVecteurs implements Serializable {
 
 	// dans ce cas, un nouveau tableau de données est créé
 	//  les points sont ajoutés à chaque colonne,à la suite
+	// L'ajout de la MAP se fait via les Y
 	public MapDeVecteurs addMap(MapDeVecteurs map) {
 		
 		if (map.xSize() != this.xSize()) return null;
 
-		MapDeVecteurs ret = new MapDeVecteurs(xSize, ySize+ map.ySize() );
+		MapDeVecteurs ret = new MapDeVecteurs(xSize+ map.xSize, ySize);
 
-		for (int pos = 0; pos < this.xSize; pos ++) {
-			for (int xpos = 0; xpos < this.ySize; xpos ++) {
-				ret.setPoint(pos, xpos, getPoint(pos, xpos));
+		for (int ypos = 0; ypos < this.ySize; ypos ++) {
+			for (int xpos = 0; xpos < this.xSize; xpos ++) {
+				ret.setPoint(xpos, ypos, getPoint(xpos, ypos));
 			}
-			for (int xpos = 0; xpos < map.ySize(); xpos ++) {
-				ret.setPoint(pos, ySize + xpos,  map.getPoint(pos, map.ySize -1 - xpos));
+			for (int xpos = 0; xpos < map.xSize(); xpos ++) {
+				ret.setPoint(xSize + xpos, ypos,  map.getPoint(map.xSize -1 - xpos, ypos));
 			}
 		}
 		return ret;
@@ -102,26 +117,28 @@ public class MapDeVecteurs implements Serializable {
 		MapDeVecteurs ret = new MapDeVecteurs(this);
 		
 		//Parcours tous les points verticaux. Attention les points entre et sortent de l'eau
-		for (int xpos = 0; xpos < this.xSize; xpos ++) {
+		for (int ypos = 0; ypos < this.ySize; ypos ++) {
+			// calcule la position de la mer pour une tranche
+			
 			// calcul l'intersection avec le plan
 			Vecteur inter = null;
 			// Recherche la première intersection
-			for (int ypos = 1; ypos < this.ySize; ypos ++) {
-				Vecteur v = surface.intersection(this.getPoint(xpos, ypos-1), this.getPoint(xpos, ypos));
+			for (int xpos = 1; xpos < this.xSize; xpos ++) {
+				Vecteur v = surface.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
 				if ((v != null)&&(inter == null)) inter = v;
 			}
 
 			boolean auDessus = true;
-			if (surface.donneCote(getPoint(xpos, 0)) > 0) auDessus = false; 
+			if (surface.donneCote(getPoint(0, ypos)) > 0) auDessus = false; 
 			
 			if (auDessus)
-				ret.setPoint(xpos, 0, inter);
+				ret.setPoint(0, ypos, inter);
 			else 
-				ret.setPoint(xpos, 0, this.getPoint(xpos, 0));
+				ret.setPoint(0, ypos, this.getPoint(ypos, 0));
 				
-			for (int ypos = 1; ypos < this.ySize; ypos ++) {
-				Vecteur v = surface.intersection(this.getPoint(xpos, ypos-1), this.getPoint(xpos, ypos));
-				if (v != null) {
+			for (int xpos = 1; xpos < this.xSize; xpos ++) {
+				Vecteur v = surface.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
+				if ((v != null)&&(!v.equals(this.getPoint(xpos-1, ypos)))) {
 					auDessus = !auDessus;
 					inter = v;
 				}
@@ -147,4 +164,37 @@ public class MapDeVecteurs implements Serializable {
 		}
 		return ret;
 	}
+
+	/**
+	 * Génère un plan de coupe de la forme selon le plan donné
+	 * 
+	 * @param pl
+	 * @return
+	 */
+	public Area intersectionVerticale(Plan3D pl) {
+		Area ret = new Area();
+		//Parcours tous les points verticaux. Attention les points entre et sortent de l'eau
+		for (int ypos = 0; ypos < this.ySize; ypos ++) {
+			// calcule la position du plan pour une tranche
+			for (int xpos = 1; xpos < this.xSize; xpos ++) {
+				Vecteur v = pl.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
+				if (v!= null) ret.points.add(v);
+			}
+		}
+		return ret;
+	}
+
+	public Area intersectionHorizontale(Plan3D pl) {
+		Area ret = new Area();
+		//Parcours tous les points verticaux. Attention les points entre et sortent de l'eau
+		for (int xpos = 0; xpos < this.xSize; xpos ++) {
+			// calcule la position du plan pour une tranche
+			for (int ypos = 1; ypos < this.ySize; ypos ++) {
+				Vecteur v = pl.intersection(this.getPoint(xpos, ypos-1), this.getPoint(xpos, ypos));
+				if (v!= null) ret.points.add(v);
+			}
+		}
+		return ret;
+	}
+
 }

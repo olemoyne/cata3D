@@ -93,6 +93,7 @@ public class CalculVolume {
 	
 	/**
 	 * Calcul la poussée en saussissonnant la MAP
+	 *   par les Y
 	 * 
 	 * @param map
 	 * @return
@@ -102,9 +103,9 @@ public class CalculVolume {
 		// Calcule les surfaces de chaque section
 		ArrayList<Decimal> surfaces= new ArrayList<Decimal>();
 		ArrayList<Vecteur> centresSurf = new ArrayList<Vecteur>();
-		for (int x = 0; x < map.xSize(); x ++) {
+		for (int y = 0; y < map.ySize(); y ++) {
 			lst.clear();
-			for (int y = 0; y < map.ySize(); y ++) 
+			for (int x = 0; x < map.xSize(); x ++) 
 				lst.add(map.getPoint(x, y));
 				// Centre sde poussée
 			centresSurf.add(CalculSurface.getCentre (lst));
@@ -113,15 +114,15 @@ public class CalculVolume {
 
 		// Calcule le volume et le centre de poussée de chaque bloc
 		ArrayList<Poids> poussees = new ArrayList<Poids>();
-		for (int x = 1; x < map.xSize(); x ++) {
+		for (int y = 1; y < map.ySize(); y ++) {
 			// Centre de poussée 
-			Vecteur ctr = centresSurf.get(x-1).multiply(surfaces.get(x-1)).add(centresSurf.get(x).multiply(surfaces.get(x))) ;
-			Decimal surf = surfaces.get(x-1).add(surfaces.get(x));
+			Vecteur ctr = centresSurf.get(y-1).multiply(surfaces.get(y-1)).add(centresSurf.get(y).multiply(surfaces.get(y))) ;
+			Decimal surf = surfaces.get(y-1).add(surfaces.get(y));
 			if (!surf.isZero())
 				ctr = ctr.multiply(surf.inverse());
 			
-			Decimal dist = centresSurf.get(x).getDecZ().minus(centresSurf.get(x-1).getDecZ());
-			Decimal vol = ((surfaces.get(x-1).add(surfaces.get(x))).multiply(Decimal.DEMI)).multiply(dist);
+			Decimal dist = centresSurf.get(y).getDecZ().minus(centresSurf.get(y-1).getDecZ());
+			Decimal vol = ((surfaces.get(y-1).add(surfaces.get(y))).multiply(Decimal.DEMI)).multiply(dist);
 			
 			poussees.add(new Poids("", ctr, vol));			
 		}

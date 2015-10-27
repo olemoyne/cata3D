@@ -14,7 +14,7 @@ public class PrintableScene {
 	
 	public void printScene(GL2 gl) {
 		for (PrintableObject obj : allObjects) {
-			obj.drawObject(gl);
+			if (obj.toBePrinted) obj.drawObject(gl);
 		}
 	}
 
