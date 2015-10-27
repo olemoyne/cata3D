@@ -1,26 +1,26 @@
-package appli.values.properties;
+package appli.values.properties.optimize;
 
 import model.Cata;
 import model.math.Decimal;
 import appli.values.CataValuesException;
 import appli.values.CataValuesProperty;
 
-public class Tangage extends CataValuesProperty {
+public class Pilonnement extends CataValuesProperty {
 
-	public Tangage () {
-		super("Degrés de tangage");
+	public Pilonnement () {
+		super("Enfoncement du bateau");
 	}
 
 	public Object getPropertyValue(Cata data) {
-		return data.mer.tangage;
+		return data.mer.pilonnement;
 	}
 	
 	public String setProperty (Cata data, Object val) throws CataValuesException {
 		try {
 			Decimal dec = (Decimal)val;
-			if (Math.abs(dec.floatValue()) > 20)
-				throw new CataValuesException("Le tanagage doit etre comprise entre -20 et + 20 degrés");
-			data.mer.tangage = dec;
+			if (Math.abs(dec.floatValue()) > 1)
+				throw new CataValuesException("Le pilonnement doit etre comprise entre -1 et + 1 metres");
+			data.mer.pilonnement = dec;
 			data.recalculeFlottaison();
 			return dec.toString();
 		} catch (NumberFormatException e) {

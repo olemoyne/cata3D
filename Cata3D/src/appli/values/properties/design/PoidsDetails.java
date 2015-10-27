@@ -1,31 +1,31 @@
-package appli.values.properties;
+package appli.values.properties.design;
 
 import model.Cata;
 import model.Poids;
 import appli.values.CataValuesException;
 import appli.values.CataValuesProperty;
 
-public class PousseeDeCarene extends CataValuesProperty {
+public class PoidsDetails extends CataValuesProperty {
 	
-	public PousseeDeCarene () {
-		super("Poussée de carène");
+	int position;
+	
+	public PoidsDetails (Poids pds, int pos) {
+		super("Poids appliqué");
+		position = pos;
 	}
 
 	public Object getPropertyValue(Cata data) {
-		Poids v = data.mer.pousseeArchimede;
+		Poids v = data.poids.get(position);
 		return v;
 	}
 	
 	public String setProperty (Cata data, Object val) throws CataValuesException {
 		try {
+			data.poids.set(position, (Poids) val);
 			return val.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);
 		}
-	}
-
-	public boolean isUpdatable() {
-		return false;
 	}
 
 }

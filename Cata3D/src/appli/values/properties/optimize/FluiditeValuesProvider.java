@@ -1,4 +1,4 @@
-package appli.values.properties;
+package appli.values.properties.optimize;
 
 import java.awt.Color;
 
@@ -40,7 +40,7 @@ public class FluiditeValuesProvider extends CataValuesProvider {
 		PrintableScene ret = super.getScene(bateau);
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (bateau.mer.coque, "Coque", false, Color.lightGray));
+		ret.add(new PrintedMap (bateau.mer.coque, "Coque", false, Color.darkGray));
 
 		// Affiche la carène en bleu
 		if (bateau.mer.carene != null)

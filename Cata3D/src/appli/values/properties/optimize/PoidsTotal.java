@@ -1,31 +1,31 @@
-package appli.values.properties;
+package appli.values.properties.optimize;
 
 import model.Cata;
 import model.Poids;
 import appli.values.CataValuesException;
 import appli.values.CataValuesProperty;
 
-public class PoidsDetails extends CataValuesProperty {
+public class PoidsTotal extends CataValuesProperty {
 	
-	int position;
-	
-	public PoidsDetails (Poids pds, int pos) {
-		super("Poids appliqué");
-		position = pos;
+	public PoidsTotal () {
+		super("Poids total");
 	}
 
 	public Object getPropertyValue(Cata data) {
-		Poids v = data.poids.get(position);
+		Poids v = data.mer.poidsTotal;
 		return v;
 	}
 	
 	public String setProperty (Cata data, Object val) throws CataValuesException {
 		try {
-			data.poids.set(position, (Poids) val);
 			return val.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);
 		}
+	}
+
+	public boolean isUpdatable() {
+		return false;
 	}
 
 }

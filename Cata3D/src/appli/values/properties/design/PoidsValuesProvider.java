@@ -1,4 +1,4 @@
-package appli.values.properties;
+package appli.values.properties.design;
 
 import java.awt.Color;
 

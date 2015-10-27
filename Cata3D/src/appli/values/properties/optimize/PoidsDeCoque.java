@@ -1,4 +1,4 @@
-package appli.values.properties;
+package appli.values.properties.optimize;
 
 import model.Cata;
 import model.Poids;

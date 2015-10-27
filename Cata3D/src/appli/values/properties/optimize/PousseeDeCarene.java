@@ -1,18 +1,18 @@
-package appli.values.properties;
+package appli.values.properties.optimize;
 
 import model.Cata;
 import model.Poids;
 import appli.values.CataValuesException;
 import appli.values.CataValuesProperty;
 
-public class PoidsTotal extends CataValuesProperty {
+public class PousseeDeCarene extends CataValuesProperty {
 	
-	public PoidsTotal () {
-		super("Poids total");
+	public PousseeDeCarene () {
+		super("Poussée de carène");
 	}
 
 	public Object getPropertyValue(Cata data) {
-		Poids v = data.mer.poidsTotal;
+		Poids v = data.mer.pousseeArchimede;
 		return v;
 	}
 	

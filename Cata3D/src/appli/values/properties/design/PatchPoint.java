@@ -1,4 +1,4 @@
-package appli.values.properties;
+package appli.values.properties.design;
 
 import model.Cata;
 import model.math.Vecteur;

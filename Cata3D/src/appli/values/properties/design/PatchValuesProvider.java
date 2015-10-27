@@ -1,4 +1,4 @@
-package appli.values.properties;
+package appli.values.properties.design;
 
 import java.awt.Color;
 
@@ -60,7 +60,7 @@ public class PatchValuesProvider extends CataValuesProvider {
 				ret.add(new PrintedPoint(bateau.patch.points[x][y], "", Color.yellow));
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (bateau.mapAffichage, "Coque", false, Color.lightGray));
+		ret.add(new PrintedMap (bateau.mapAffichage, "Coque", false, Color.darkGray));
 					
 		return ret;
 	}
