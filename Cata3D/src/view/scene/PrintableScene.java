@@ -21,5 +21,9 @@ public class PrintableScene {
 	public void add(PrintableObject obj) {
 		allObjects.add(obj);
 	}
+
+	public boolean is3DScene() {
+		return true;
+	}
 	
 }

@@ -25,6 +25,12 @@ public class Plan3D {
 		compute (a, o, b);
 	}
 	
+	/** Plan Y = 0**/
+	public Plan3D() {
+		
+		compute (new Vecteur(1, 0, 0), new Vecteur(0, 0, 0), new Vecteur(0, 0, 1));
+	}
+
 	/**
 	 * Retourne l'origine du plan
 	 * @return

@@ -102,7 +102,7 @@ public class ValuesTableModel extends AbstractTableModel {
     	try {
 			dataProvider.setPropertyValue(this.nodeName, row, value);
 			// Mise à jour de la vue
-			this.control.updateView(dataProvider.getView(nodeName));
+			this.control.showDessin(nodeName);
 			fireTableCellUpdated(row, col);
 		} catch (CataValuesException e) {
 			log.logError(e.getLocalizedMessage());

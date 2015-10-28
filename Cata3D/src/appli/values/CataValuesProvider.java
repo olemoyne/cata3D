@@ -37,9 +37,9 @@ public class CataValuesProvider {
 
 	public boolean isUpdatable(Cata data, int row) throws CataValuesException {
 		if (liste.size() == 0) return false;
-		if (liste.size() <= row) return false;
+		if (liste.size() < row) return false;
 		// Identifie le type de données en fonction de la position
-		CataValuesProperty prop = liste.get(row);
+		CataValuesProperty prop = liste.get(row-1);
 		return prop.isUpdatable();
 	}
 

@@ -11,8 +11,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Cata;
-import view.PrintableObjectViewer;
-import view.PrintableViewUpdate;
 import view.scene.PrintableScene;
 import appli.values.CataDataManager;
 import appli.values.CataValuesException;
@@ -28,10 +26,9 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 	/** Gestion des outils affichés**/
 	private Message message;
 	private CataFileManager mngr;
-	private PrintableObjectViewer viewer;
-	private PrintableViewUpdate upd;
 	private TableValues values;
 	private ArbreDesign arbre;
+	private ActiveView vue; 
 	
 	private CataDataManager dataManager;
 	
@@ -53,10 +50,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		 * Creation du manager de formes
 		 */
 		log.writeLog("Starting the view");
-		upd = new PrintableViewUpdate("0.25");
-		viewer = new PrintableObjectViewer(upd);
-
-		fond.add(viewer, BorderLayout.CENTER);
+		vue = new ActiveView(fond);
 
 		log.writeLog("Drawing the tree");
 		arbre = new ArbreDesign(this);
@@ -119,7 +113,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		try {
 			if (node.isLeaf()) {
 				// Positionne la bonne view
-				viewer.setScene(dataManager.getView(nodeName));
+				this.showDessin(nodeName);
 				// Positionne les bonnes valeurs
 				values.showNode(nodeName);
 			} else {
@@ -170,14 +164,11 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		Context.saveTofile(ctx);
 	}
 
-	public void updateView(PrintableScene view) {
-		this.viewer.setScene(view);
-	}
-
 	public void showDessin(String nodeName) {
 		// Positionne la bonne view
 		try {
-			viewer.setScene(dataManager.getView(nodeName));
+			PrintableScene scene = dataManager.getView(nodeName);
+			vue.setScene(scene);
 		} catch (CataValuesException e) {
 			e.printStackTrace();
 			this.message.logError(e.getLocalizedMessage());

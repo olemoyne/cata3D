@@ -1,7 +1,6 @@
 package appli.values.updater;
 
-import java.awt.FlowLayout;
-
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 /** 
@@ -19,7 +18,7 @@ public class ObjectUpdater extends JPanel {
 
 	public ObjectUpdater () {
 		super();
-		setLayout(new FlowLayout(FlowLayout.LEADING));
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 	}
 	
 	public void setProperty (Object val) {

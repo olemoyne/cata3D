@@ -1,5 +1,7 @@
 package appli.values.updater;
 
+import java.awt.GridLayout;
+
 import model.Poutre;
 import model.math.Decimal;
 import model.math.Vecteur;
@@ -28,23 +30,25 @@ public class PoutreUpdater extends ObjectUpdater {
 	
 	// Ajoute les champs de saisie
 	private void addFields() {
+		setLayout(new GridLayout(3, 2));
+
 		fldX = new DecimalField("X Position : ", "m");
 		add(fldX);
 
+		epai = new DecimalField("Epaisseur : ", "m");
+		add(epai);
+
 		fldY = new DecimalField("Y Position : ", "m");
 		add(fldY);
+
+		haut = new DecimalField("Hauteur : ", "m");
+		add(haut);
 
 		fldZ = new DecimalField("Z Position : ", "m");
 		add(fldZ);
 
 		longu = new DecimalField("Longueur : ", "m");
 		add(longu);
-
-		haut = new DecimalField("Hauteur : ", "m");
-		add(haut);
-
-		epai = new DecimalField("Epaisseur : ", "m");
-		add(epai);
 
 	}
 

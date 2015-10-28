@@ -9,6 +9,7 @@ import java.util.Hashtable;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import model.Gabarit;
 import model.Poids;
@@ -24,6 +25,8 @@ public class PropertyValueUpdater extends JPanel {
 	private Hashtable<String, ObjectUpdater> panels;
 
 	private JButton modifie;
+	
+	private JScrollPane scroll;
 
 	/**
 	 * 
@@ -68,6 +71,9 @@ public class PropertyValueUpdater extends JPanel {
 		modifie.setActionCommand("modifie");
 		modifie.addActionListener(ctr);		
 		sub.add(modifie);
+		
+		scroll = new JScrollPane();
+		this.add(scroll, BorderLayout.CENTER);
 
 		this.add(sub, BorderLayout.SOUTH);
 	}
@@ -76,11 +82,11 @@ public class PropertyValueUpdater extends JPanel {
 	public void setValue (Object val, boolean modif) {
 		if (val == null) return;
 		String cl = val.getClass().toString();
-		if (active != null) this.remove(active);
+		if (active != null) scroll.remove(active);
 		active = panels.get(cl);
 		if (active != null) {
 			active.setProperty(val);
-			this.add(active, BorderLayout.CENTER);
+			scroll.setViewportView(active);
 			modifie.setEnabled(modif);
 			this.repaint();
 		}

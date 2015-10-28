@@ -1,4 +1,4 @@
-package view;
+package view.view3D;
 
 import com.jogamp.opengl.glu.GLU;
 

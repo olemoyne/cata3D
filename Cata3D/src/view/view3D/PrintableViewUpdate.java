@@ -1,4 +1,4 @@
-package view;
+package view.view3D;
 
 import java.awt.Color;
 import java.awt.Component;

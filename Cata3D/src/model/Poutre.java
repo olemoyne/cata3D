@@ -36,7 +36,7 @@ public class Poutre implements Serializable{
 
 	public Vecteur  getEnd() {
 		return new Vecteur (depart.getDecX().add(epaisseur), 
-				depart.getDecY().minus(longueur), depart.getDecZ().add(longueur));
+				depart.getDecY().minus(hauteur), depart.getDecZ().add(longueur));
 	}
 	
 }
