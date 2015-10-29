@@ -5,16 +5,12 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import tarpeia.com.model.TarpeiaField;
-import tarpeia.com.model.TarpeiaObject;
-
 /**
- * Gestion des nombre décimaux 
+ * Gestion des nombre dï¿½cimaux 
  * 
  * @author olemoyne
  *
  */
-@TarpeiaObject
 public class Decimal implements Comparable<Decimal>, Serializable{
 	
 	/**
@@ -43,11 +39,10 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	public static final Decimal DEMI = new Decimal("0.5");;
 
 	/**
-	 * montant à payer
+	 * montant ï¿½ payer
 	 */
 	private BigDecimal dec;
 	
-	@TarpeiaField
 	private String val;
 
 	
@@ -69,7 +64,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	/**
-	 *  creation d'un Décimal
+	 *  creation d'un Dï¿½cimal
 	 *  
 	 * @param d
 	 */
@@ -80,7 +75,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 
 	
 	/**
-	 * Création d'un décimal de type long
+	 * Crï¿½ation d'un dï¿½cimal de type long
 	 * 
 	 * @param x
 	 */
@@ -95,7 +90,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	/**
-	 * Comparaison de nombre décimaux
+	 * Comparaison de nombre dï¿½cimaux
 	 * 
 	 * @param other
 	 * @return
@@ -107,7 +102,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 	
 	/**
-	 * Division d'un décimal
+	 * Division d'un dï¿½cimal
 	 * 
 	 * @param d
 	 * @return
@@ -125,7 +120,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 
 	
 	/**
-	 * Multiplication d'un décimal
+	 * Multiplication d'un dï¿½cimal
 	 * 
 	 * @param d
 	 * @return
@@ -156,7 +151,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	/**
-	 * retourne la valeur négative
+	 * retourne la valeur nï¿½gative
 	 * 
 	 * @return
 	 */
@@ -166,7 +161,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	/**
-	 * Addition d'un décimal
+	 * Addition d'un dï¿½cimal
 	 * 
 	 * @param d
 	 * @return
@@ -178,7 +173,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	/**
-	 * Soustraction d'un décimal
+	 * Soustraction d'un dï¿½cimal
 	 * 
 	 * @param d
 	 * @return
@@ -191,7 +186,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 
 	
 	/**
-	 * Calcul du carré
+	 * Calcul du carrï¿½
 	 * @return
 	 */
 	public Decimal square() {
@@ -200,7 +195,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	/**
-	 * Calcul de la racine carrée
+	 * Calcul de la racine carrï¿½e
 	 * @return
 	 */
 	public Decimal racine() {
@@ -229,7 +224,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	/**
-	 * Retourne une chaine de caractères correspondant à la description du point
+	 * Retourne une chaine de caractï¿½res correspondant ï¿½ la description du point
 	 */
 	public String toString() {
 		if (dec == null) dec = new BigDecimal(val);
@@ -249,7 +244,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	/**
-	 * Parse un décimal
+	 * Parse un dï¿½cimal
 	 * 
 	 * @param d
 	 * @return

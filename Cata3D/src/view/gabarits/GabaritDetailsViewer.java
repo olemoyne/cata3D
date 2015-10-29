@@ -25,8 +25,8 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 
 	/**
 	 * Scene de visualisation des gabarits  
-	 *    -> Liste des différents gabarits (Choice / Select)
-	 *    -> Détail de visualisation
+	 *    -> Liste des diffï¿½rents gabarits (Choice / Select)
+	 *    -> Dï¿½tail de visualisation
 	 */
 	
 	private GabaritPlanViewer vue;
@@ -45,11 +45,11 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 		setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 		
-		// Ajoute les éléments 
+		// Ajoute les ï¿½lï¿½ments 
 		//Liste des gabarits
 		JPanel sub = new JPanel();
 		sub.setLayout(new BoxLayout(sub, BoxLayout.LINE_AXIS));
-		sub.add(new JLabel("Choisissez le gabarit à étudier"));
+		sub.add(new JLabel("Choisissez le gabarit ï¿½ ï¿½tudier"));
 		select = new JComboBox<Gabarit>();
 		select.addActionListener(this);
 		sub.add(select);
@@ -63,26 +63,24 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Affiche la scene demandée
+	 * Affiche la scene demandï¿½e
 	 * 
 	 * @param gab
 	 */
 	public void setScene (GabaritScene gab) {
 		// Affiche la liste des gabarits possible
 		select.removeAllItems();
-		for (Gabarit g : gab.getGabarits()) select.addItem(g);
+/**		for (Gabarit g : gab.getGabarits()) select.addItem(g);
 		if (gab.getGabarits().size() > 0) {
 			Gabarit g = gab.getGabarits().get(0);
 			if (g != null) select.getModel().setSelectedItem(g);
 		}
-		
-		mer = gab.getFlottaison();
-		poutres = gab.getPoutres(); 
+**/		
 	}
 
 	@Override
 	/** 
-	 * Changement de gabarit selectionné 
+	 * Changement de gabarit selectionnï¿½ 
 	 ***/
 	public void actionPerformed(ActionEvent e) {
 		Gabarit gab = (Gabarit)this.select.getSelectedItem();

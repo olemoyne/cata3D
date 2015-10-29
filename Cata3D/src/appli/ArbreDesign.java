@@ -14,7 +14,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 /**
- * Permet de gérer le menu des paramètres de design de la coque
+ * Permet de gï¿½rer le menu des paramï¿½tres de design de la coque
  * 
  * @author olemoyne
  *
@@ -27,12 +27,12 @@ public class ArbreDesign extends JPanel {
 	private static final long serialVersionUID = 7084266294399341057L;
 	
 	/**
-	 * Arbre de visualisation des données 
+	 * Arbre de visualisation des donnï¿½es 
 	 */
 	private JTree arbre;
 	
 	/**
-	 * Constructeur avec la référence vers le viewer pour changer les données ou rafraichir la vision
+	 * Constructeur avec la rï¿½fï¿½rence vers le viewer pour changer les donnï¿½es ou rafraichir la vision
 	 * 
 	 * @param v
 	 * @param msg 
@@ -44,7 +44,7 @@ public class ArbreDesign extends JPanel {
 		this.setPreferredSize(new Dimension(400, 1000));
 		this.setBackground(Color.black);
 		
-		DefaultMutableTreeNode top = new DefaultMutableTreeNode("Définition de la coque");
+		DefaultMutableTreeNode top = new DefaultMutableTreeNode("Dï¿½finition de la coque");
 		createNodes(top);
 
 		arbre = new JTree(top);
@@ -68,7 +68,7 @@ public class ArbreDesign extends JPanel {
 		}
 	}
 
-	// Les neuds sont créés en dur
+	// Les neuds sont crï¿½ï¿½s en dur
 	private void createNodes(DefaultMutableTreeNode top) {
 
 	    DefaultMutableTreeNode design = null;
@@ -86,8 +86,8 @@ public class ArbreDesign extends JPanel {
 	    optimisation= new DefaultMutableTreeNode("Optimisation");
 	    top.add(optimisation);
 	    optimisation.add(new DefaultMutableTreeNode("Flottaison"));
-	    optimisation.add(new DefaultMutableTreeNode("Fluidité"));
-	    optimisation.add(new DefaultMutableTreeNode("Habitablité"));
+	    optimisation.add(new DefaultMutableTreeNode("FluiditÃ©"));
+	    optimisation.add(new DefaultMutableTreeNode("HabitabilitÃ©"));
 
 	    //construction de la coque
 	    construction= new DefaultMutableTreeNode("Construction");

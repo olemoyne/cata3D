@@ -10,7 +10,7 @@ import view.view3D.PrintableObjectViewer;
 import view.view3D.PrintableViewUpdate;
 
 /**
- * Vue permettant de switcher le type de vue en fonction de la scène à afficher.
+ * Vue permettant de switcher le type de vue en fonction de la scï¿½ne ï¿½ afficher.
  * 
  * @author olemoyne
  *
@@ -40,8 +40,8 @@ public class ActiveView {
 	
 	public void setScene (PrintableScene scene) {
 		if (scene.is3DScene()) {
+			viewer3D.setScene(scene);
 			if (active != viewer3D) {
-				viewer3D.setScene(scene);
 				fondDeVue.remove(active);
 				fondDeVue.add(viewer3D, BorderLayout.CENTER);
 				active = viewer3D;

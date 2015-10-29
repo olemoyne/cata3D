@@ -12,7 +12,7 @@ import appli.values.properties.optimize.FluiditeValuesProvider;
 import model.Cata;
 
 /**
- * Gestion des données à afficher à partir du catamaran
+ * Gestion des donnï¿½es ï¿½ afficher ï¿½ partir du catamaran
  * 
  * @author olemoyne
  *
@@ -29,16 +29,16 @@ public class CataDataManager {
 		providers.put("Patch", new PatchValuesProvider());
 		providers.put("Poids", new PoidsValuesProvider());
 		providers.put("Flottaison", new FlottaisonValuesProvider());
-		providers.put("Fluidité", new FluiditeValuesProvider());
+		providers.put("FluiditÃ©", new FluiditeValuesProvider());
 		providers.put("Gabarits", new GabaritsValuesProvider());
 		providers.put("Poutres", new PoutresValuesProvider());
 		
-		// par défaut, le cata est initialisé
+		// par dï¿½faut, le cata est initialisï¿½
 //		data = new Cata();
 	}
 	
 	/**
-	 * Détermine la nécessité d'afficher des boutons 
+	 * Dï¿½termine la nï¿½cessitï¿½ d'afficher des boutons 
 	 * 
 	 * @param nodeName
 	 * @return
@@ -52,7 +52,7 @@ public class CataDataManager {
 	}
 
 	/**
-	 * Mise à jour d'une données dans le model
+	 * Mise ï¿½ jour d'une donnï¿½es dans le model
 	 * 
 	 * @param nodeName
 	 * @param row
@@ -67,7 +67,7 @@ public class CataDataManager {
 
 
 	/**
-	 * Mise à jour d'une données dans le model
+	 * Mise ï¿½ jour d'une donnï¿½es dans le model
 	 * 
 	 * @param nodeName
 	 * @param row
@@ -81,7 +81,7 @@ public class CataDataManager {
 	}
 
 	/**
-	 * Retourne le nombre de données dans le tableau
+	 * Retourne le nombre de donnï¿½es dans le tableau
 	 * 
 	 * @param nodeName
 	 * @return
@@ -95,7 +95,7 @@ public class CataDataManager {
 	}
 
 	/**
-	 * Si une valeur peut être mise à jour
+	 * Si une valeur peut ï¿½tre mise ï¿½ jour
 	 * 
 	 * @param nodeName
 	 * @return
@@ -110,7 +110,7 @@ public class CataDataManager {
 
 	
 	/**
-	 * Retourne le nom de la propriété 
+	 * Retourne le nom de la propriï¿½tï¿½ 
 	 * 
 	 * @param nodeName
 	 * @param row
@@ -126,7 +126,7 @@ public class CataDataManager {
 
 	public PrintableScene getView(String nodeName) throws CataValuesException {
 		CataValuesProvider prv = providers.get(nodeName);
-		if (prv == null) throw new CataValuesException("Node name not defined : "+nodeName);
+		if (prv == null) return null;//throw new CataValuesException("Node name not defined : "+nodeName);
 		
 		return prv.getScene(data);
 	}

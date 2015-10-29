@@ -12,8 +12,9 @@ import model.Cata;
 import model.Gabarit;
 import model.Poutre;
 import model.Structure;
+import model.math.Decimal;
 /**
- * Permet de gérer la mise à jour des données de patch
+ * Permet de gï¿½rer la mise ï¿½ jour des donnï¿½es de patch
  * 
  * @author olemoyne
  *
@@ -40,18 +41,18 @@ public class PoutresValuesProvider extends CataValuesProvider {
 	}
 	
 	/** 
-	 * Permet d'afficher la scene correspondant à la vue définie
+	 * Permet d'afficher la scene correspondant ï¿½ la vue dï¿½finie
 	 * 
 	 */
 	public PrintableScene getScene ( Cata bateau) {
 		PrintableScene ret = super.getScene(bateau);
 
-		// Affiche la coque en gris foncé
+		// Affiche la coque en gris foncï¿½
 		ret.add(new PrintedMap (bateau.mapAffichage, "Coque", false, Color.darkGray));
 					
 		// Affiche chaque gabarit
 		for (Gabarit gab : bateau.structure.gabarits) {
-			ret.add(new PrintedArea(gab.getArea(bateau), "Bagarit "+gab.position.toString(), false,  Color.lightGray));
+			ret.add(new PrintedArea(gab.getArea(bateau, Decimal.ZERO), "Bagarit "+gab.position.toString(), false,  Color.lightGray));
 		}
 
 		// Affiche chaque gabarit
@@ -63,7 +64,7 @@ public class PoutresValuesProvider extends CataValuesProvider {
 	}
 
 	/**
-	 * 	Les boutons sont nécessaires
+	 * 	Les boutons sont nï¿½cessaires
 	 */
 	public boolean areArrayButtonsNeeded() {
 		return true;
@@ -77,10 +78,10 @@ public class PoutresValuesProvider extends CataValuesProvider {
 	}
 
 	public void supprimer(Cata data, int pos){
-		// Décale les positions
+		// Dï¿½cale les positions
 		data.structure.poutres.remove(pos);
 		this.liste.remove(pos);
-		// décale les positions
+		// dï¿½cale les positions
 		int position = 0;
 		for (CataValuesProperty prp : liste) {
 			PoutreDetails pd = (PoutreDetails)prp;
