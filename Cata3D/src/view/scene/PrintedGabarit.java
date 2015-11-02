@@ -33,12 +33,16 @@ public class PrintedGabarit extends PrintableObject {
 	public PrintedGabarit(Gabarit gab, Cata coque, String n, Color c) {
 		super(n, c);
 		
+		name = gab.toString();
+		
 		bns = new Bounds3D(); 
 		
 		devant = gab.getArea(coque, Decimal.ZERO);
 		bns.add(devant);
 		fond = gab.getArea(coque, gab.epaisseur);
 		bns.add(devant);
+		
+		trous = new ArrayList<Area>();
 		
 		// Liste des trous
 		for (Poutre ptr : coque.structure.poutres) {
@@ -50,14 +54,19 @@ public class PrintedGabarit extends PrintableObject {
 			}
 		}
 		
+	
 		// Ajoute le niveau de la mer
 		Plan3D pl = coque.mer.getPlan();
 		
 		Vecteur s = bns.getMin();
-		Vecteur e = new Vecteur (start.getDecX(), start.getDecY(), end.getDecZ());
-		Vecteur c = pl.intersection(e,  s);
-		if (c!= null) ret.points.add(c);
+		Vecteur e = new Vecteur (bns.getMin().getDecX(), bns.getMax().getDecY(), bns.getMin().getDecZ());
+		Vecteur mstart = pl.intersection(e,  s);
 
+		s = new Vecteur (bns.getMax().getDecX(), bns.getMin().getDecY(), bns.getMin().getDecZ());
+		e = new Vecteur (bns.getMax().getDecX(), bns.getMax().getDecY(), bns.getMin().getDecZ());
+		Vecteur mend= pl.intersection(e,  s);
+
+		mer = new Segment (mstart, mend);
 	}
 
 
@@ -66,6 +75,11 @@ public class PrintedGabarit extends PrintableObject {
 	 */
 	@Override
 	public void drawObject(GL2 gl) {
+	}
+	
+	
+	public String toString() {
+		return name;
 	}
 
 }

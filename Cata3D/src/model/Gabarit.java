@@ -104,4 +104,5 @@ public class Gabarit implements Serializable {
 		
 		return ret;
 	}
+	
 }

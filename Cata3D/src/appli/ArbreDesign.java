@@ -94,6 +94,7 @@ public class ArbreDesign extends JPanel {
 	    top.add(construction);
 	    construction.add(new DefaultMutableTreeNode("Gabarits"));
 	    construction.add(new DefaultMutableTreeNode("Poutres"));
+	    construction.add(new DefaultMutableTreeNode("Plans"));
 	}
 
 	public DefaultMutableTreeNode getTheNode() {

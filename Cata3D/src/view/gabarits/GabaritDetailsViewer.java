@@ -4,17 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import model.Gabarit;
-import model.Poutre;
-import model.math.Plan3D;
 import view.scene.GabaritScene;
+import view.scene.PrintableObject;
+import view.scene.PrintedGabarit;
 
 public class GabaritDetailsViewer extends JPanel implements ActionListener {
 
@@ -31,11 +28,7 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 	
 	private GabaritPlanViewer vue;
 	
-	private JComboBox<Gabarit> select;
-	
-	private Plan3D mer;
-	
-	private ArrayList<Poutre> poutres;
+	private JComboBox<PrintedGabarit> select;
 	
 	/**
 	 * Creation de la vue 2D
@@ -50,7 +43,7 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 		JPanel sub = new JPanel();
 		sub.setLayout(new BoxLayout(sub, BoxLayout.LINE_AXIS));
 		sub.add(new JLabel("Choisissez le gabarit � �tudier"));
-		select = new JComboBox<Gabarit>();
+		select = new JComboBox<PrintedGabarit>();
 		select.addActionListener(this);
 		sub.add(select);
 		
@@ -70,12 +63,12 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 	public void setScene (GabaritScene gab) {
 		// Affiche la liste des gabarits possible
 		select.removeAllItems();
-/**		for (Gabarit g : gab.getGabarits()) select.addItem(g);
-		if (gab.getGabarits().size() > 0) {
-			Gabarit g = gab.getGabarits().get(0);
-			if (g != null) select.getModel().setSelectedItem(g);
+		for (PrintableObject g : gab.allObjects) select.addItem((PrintedGabarit)g);
+		if (gab.allObjects.size() > 0) {
+			PrintableObject g = gab.allObjects.get(0);
+			if (g != null) select.getModel().setSelectedItem((PrintedGabarit)g);
 		}
-**/		
+		repaint();
 	}
 
 	@Override
@@ -83,9 +76,10 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 	 * Changement de gabarit selectionn� 
 	 ***/
 	public void actionPerformed(ActionEvent e) {
-		Gabarit gab = (Gabarit)this.select.getSelectedItem();
+		PrintedGabarit gab = (PrintedGabarit)this.select.getSelectedItem();
 		// TODO Auto-generated method stub
-		this.vue.setGabarit(gab, mer, poutres);
+		this.vue.setGabarit(gab);
+		repaint();
 	}
 	
 }

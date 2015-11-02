@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 import view.scene.PrintableScene;
 import appli.values.properties.build.GabaritsValuesProvider;
+import appli.values.properties.build.PlansValuesProvider;
 import appli.values.properties.build.PoutresValuesProvider;
 import appli.values.properties.design.PatchValuesProvider;
 import appli.values.properties.design.PoidsValuesProvider;
@@ -32,6 +33,7 @@ public class CataDataManager {
 		providers.put("Fluidité", new FluiditeValuesProvider());
 		providers.put("Gabarits", new GabaritsValuesProvider());
 		providers.put("Poutres", new PoutresValuesProvider());
+		providers.put("Plans", new PlansValuesProvider());
 		
 		// par d�faut, le cata est initialis�
 //		data = new Cata();

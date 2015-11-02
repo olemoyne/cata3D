@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 import view.gabarits.GabaritDetailsViewer;
+import view.scene.GabaritScene;
 import view.scene.PrintableScene;
 import view.view3D.PrintableObjectViewer;
 import view.view3D.PrintableViewUpdate;
@@ -35,6 +36,7 @@ public class ActiveView {
 		active = viewer3D;
 
 		/** Creation de la vue du gabarit **/
+		gabView = new GabaritDetailsViewer();
 		
 	}
 	
@@ -47,9 +49,12 @@ public class ActiveView {
 				active = viewer3D;
 			}
 		} else {
-			fondDeVue.remove(active);
-			fondDeVue.add(viewer3D, BorderLayout.CENTER);
-			active = viewer3D;
+			gabView.setScene((GabaritScene)scene);
+			if (active != gabView) {
+				fondDeVue.remove(active);
+				fondDeVue.add(gabView, BorderLayout.CENTER);
+				active = gabView;
+			}
 		}
 	}
 	
