@@ -39,7 +39,7 @@ public class Gabarit implements Serializable {
 	public Area getArea(Cata bateau, Decimal i) {
 		// Plan Z = position;
 		Plan3D pl = new Plan3D(new Vecteur(Decimal.UN, Decimal.ZERO, position.add(i)), 
-				new Vecteur(Decimal.ZERO, Decimal.ZERO, position), new Vecteur(Decimal.ZERO, Decimal.UN, position.add(i)));
+				new Vecteur(Decimal.ZERO, Decimal.ZERO, position.add(i)), new Vecteur(Decimal.ZERO, Decimal.UN, position.add(i)));
 		
 		Area coupe = bateau.mapAffichage.intersectionHorizontale(pl);
 		
