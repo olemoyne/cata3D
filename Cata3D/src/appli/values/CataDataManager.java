@@ -8,6 +8,7 @@ import appli.values.properties.build.PlansValuesProvider;
 import appli.values.properties.build.PoutresValuesProvider;
 import appli.values.properties.design.PatchValuesProvider;
 import appli.values.properties.design.PoidsValuesProvider;
+import appli.values.properties.optimize.DeriveValuesProvider;
 import appli.values.properties.optimize.FlottaisonValuesProvider;
 import appli.values.properties.optimize.FluiditeValuesProvider;
 import model.Cata;
@@ -30,6 +31,7 @@ public class CataDataManager {
 		providers.put("Patch", new PatchValuesProvider());
 		providers.put("Poids", new PoidsValuesProvider());
 		providers.put("Flottaison", new FlottaisonValuesProvider());
+		providers.put("Dérive", new DeriveValuesProvider());
 		providers.put("Fluidité", new FluiditeValuesProvider());
 		providers.put("Gabarits", new GabaritsValuesProvider());
 		providers.put("Poutres", new PoutresValuesProvider());

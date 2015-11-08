@@ -41,6 +41,7 @@ public class ActiveView {
 	}
 	
 	public void setScene (PrintableScene scene) {
+		if (scene == null) return;
 		if (scene.is3DScene()) {
 			viewer3D.setScene(scene);
 			if (active != viewer3D) {

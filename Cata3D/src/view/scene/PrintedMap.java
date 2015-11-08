@@ -7,7 +7,12 @@ import model.math.MapDeVecteurs;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL2;
-
+/**
+ * TODO : nettoyage de la coque
+ *  
+ * @author lemoyne
+ *
+ */
 public class PrintedMap extends PrintableObject {
 
 	private MapDeVecteurs map;
@@ -35,7 +40,7 @@ public class PrintedMap extends PrintableObject {
 		
 		if (!fillup) {
 			Vecteur pt = null;
-			// Trace tous les trais horizontaux
+			// Trace tous les trais verticaux
 			for (int y = 0; y < map.ySize(); y ++) {
 		        gl.glBegin(GL2.GL_LINE_STRIP);
 				for (int x = 0; x < map.xSize(); x ++) {
@@ -43,10 +48,10 @@ public class PrintedMap extends PrintableObject {
 					gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
 				}
 				pt = map.getPoint(0,  y);
-//				gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+				gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
 				gl.glEnd();
 			}
-			// Trace tous les trais verticaux
+			// Trace tous les trais horizontaux
 			for (int x = 0; x < map.xSize(); x ++) {
 		        gl.glBegin(GL2.GL_LINE_STRIP);
 				for (int y = 0; y < map.ySize(); y ++) {
@@ -54,13 +59,13 @@ public class PrintedMap extends PrintableObject {
 					gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
 				}
 				pt = map.getPoint(x,  0);
-				gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+//				gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
 				gl.glEnd();
 			}
 		} else {
 			Vecteur pt= null;
 			ArrayList<Vecteur>lst = new ArrayList<Vecteur>();
-			// Trace tous les carrrés
+			// Trace tous les carrrï¿½s
 			for (int x = 1; x < map.xSize(); x ++) {
 				for (int y = 1; y < map.ySize(); y ++) {
 					lst.clear();

@@ -2,6 +2,7 @@ package model.calcul;
 
 import java.util.ArrayList;
 
+import model.Area;
 import model.Cata;
 import model.Poids;
 import model.math.Axis;
@@ -87,6 +88,27 @@ public class CalculCoque {
 		cata.mer.poidsTotal = CalculVolume.getCentreGravite("Poids total ", pds);
 		// calcul si le bateau est stable
 		
+	}
+
+
+	/** 
+	 * TODO : Calcul du centre de dérive et de la surface anti-dérive
+	 * 
+	 * @param cata
+	 */
+	public static void calculeDerive(Cata cata) {
+		// Création d'une projection
+		Area surface = new Area();
+		for (int y = 0; y < cata.mer.carene.ySize(); y++) {
+			surface.points.add(cata.mer.carene.getPoint(0, y));
+		}
+		int max = cata.mer.carene.xSize()-1;
+		for (int y = cata.mer.carene.ySize()-1; y > 0 ; y--) {
+			surface.points.add(cata.mer.carene.getPoint(max, y));
+		}
+		
+		cata.mer.centreAntiDerive = surface.getCentre();
+		cata.mer.surfaceAntiDerive = surface.getSurface();
 	}
 	
 }

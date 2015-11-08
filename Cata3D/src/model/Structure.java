@@ -21,6 +21,9 @@ public class Structure implements Serializable {
 	/** Poutres **/
 	public ArrayList<Poutre> poutres;
 
+	/** position en Z du mat **/
+	public Decimal positionDuMat;
+
 	public Structure () {
 
 		gabarits = new ArrayList<Gabarit> ();

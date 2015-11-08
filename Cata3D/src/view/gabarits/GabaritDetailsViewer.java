@@ -77,7 +77,7 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 	 ***/
 	public void actionPerformed(ActionEvent e) {
 		PrintedGabarit gab = (PrintedGabarit)this.select.getSelectedItem();
-		// TODO Auto-generated method stub
+		
 		this.vue.setGabarit(gab);
 		repaint();
 	}

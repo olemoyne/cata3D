@@ -8,7 +8,7 @@ import view.scene.PrintedMap;
 import appli.values.CataValuesProvider;
 import model.Cata;
 /**
- * Permet de gérer la mise à jour des données de patch
+ * Permet de gï¿½rer la mise ï¿½ jour des donnï¿½es de patch
  * 
  * @author olemoyne
  *
@@ -25,7 +25,7 @@ public class FlottaisonValuesProvider extends CataValuesProvider {
 		liste.add(new Tangage());
 		liste.add(new DensiteSurfaciqueCoque());
 		
-		// TODO : Affichage des valeurs calculées
+		// Affichage des valeurs calculï¿½es
 		liste.add(new PoidsDeCoque());
 		liste.add(new PoidsTotal());
 		liste.add(new PousseeDeCarene());
@@ -51,7 +51,7 @@ public class FlottaisonValuesProvider extends CataValuesProvider {
 	}
 
 	/** 
-	 * Permet d'afficher la scene correspondant à la vue définie
+	 * Permet d'afficher la scene correspondant ï¿½ la vue dï¿½finie
 	 * 
 	 */
 	public PrintableScene getScene ( Cata bateau) {
@@ -60,16 +60,16 @@ public class FlottaisonValuesProvider extends CataValuesProvider {
 		// Affiche la coque en gris
 		ret.add(new PrintedMap (bateau.mer.coque, "Coque", false, Color.darkGray));
 
-		// Affiche la carène en bleu
+		// Affiche la carï¿½ne en bleu
 		if (bateau.mer.carene != null)
-			ret.add(new PrintedMap (bateau.mer.carene, "Carène", false, Color.blue));
+			ret.add(new PrintedMap (bateau.mer.carene, "Carï¿½ne", false, Color.blue));
 
 		// Affiche la mer en bleu ciel 
 		
 		// Affiche le poids total en rouge
 		if (bateau.mer.poidsTotal!= null)
 			ret.add(new PrintedForce (bateau.mer.poidsTotal, Color.red));
-		// Affiche la poussée en vert
+		// Affiche la poussï¿½e en vert
 		if (bateau.mer.poidsTotal!= null)
 			ret.add(new PrintedForce  (bateau.mer.pousseeArchimede, Color.blue));
 		

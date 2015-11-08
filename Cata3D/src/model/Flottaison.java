@@ -12,7 +12,7 @@ import model.math.transfo.Transformation;
 import model.math.transfo.Translation;
 
 /***************************
- *  Permet de définir le niveau de la mer par rapport à la coque
+ *  Permet de dï¿½finir le niveau de la mer par rapport ï¿½ la coque
  *  
  * @author olemoyne
  *
@@ -36,7 +36,7 @@ public class Flottaison implements Serializable {
 	
 	
 	/**
-	 * Elements calculés pour affichage
+	 * Elements calculï¿½s pour affichage
 	 */
 	public MapDeVecteurs coque;
 	public MapDeVecteurs carene;
@@ -46,7 +46,11 @@ public class Flottaison implements Serializable {
 	public Poids pousseeArchimede;
 	
 	public String flottabilite;
-	
+
+	// Elements calculÃ©s Ã  partir de la surface de carÃ¨ne
+	public Vecteur centreAntiDerive;
+	public Decimal surfaceAntiDerive;
+
 	public Flottaison () {
 		pilonnement = new Decimal(0);
 		tangage = new Decimal(0); // Angle de tangage (rotation selon Y )
@@ -65,7 +69,7 @@ public class Flottaison implements Serializable {
 	}
 	
 	/**
-	 * Détermine le plan correspondant à la surface de la mer
+	 * Dï¿½termine le plan correspondant ï¿½ la surface de la mer
 	 * 
 	 * @return
 	 */

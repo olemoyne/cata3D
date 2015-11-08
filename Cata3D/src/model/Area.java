@@ -6,7 +6,7 @@ import model.math.Decimal;
 import model.math.Vecteur;
 
 /** 
- * Liste de points définissant une surface
+ * Liste de points dï¿½finissant une surface
  * 
  * @author olemoyne
  *
@@ -31,7 +31,7 @@ public class Area {
 	}
 	
 	/**
-	 * Retaille la forme en rognant la distance demandée
+	 * Retaille la forme en rognant la distance demandï¿½e
 	 * 
 	 * @param negate
 	 * @return
@@ -48,6 +48,16 @@ public class Area {
 			ret.points.add(pt);
 		}
 		return ret;
+	}
+
+	
+	/** 
+	 * TODO : calcul la surface de la zone
+	 * @return
+	 */
+	public Decimal getSurface() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -3,7 +3,7 @@ package appli.values.updater;
 import model.math.Decimal;
 
 /** 
- * Permet de mettre à jour un vecteur
+ * Permet de mettre ï¿½ jour un vecteur
  * 
  * @author olemoyne
  *
@@ -31,7 +31,7 @@ public class IntegerUpdater extends ObjectUpdater {
 	public Object getData() {
 		Decimal dec = (Decimal) intVal.getValue();
 		int idec = Math.round(dec.floatValue());
-		return new Integer(idec);
+		return new Decimal(idec);
 	}
 	
 }

@@ -87,6 +87,7 @@ public class ArbreDesign extends JPanel {
 	    top.add(optimisation);
 	    optimisation.add(new DefaultMutableTreeNode("Flottaison"));
 	    optimisation.add(new DefaultMutableTreeNode("Fluidité"));
+	    optimisation.add(new DefaultMutableTreeNode("Dérive"));
 	    optimisation.add(new DefaultMutableTreeNode("Habitabilité"));
 
 	    //construction de la coque

@@ -9,11 +9,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-
-public class ViewListener implements KeyListener, MouseMotionListener, MouseListener, MouseWheelListener, ListSelectionListener  {
+public class ViewListener implements KeyListener, MouseMotionListener, MouseListener, MouseWheelListener {
 
     private View3D upper;
     private Point lastPosition = null;
@@ -137,7 +134,7 @@ public class ViewListener implements KeyListener, MouseMotionListener, MouseList
 	}
 	
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
-		// Gère la profondeur de chant
+		// Gï¿½re la profondeur de chant
 		if (arg0.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
 			for (int pos = arg0.getScrollAmount(); pos > 0 ; pos --) {
 				if (arg0.getWheelRotation() == -1) calculateur.changeCameraPosition("moveInto");;
@@ -148,8 +145,4 @@ public class ViewListener implements KeyListener, MouseMotionListener, MouseList
 		
 	}
 
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		// TODO : 
-	}
 }

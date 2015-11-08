@@ -11,12 +11,12 @@ import model.patch.Patch;
 /**
  * Modelisation simple d'un catamaran 
  *   * Design
- *   --> 16 points pour définir la forme de la coque
- *   --> 1 point de départ pour le roof
- *   --> une échelle de précision pour les calculs / affichage
+ *   --> 16 points pour dï¿½finir la forme de la coque
+ *   --> 1 point de dï¿½part pour le roof
+ *   --> une ï¿½chelle de prï¿½cision pour les calculs / affichage
  *   --> maillage de points pour afficher la coque
  *   --> maillage de points pour les calculs
- *   --> liste de poids associés
+ *   --> liste de poids associï¿½s
  *   --> Position (tangage, gite et pilonnement )
  * 
  *   * Construction 
@@ -34,11 +34,11 @@ public class Cata implements Serializable{
 
 	public Patch patch;
 	
-	/** Précision de calcul et d'affichage **/
+	/** Prï¿½cision de calcul et d'affichage **/
 	public int precisionDeCalcul;
 	public int precisionDAffichage;
 	
-	/** Modèles matematiques d'affichage et de calcul **/
+	/** Modï¿½les matematiques d'affichage et de calcul **/
 	public MapDeVecteurs mapAffichage;
 	public MapDeVecteurs mapCalcul;
 
@@ -71,7 +71,7 @@ public class Cata implements Serializable{
 	
 
 	/**
-	 * Si les donneés de patch sont modifiées 
+	 * Si les donneï¿½s de patch sont modifiï¿½es 
 	 * 
 	 * @param y 
 	 * @param x 
@@ -107,6 +107,9 @@ public class Cata implements Serializable{
 		CalculCoque.calculeCarene(this);
 		this.mer.poidsDeLaCoque = CalculCoque.calculePoidsCoque(this);
 		CalculCoque.calculeFlottaison(this);
+		// TODO  : calcule la surface de dÃ©rive et le centre de dÃ©rive
+		CalculCoque.calculeDerive(this);
+		
 	}
 
 
@@ -114,7 +117,7 @@ public class Cata implements Serializable{
 	 * En cas de modification de la structure du bateau 
 	 * **/
 	public void recalculeStructure() {
-		
+		//TODO : Reclacul de la structure 
 	}
 
 
