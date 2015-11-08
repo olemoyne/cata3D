@@ -43,11 +43,11 @@ public class GabaritPlanViewer extends JPanel {
 
 	
 	private int getX (Vecteur v) {
-		return (int)Math.round(v.getX()*echelle+dim.width/2);
+		return (int)Math.round((v.minus(gabarit.bns.getMin())).getX()*echelle);
 	}
 
 	private int getY (Vecteur v) {
-		return (int)Math.round(dim.height/2 - v.getY()*echelle);
+		return (int)Math.round((gabarit.bns.getMax().minus(v)).getY()*echelle);
 	}
 
 	
@@ -66,7 +66,7 @@ public class GabaritPlanViewer extends JPanel {
 	 */
 	public void paintComponent(Graphics gr) {
 		super.paintComponent(gr);
-//		super.paint(gr); // Effectue le repaint d�j� pr�vu
+		if (gabarit == null) return;
 		// Dessine le gabarit 
 		dim = this.getBounds();
 		double echelleX = (dim.getWidth()-20)/(gabarit.bns.getMax().getX() - gabarit.bns.getMin().getX()); 

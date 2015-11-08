@@ -40,7 +40,7 @@ public class PrintedGabarit extends PrintableObject {
 		devant = gab.getArea(coque, Decimal.ZERO);
 		bns.add(devant);
 		fond = gab.getArea(coque, gab.epaisseur);
-		bns.add(devant);
+		bns.add(fond);
 		
 		trous = new ArrayList<Area>();
 		
