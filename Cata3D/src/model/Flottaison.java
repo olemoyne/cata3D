@@ -49,7 +49,7 @@ public class Flottaison implements Serializable {
 
 	// Elements calculés à partir de la surface de carène
 	public Vecteur centreAntiDerive;
-	public Decimal surfaceAntiDerive;
+	public Area surfaceAntiDerive;
 
 	public Flottaison () {
 		pilonnement = new Decimal(0);

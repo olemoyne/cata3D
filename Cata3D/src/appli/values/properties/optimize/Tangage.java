@@ -21,7 +21,7 @@ public class Tangage extends CataValuesProperty {
 			if (Math.abs(dec.floatValue()) > 20)
 				throw new CataValuesException("Le tanagage doit etre comprise entre -20 et + 20 degrés");
 			data.mer.tangage = dec;
-			data.recalculeFlottaison();
+			data.recalcule();
 			return dec.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);

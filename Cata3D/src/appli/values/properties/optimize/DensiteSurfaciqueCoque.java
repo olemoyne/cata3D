@@ -19,7 +19,7 @@ public class DensiteSurfaciqueCoque extends CataValuesProperty {
 		try {
 			Decimal dec = (Decimal)val;
 			data.mer.densiteSurfaciqueCoque = dec;
-			data.recalculeFlottaison();
+			data.recalcule();
 			return dec.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);

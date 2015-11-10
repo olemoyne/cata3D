@@ -21,7 +21,7 @@ public class Pilonnement extends CataValuesProperty {
 			if (Math.abs(dec.floatValue()) > 1)
 				throw new CataValuesException("Le pilonnement doit etre comprise entre -1 et + 1 metres");
 			data.mer.pilonnement = dec;
-			data.recalculeFlottaison();
+			data.recalcule();
 			return dec.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);

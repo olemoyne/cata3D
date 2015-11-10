@@ -19,7 +19,7 @@ public class HorizontalPatchSize extends CataValuesProperty {
 			int v = ((Integer)val).intValue();
 			if ((v-1)%3 != 0) 
 				throw new CataValuesException("Le nombre de points doit être compatible avec le patch : "+v);
-			data.recalculePatch(v, data.patch.y);
+			data.setPatch(v, data.patch.y);
 			return Integer.toString(v);
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);

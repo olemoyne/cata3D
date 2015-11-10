@@ -99,16 +99,30 @@ public class CalculCoque {
 	public static void calculeDerive(Cata cata) {
 		// Création d'une projection
 		Area surface = new Area();
+		ArrayList<Vecteur> maxes = new ArrayList<Vecteur>();
+		ArrayList<Vecteur> mines = new ArrayList<Vecteur>();
+		
 		for (int y = 0; y < cata.mer.carene.ySize(); y++) {
-			surface.points.add(cata.mer.carene.getPoint(0, y));
+			Vecteur max = null;
+			Vecteur min = null;
+			for (int x = 0; x < cata.mer.carene.xSize(); x++) {
+				Vecteur v = cata.mer.carene.getPoint(x, y);
+				if ((max == null)||(max.getDecY().compareTo(v.getDecY()) < 0)) max = v;
+				if ((min == null)||(min.getDecY().compareTo(v.getDecY()) > 0)) min = v;
+			}		
+			maxes.add(max); mines.add(min);
 		}
-		int max = cata.mer.carene.xSize()-1;
-		for (int y = cata.mer.carene.ySize()-1; y > 0 ; y--) {
-			surface.points.add(cata.mer.carene.getPoint(max, y));
+
+		for (Vecteur v : maxes) {
+			surface.points.add(new Vecteur (Decimal.ZERO, v.getDecY(), v.getDecZ()));
+		}
+		for (int p = mines.size()-1; p >= 0; p--) {
+			Vecteur v = mines.get(p);
+			surface.points.add(new Vecteur (Decimal.ZERO, v.getDecY(), v.getDecZ()));
 		}
 		
-		cata.mer.centreAntiDerive = surface.getCentre();
-		cata.mer.surfaceAntiDerive = surface.getSurface();
+		cata.mer.centreAntiDerive = CalculSurface.getCentreSurface(surface.points);
+		cata.mer.surfaceAntiDerive = surface;
 	}
 	
 }

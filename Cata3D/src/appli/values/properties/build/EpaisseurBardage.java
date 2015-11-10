@@ -19,7 +19,7 @@ public class EpaisseurBardage extends CataValuesProperty {
 		try {
 			Decimal dec = (Decimal)val;			
 			data.structure.epaisseurDeBardage = dec;
-			data.recalculeStructure();
+			data.recalcule();
 			return dec.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);

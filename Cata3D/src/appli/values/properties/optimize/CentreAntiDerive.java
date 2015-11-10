@@ -1,18 +1,18 @@
 package appli.values.properties.optimize;
 
 import model.Cata;
-import model.math.Decimal;
+import model.math.Vecteur;
 import appli.values.CataValuesException;
 import appli.values.CataValuesProperty;
 
 public class CentreAntiDerive extends CataValuesProperty {
 	
 	public CentreAntiDerive () {
-		super("Surface anti derive");
+		super("Centre de surface anti dérive");
 	}
 
 	public Object getPropertyValue(Cata data) {
-		Decimal v = data.mer.SurfaceAntiDerive;
+		Vecteur v = data.mer.centreAntiDerive;
 		return v;
 	}
 	

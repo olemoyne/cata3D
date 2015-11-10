@@ -21,7 +21,7 @@ public class Gite extends CataValuesProperty {
 			if (Math.abs(dec.floatValue()) > 180)
 				throw new CataValuesException("La gite doit etre comprise entre -180 et + 180");
 			data.mer.gite = dec;
-			data.recalculeFlottaison();
+			data.recalcule();
 			return dec.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);

@@ -1,6 +1,7 @@
 package appli.values.properties.optimize;
 
 import model.Cata;
+import model.calcul.CalculSurface;
 import model.math.Decimal;
 import appli.values.CataValuesException;
 import appli.values.CataValuesProperty;
@@ -12,7 +13,7 @@ public class SurfaceAntiDerive extends CataValuesProperty {
 	}
 
 	public Object getPropertyValue(Cata data) {
-		Decimal v = data.mer.SurfaceAntiDerive;
+		Decimal v = CalculSurface.getSurface(data.mer.surfaceAntiDerive.points);
 		return v;
 	}
 	

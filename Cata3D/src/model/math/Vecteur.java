@@ -332,4 +332,18 @@ public class Vecteur implements Serializable{
 		return -1;
 	}
 	
+	/**
+	 * Calcule le centre de trois points
+	 *  
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @return
+	 */
+	public static Vecteur getCentre(Vecteur a, Vecteur b, Vecteur c) {
+		Vecteur somme = a.add(b).add(c);
+		Decimal tiers = new Decimal(1d/3d);
+		return somme.multiply(tiers);
+	}
+	
 }

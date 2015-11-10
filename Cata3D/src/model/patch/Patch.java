@@ -3,7 +3,11 @@ package model.patch;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import model.Area;
+import model.math.Bounds3D;
+import model.math.Decimal;
 import model.math.MapDeVecteurs;
+import model.math.Plan3D;
 import model.math.Vecteur;
 
 /**
@@ -37,6 +41,8 @@ public class Patch implements Serializable {
 
 	/**
 	 * Construit la MAP de vecteurs correspondant au patch définit
+	 * Puis définit une liste de tranches verticales (plans) et calcule la MAP correspondant à la section entre ces plans 
+	 *   et ma MAP
 	 * 
 	 * @param precisionDAffichage
 	 * @return
@@ -67,7 +73,35 @@ public class Patch implements Serializable {
 				}
 			}
 		}
-		return map.reverse();		
+		MapDeVecteurs temp = map.reverse();
+		// Calcule la zone entre les maps
+		Bounds3D bnds = new Bounds3D();
+		for (int posX = 0; posX < x; posX++) {
+			for (int posY = 0; posY < y; posY++) {
+				bnds.addPoint(points[posX][posY]);
+			}
+		}
+		// Par défaut 10 positions
+		Decimal ecart = bnds.getMax().getDecZ().minus(bnds.getMin().getDecZ()).divide(new Decimal(nbPoints-1));
+		MapDeVecteurs ret = new MapDeVecteurs(temp.xSize(), nbPoints);
+		for (int nb = 0; nb < nbPoints; nb ++) {
+			Decimal pos = bnds.getMin().getDecZ().add(new Decimal(nb).multiply(ecart));
+			Vecteur a = new Vecteur(Decimal.UN, Decimal.ZERO, pos);
+			Vecteur b = new Vecteur(Decimal.ZERO, Decimal.ZERO, pos);
+			Vecteur c = new Vecteur(Decimal.ZERO, Decimal.UN, pos);
+			
+			Plan3D pl = new Plan3D(a, b, c);
+			
+			Area aire = temp.intersectionHorizontale(pl);
+			for (int x = 0; x < temp.xSize(); x++) {
+				if (x < aire.points.size())
+					ret.setPoint(x, nb, aire.points.get(x));
+				else
+					ret.setPoint(x, nb, aire.points.get(aire.points.size()-1));
+			}
+		}
+		
+		return ret;
 	}
 
 	/**

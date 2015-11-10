@@ -21,7 +21,7 @@ public class PositionDuMat extends CataValuesProperty {
 			if (dec.floatValue() < 0 )
 				throw new CataValuesException("La position du mat doit être positive");
 			data.structure.positionDuMat = dec;
-			data.recalculeFlottaison();
+			data.recalcule();
 			return dec.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);

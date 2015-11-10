@@ -31,7 +31,7 @@ public class PatchPoint extends CataValuesProperty {
 	public String setProperty (Cata data, Object value) throws CataValuesException {
 		try {
 			data.patch.points[posX][posY] = (Vecteur)value;
-			data.recalculeMaps();
+			data.recalcule();
 			return value.toString();
 		} catch (NumberFormatException e) {
 			throw new CataValuesException(e);

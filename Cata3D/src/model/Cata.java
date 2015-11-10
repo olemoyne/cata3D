@@ -76,19 +76,22 @@ public class Cata implements Serializable{
 	 * @param y 
 	 * @param x 
 	 */
-	public void recalculePatch(int x, int y) {
+	public void setPatch(int x, int y) {
 		patch.recalcule(x, y);
-		recalculeMaps();
-		recalculeFlottaison();
-		recalculeStructure();
+		recalcule();
 	}
 
 	/**
 	 * Changement de patch sans resizing
 	 */
-	public void recalculeMaps() {
+	public void recalcule() {
 		// Recalcul des coques
 		mapAffichage = CalculCoque.createCoque(patch, precisionDAffichage);
+		CalculCoque.calculeCarene(this);
+		this.mer.poidsDeLaCoque = CalculCoque.calculePoidsCoque(this);
+		CalculCoque.calculeFlottaison(this);
+		CalculCoque.calculeDerive(this);
+		
 	}
 
 	
@@ -100,27 +103,5 @@ public class Cata implements Serializable{
         if (poids != null) for (Poids pds : poids) sb.append(pds.toString());
         if (structure != null) sb.append(structure.toString());
         return sb.toString();
-    }
-
-
-	public void recalculeFlottaison() {
-		CalculCoque.calculeCarene(this);
-		this.mer.poidsDeLaCoque = CalculCoque.calculePoidsCoque(this);
-		CalculCoque.calculeFlottaison(this);
-		// TODO  : calcule la surface de dérive et le centre de dérive
-		CalculCoque.calculeDerive(this);
-		
-	}
-
-
-	/** 
-	 * En cas de modification de la structure du bateau 
-	 * **/
-	public void recalculeStructure() {
-		//TODO : Reclacul de la structure 
-	}
-
-
-
-	
+    }	
 }

@@ -3,6 +3,7 @@ package appli.values.properties.optimize;
 import java.awt.Color;
 
 import view.scene.PrintableScene;
+import view.scene.PrintedArea;
 import view.scene.PrintedMap;
 import view.scene.PrintedPoint;
 import appli.values.CataValuesProvider;
@@ -56,13 +57,19 @@ public class DeriveValuesProvider extends CataValuesProvider {
 
 		// Affiche la mer en bleu ciel 
 		
-		// Affiche le poids total en rouge
-		if (bateau.mer.CentreAntiDerive!= null)
-			ret.add(new PrintedPoint (bateau.mer.CentreAntiDerive, "AntiDerive", Color.red));
-		// Affiche la poussï¿½e en vert
+		// Affiche le centre anti dérive en rouge
+		if (bateau.mer.centreAntiDerive!= null)
+			ret.add(new PrintedPoint (bateau.mer.centreAntiDerive, "Centre antiDerive", Color.red));
+
+		// Affiche la surface anti dérive en rouge
+		if (bateau.mer.surfaceAntiDerive!= null)
+			ret.add(new PrintedArea (bateau.mer.surfaceAntiDerive, "Surface antiDerive", false, Color.magenta));
+		
+
+		// Affiche la position du mat
 		if (bateau.structure.positionDuMat!= null) {
 			Vecteur v = new Vecteur (Decimal.ZERO, Decimal.ZERO, bateau.structure.positionDuMat);
-			ret.add(new PrintedPoint (v, "Mature", Color.blue));
+			ret.add(new PrintedPoint (v, "Mature", Color.green));
 		}
 		return ret;
 	}
