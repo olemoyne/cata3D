@@ -88,7 +88,7 @@ public class Cata implements Serializable{
 		// Recalcul des coques
 		mapAffichage = CalculCoque.createCoque(patch, precisionDAffichage);
 		CalculCoque.calculeCarene(this);
-		this.mer.poidsDeLaCoque = CalculCoque.calculePoidsCoque(this);
+		this.mer.poidsDeLaCoque = CalculCoque.calculePoidsCoque(this.mapAffichage, this.mer.densiteSurfaciqueCoque);
 		CalculCoque.calculeFlottaison(this);
 		CalculCoque.calculeDerive(this);
 		

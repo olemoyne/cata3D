@@ -19,11 +19,11 @@ import appli.values.TableValues;
 public class Controleur implements ActionListener, TreeSelectionListener{
 	
 	/**
-	 * Catamaran affiché 
+	 * Catamaran affichï¿½ 
 	 */
 	private Cata dessin;
 	
-	/** Gestion des outils affichés**/
+	/** Gestion des outils affichï¿½s**/
 	private Message message;
 	private CataFileManager mngr;
 	private TableValues values;
@@ -59,6 +59,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		
 		log.writeLog("File manager starting");
 		mngr = new CataFileManager(this);
+		
 		fond.add(mngr, BorderLayout.NORTH);
 		
 
@@ -91,7 +92,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 	}
 	
 	/**
-	 * Permet de réagir si l'arbre change de sélection
+	 * Permet de rï¿½agir si l'arbre change de sï¿½lection
 	 * @param e
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
@@ -147,11 +148,15 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 			try {
 				// Ouvre un nouveau fichier
 				mngr.saveCataToFile(this.dessin);
-				message.logTrace("Catamaran sauvé");
+				message.logTrace("Catamaran sauvï¿½");
 			} catch (CataAppliException e1) {
 				e1.printStackTrace();
 				this.message.logError(e1.getLocalizedMessage());
 			}
+		}
+		
+		if ("ajouteComposant".equals(e.getActionCommand())) {
+			// Ajoute un composant Ã  l'arbre de visualisation
 		}
 
 	}

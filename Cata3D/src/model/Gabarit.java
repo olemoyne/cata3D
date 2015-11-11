@@ -74,7 +74,7 @@ public class Gabarit implements Serializable {
 		long pStart = pl.donneCote(start);
 		long pEnd = pl.donneCote(end);
 		
-		if (pStart*pEnd > 0) {
+		if (Long.signum(pStart)*Long.signum(pEnd) > 0) {
 			// Sont du même coté --> Pas d'intersection
 			return null;
 		}

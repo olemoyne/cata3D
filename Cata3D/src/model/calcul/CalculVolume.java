@@ -37,7 +37,10 @@ public class CalculVolume {
 	 * @param v
 	 * @return
 	 */
-	private static Decimal getVolume(Vecteur centre, Vecteur[] v) { // tableau de 8 points 
+	private static Decimal getVolume(Vecteur centre, ArrayList<Vecteur> lst) { // tableau de 8 points 
+		
+		Vecteur[] v = new Vecteur[8];
+		lst.toArray(v);
 		
 		/* --> 12 facette :
 		 *  ABC, EFG, ABE, BCF, CDG, DAH
@@ -65,22 +68,22 @@ public class CalculVolume {
 	 * @return
 	 */
 	public static Poids getPoussee2(MapDeVecteurs map) { 
-		Vecteur[] lst = new Vecteur[8];
+		ArrayList<Vecteur> lst = new ArrayList<Vecteur>(8);
 		// Liste des poussées
 		ArrayList<Poids> pds = new ArrayList<Poids>();
 		// Trace tous les carrrés
 		for (int x = 1; x < map.xSize(); x ++) {
 			for (int y = 1; y < map.ySize(); y ++) {
-				lst[0] = map.getPoint(x-1,  y-1);
-				lst[1] = map.getPoint(x,  y-1);
-				lst[2] = map.getPoint(x,  y);
-				lst[3] = map.getPoint(x-1,  y);
-				lst[4] = map.getPoint(x-1,  y-1).set(Axis.ZAxis, 0);
-				lst[5] = map.getPoint(x,  y-1).set(Axis.ZAxis, 0);
-				lst[6] = map.getPoint(x,  y).set(Axis.ZAxis, 0);
-				lst[7] = map.getPoint(x-1,  y).set(Axis.ZAxis, 0);
+				lst.add(map.getPoint(x-1,  y-1));
+				lst.add(map.getPoint(x,  y-1));
+				lst.add(map.getPoint(x,  y));
+				lst.add(map.getPoint(x-1,  y));
+				lst.add(map.getPoint(x-1,  y-1).set(Axis.ZAxis, 0));
+				lst.add(map.getPoint(x,  y-1).set(Axis.ZAxis, 0));
+				lst.add(map.getPoint(x,  y).set(Axis.ZAxis, 0));
+				lst.add(map.getPoint(x-1,  y).set(Axis.ZAxis, 0));
 				// Centre sde poussée
-				Vecteur centre = CalculSurface.getCentre (lst);
+				Vecteur centre = CalculSurface.getCentreSurface (lst);
 				Decimal vol = getVolume(centre, lst);
 				pds.add(new Poids (" ", centre, vol));
 			}
@@ -108,7 +111,7 @@ public class CalculVolume {
 			for (int x = 0; x < map.xSize(); x ++) 
 				lst.add(map.getPoint(x, y));
 				// Centre sde poussée
-			centresSurf.add(CalculSurface.getCentre (lst));
+			centresSurf.add(CalculSurface.getCentreSurface (lst));
 			surfaces.add(CalculSurface.getSurface(lst));
 		}
 

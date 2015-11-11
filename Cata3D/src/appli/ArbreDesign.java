@@ -3,8 +3,10 @@ package appli;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -66,6 +68,25 @@ public class ArbreDesign extends JPanel {
 		    renderer.setLeafIcon(leafIcon);
 		    arbre.setCellRenderer(renderer);
 		}
+		
+// Ajoute les boutons de gestion 
+		JPanel sub = new JPanel();
+		sub.setLayout(new FlowLayout());
+		JButton ajoute = new JButton("Ajoute");
+		ajoute.setForeground(Color.black);
+		ajoute.setToolTipText("Ajoute un composant");
+		ajoute.setActionCommand("ajouteComposant");
+		if (crtl != null) ajoute.addActionListener(crtl);		
+		sub.add(ajoute);
+
+		// Ajoute les boutons de gestion 
+		JButton supprime = new JButton("Supprime");
+		supprime.setForeground(Color.black);
+		supprime.setToolTipText("Supprime le composant en cours");
+		supprime.setActionCommand("SupprimeComposant");
+		if (crtl != null) supprime.addActionListener(crtl);		
+		sub.add(supprime);
+		this.add(sub, BorderLayout.NORTH);
 	}
 
 	// Les neuds sont cr��s en dur
@@ -87,7 +108,9 @@ public class ArbreDesign extends JPanel {
 	    top.add(optimisation);
 	    optimisation.add(new DefaultMutableTreeNode("Flottaison"));
 	    optimisation.add(new DefaultMutableTreeNode("Fluidité"));
-	    optimisation.add(new DefaultMutableTreeNode("Dérive"));
+	    DefaultMutableTreeNode derive = new DefaultMutableTreeNode("Dérive");
+	    optimisation.add(derive);
+	    derive.add(new DefaultMutableTreeNode("Forme de dérive"));
 	    optimisation.add(new DefaultMutableTreeNode("Habitabilité"));
 
 	    //construction de la coque

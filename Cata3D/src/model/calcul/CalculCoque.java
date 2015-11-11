@@ -52,8 +52,7 @@ public class CalculCoque {
 	 * @param bateau
 	 * @return
 	 */
-	public static Poids calculePoidsCoque(Cata bateau) {
-		MapDeVecteurs map = bateau.mapAffichage;
+	public static Poids calculePoidsCoque(MapDeVecteurs map, Decimal densiteSurfacique) {
 		ArrayList<Poids> pds = new ArrayList<Poids>();
 		// Trace tous les carrrés
 		for (int x = 1; x < map.xSize(); x ++) {
@@ -63,7 +62,7 @@ public class CalculCoque {
 				Vecteur C = map.getPoint(x,  y);
 				Vecteur D = map.getPoint(x-1,  y);
 				Decimal aire = Vecteur.calculeSurface(A, B, C).add(Vecteur.calculeSurface(A, C, D));
-				Decimal kg = aire.multiply(bateau.mer.densiteSurfaciqueCoque);
+				Decimal kg = aire.multiply(densiteSurfacique);
 				// Centre du poids
 				Vecteur centre = A.add(B).add(C).add(D).multiply(new Decimal(0.25f));
 				Poids p = new Poids ("", centre, kg);
