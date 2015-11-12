@@ -109,15 +109,18 @@ public class CalculCoque {
 	 */
 	public static void calculeDerive(Cata cata) {
 		// Création d'une projection
-		ArrayList<Area> surfaces = new ArrayList<Area>(); 
+		cata.mer.surfaceAntiDerive = new ArrayList<Area>(); 
         for (MapDeVecteurs cmp : cata.mer.carenes) {
-        	surfaces.add(cmp.getProjection());
+        	cata.mer.surfaceAntiDerive.add(cmp.getProjection());
         }
 
-        Decimal surf = new 
-        
-		cata.mer.centreAntiDerive = CalculSurface.getCentreSurface(surface.points);
-		cata.mer.surfaceAntiDerive = surface;
+        Decimal surf = Decimal.ZERO;
+        for (Area a : cata.mer.surfaceAntiDerive) surf = surf.add(CalculSurface.getSurface(a.points));
+		cata.mer.surfaceTotale = surf;
+
+		Vecteur ctr = new Vecteur();
+        for (Area a : cata.mer.surfaceAntiDerive) ctr = ctr.add(CalculSurface.getCentreSurface(a.points).multiply(CalculSurface.getSurface(a.points)));
+		cata.mer.centreAntiDerive = ctr.multiply(Decimal.UN.divide(surf));
 	}
 	
 }

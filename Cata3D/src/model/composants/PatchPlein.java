@@ -56,4 +56,9 @@ public class PatchPlein extends Composant {
 		this.gravite.force = this.gravite.force.multiply(densite); 
     }
 
+    
+	public int getType() {
+		return Composant.PATCH_PLEIN;
+	}
+
 }

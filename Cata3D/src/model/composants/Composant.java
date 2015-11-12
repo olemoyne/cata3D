@@ -24,6 +24,11 @@ public class Composant implements Serializable{
 	 */
 	private static final long serialVersionUID = -5490545959071227392L;
 
+	public final static int PATCH_PLEIN = 1;
+	public final static int PATCH_VIDE = 2;
+	public final static int RECOPIE = 3;
+	public final static int TUBE = 4;
+	
 	/** Nom du composant **/
 	public String nom;
 	
@@ -70,5 +75,9 @@ public class Composant implements Serializable{
     public void recalcule () {
     	
     }
+
+	public int getType() {
+		return -1;
+	}
     
 }

@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import com.jogamp.opengl.GL2;
 
 import model.Area;
-import model.Cata;
 import model.Gabarit;
 import model.Poutre;
+import model.composants.PatchVide;
 import model.math.Bounds3D;
 import model.math.Decimal;
 import model.math.Plan3D;
@@ -30,7 +30,7 @@ public class PrintedGabarit extends PrintableObject {
 	/** 
 	 * Construit les éléments du gabarit à afficher 
 	 * **/
-	public PrintedGabarit(Gabarit gab, Cata coque, String n, Color c) {
+	public PrintedGabarit(Gabarit gab, PatchVide coque, Plan3D pl, String n, Color c) {
 		super(n, c);
 		
 		name = gab.toString();
@@ -53,11 +53,7 @@ public class PrintedGabarit extends PrintableObject {
 				bns.add(devant);
 			}
 		}
-		
-	
-		// Ajoute le niveau de la mer
-		Plan3D pl = coque.mer.getPlan();
-		
+				
 		Vecteur s = bns.getMin();
 		Vecteur e = new Vecteur (bns.getMin().getDecX(), bns.getMax().getDecY(), bns.getMin().getDecZ());
 		Vecteur mstart = pl.intersection(e,  s);

@@ -41,4 +41,8 @@ public class recopie extends Composant {
 		gravite.position = decalage.getPoint(pivot.transforme(gravite.position));
     }
 
+	public int getType() {
+		return Composant.RECOPIE;
+	}
+
 }

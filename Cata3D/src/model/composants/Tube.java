@@ -56,5 +56,10 @@ public class Tube extends Composant {
 		// TODO Creation d"un saucisson de la longueur du tube
 		return null;
 	}
+	
+	public int getType() {
+		return Composant.TUBE;
+	}
+
 
 }

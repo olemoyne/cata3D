@@ -4,7 +4,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 /** 
- * Permet de mettre à jour un vecteur
+ * Permet de mettre ï¿½ jour un vecteur
  * 
  * @author olemoyne
  *
@@ -15,6 +15,11 @@ public class ObjectUpdater extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 4291603188855301380L;
+	
+	public static final String STRING = "String";
+	public static final String VECTEUR = "Vecteur";
+	public static final String POIDS = "Poids";
+	public static final String DECIMAL = "Decimal";
 
 	public ObjectUpdater () {
 		super();

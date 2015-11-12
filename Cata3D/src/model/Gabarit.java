@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 
+import model.composants.PatchVide;
 import model.math.Decimal;
 import model.math.Plan3D;
 import model.math.Vecteur;
@@ -36,14 +37,14 @@ public class Gabarit implements Serializable {
 	 * @param i 
 	 * @return
 	 */
-	public Area getArea(Cata bateau, Decimal i) {
+	public Area getArea(PatchVide cmp, Decimal i) {
 		// Plan Z = position;
 		Plan3D pl = new Plan3D(new Vecteur(Decimal.UN, Decimal.ZERO, position.add(i)), 
 				new Vecteur(Decimal.ZERO, Decimal.ZERO, position.add(i)), new Vecteur(Decimal.ZERO, Decimal.UN, position.add(i)));
 		
-		Area coupe = bateau.mapAffichage.intersectionHorizontale(pl);
+		Area coupe = cmp.mapAffichage.intersectionHorizontale(pl);
 		
-		return coupe.resize(bateau.structure.epaisseurDeBardage.negate());
+		return coupe.resize(cmp.epaisseurDeBardage.negate());
 	}
 	
 	public String toString() {

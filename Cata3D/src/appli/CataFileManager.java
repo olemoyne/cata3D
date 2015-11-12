@@ -16,11 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import model.Cata;
-import model.patch.Patch;
 
 /** 
  * Permet d'afficher le nom du fichier en cours d'adition
- * Permet d'ouvrir / créer / sauver l'étude en cours
+ * Permet d'ouvrir / crï¿½er / sauver l'ï¿½tude en cours
  * 
  * @author olemoyne
  *
@@ -44,7 +43,7 @@ public class CataFileManager extends JPanel {
 
 		editeur = new JTextField();
 		editeur.setColumns(80);
-		editeur.setToolTipText("Saisir le chemin vers le fichier à éditer");
+		editeur.setToolTipText("Saisir le chemin vers le fichier ï¿½ ï¿½diter");
 		this.add(editeur);
 		
 // Ajoute les boutons de gestion 
@@ -94,7 +93,7 @@ public class CataFileManager extends JPanel {
 		    ObjectInputStream ois = new ObjectInputStream(fis);
 		    
 		    Cata bato = (Cata)ois.readObject();
-		    bato.setPatch(bato.patch.x, bato.patch.y);
+		    bato.recalcule();
 		    ois.close();
 		    
 		    return bato;
@@ -127,44 +126,4 @@ public class CataFileManager extends JPanel {
 	}
 	
 	
-	
-	/*** 
-	 * Test purpose  
-	 * **/
-	public static void main(String [ ] args) {
-		// sauvegarde d'un bateau
-		Cata boat = new Cata();
-		// Construit un patch de test
-		boat.patch = Patch.getPatch();
-		//Sauvegarde du bateau
-		CataFileManager mngr = new CataFileManager (null); 
-		mngr.editeur.setText("D:/dev/GIT/cata3D/Cata3D/data/testFile.boat");
-		try {
-			mngr.saveCataToFile(boat);
-			// lecture du bateau
-			Cata nBoat = mngr.getCataFromFile();
-			if (nBoat.patch == null) {
-				System.err.println("Sauvegarde KO : patch null");
-				System.exit(12);
-			}
-			if (nBoat.patch.x != 4) {
-				System.err.println("Sauvegarde KO : patch de mauvaise taille");
-				System.exit(12);
-			}
-			if (nBoat.patch.y != 4) {
-				System.err.println("Sauvegarde KO : patch de mauvaise taille");
-				System.exit(12);
-			}
-			if (nBoat.patch.points.length != 4) {
-				System.err.println("Sauvegarde KO : patch de mauvaise taille");
-				System.exit(12);
-			}
-			System.err.println("Test OK - Sauvegarde réussie");
-			System.out.println(nBoat.toString());
-		} catch (CataAppliException e) {
-			e.printStackTrace();
-			System.exit(12);
-		}
-	}
-
 }

@@ -12,6 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Cata;
 import view.scene.PrintableScene;
+import appli.arbre.ArbreDesign;
 import appli.values.CataDataManager;
 import appli.values.CataValuesException;
 import appli.values.TableValues;

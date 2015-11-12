@@ -39,8 +39,6 @@ public class Cata implements Serializable{
 	/** Poids **/
 	public ArrayList<Poids> poids;
 
-	/** Structure du bateau **/
-	public Structure structure;
 		
 	
 	/**
@@ -51,8 +49,6 @@ public class Cata implements Serializable{
 		mer = new Flottaison();
 
 		poids = new ArrayList<Poids> ();
-		
-		structure = new Structure();
 	}
 	
 
@@ -80,7 +76,6 @@ public class Cata implements Serializable{
 		}
         if (mer != null) sb.append(mer.toString());
         if (poids != null) for (Poids pds : poids) sb.append(pds.toString());
-        if (structure != null) sb.append(structure.toString());
         return sb.toString();
     }	
 }
