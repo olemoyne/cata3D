@@ -1,15 +1,16 @@
 package model.math;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import model.Area;
 import model.math.transfo.Transformation;
 
 
 /**
- *  Maillage de vecteurs qui correspondent à une coque
- *   --> X étalonnage vertical 
- *   --> Y étalonnage horizontal
+ *  Maillage de vecteurs qui correspondent ï¿½ une coque
+ *   --> X ï¿½talonnage vertical 
+ *   --> Y ï¿½talonnage horizontal
  * 
  *   point X Y --> point sur la position verticale X (plus ou moins haut dans le bateau) 
  *      et horizontale en Y (plus ou moins vers l'avant)
@@ -72,8 +73,8 @@ public class MapDeVecteurs implements Serializable {
 		data[i][y] = new Vecteur(v);
 	}
 
-	// dans ce cas, un nouveau tableau de données est créé
-	//  les points sont ajoutés à chaque colonne,à la suite
+	// dans ce cas, un nouveau tableau de donnï¿½es est crï¿½ï¿½
+	//  les points sont ajoutï¿½s ï¿½ chaque colonne,ï¿½ la suite
 	// L'ajout de la MAP se fait via les Y
 	public MapDeVecteurs addMap(MapDeVecteurs map) {
 		
@@ -107,13 +108,13 @@ public class MapDeVecteurs implements Serializable {
 		return ret;
 	}
 
-	/** Calcule le résultat entre une map et un plan
+	/** Calcule le rï¿½sultat entre une map et un plan
 	 * 
 	 * @param surface
 	 * @return
 	 */
 	public MapDeVecteurs truncate(Plan3D surface) {
-		// Recopie les éléments de la map
+		// Recopie les ï¿½lï¿½ments de la map
 		MapDeVecteurs ret = new MapDeVecteurs(this);
 		
 		//Parcours tous les points verticaux. Attention les points entre et sortent de l'eau
@@ -122,7 +123,7 @@ public class MapDeVecteurs implements Serializable {
 			
 			// calcul l'intersection avec le plan
 			Vecteur inter = null;
-			// Recherche la première intersection
+			// Recherche la premiï¿½re intersection
 			for (int xpos = 1; xpos < this.xSize; xpos ++) {
 				Vecteur v = surface.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
 				if ((v != null)&&(inter == null)) inter = v;
@@ -166,7 +167,7 @@ public class MapDeVecteurs implements Serializable {
 	}
 
 	/**
-	 * Génère un plan de coupe de la forme selon le plan donné
+	 * Gï¿½nï¿½re un plan de coupe de la forme selon le plan donnï¿½
 	 * 
 	 * @param pl
 	 * @return
@@ -195,6 +196,39 @@ public class MapDeVecteurs implements Serializable {
 			}
 		}
 		return ret;
+	}
+	
+	
+	/**
+	 * TODO : Retourne la projection de la forme sur un plan donnÃ© par l'axe
+	 *  
+	 * @return
+	 */
+	public Area getProjection () {
+		Area surface = new Area();
+		ArrayList<Vecteur> maxes = new ArrayList<Vecteur>();
+		ArrayList<Vecteur> mines = new ArrayList<Vecteur>();
+		
+		for (int y = 0; y < ySize(); y++) {
+			Vecteur max = null;
+			Vecteur min = null;
+			for (int x = 0; x < xSize(); x++) {
+				Vecteur v = getPoint(x, y);
+				if ((max == null)||(max.getDecY().compareTo(v.getDecY()) < 0)) max = v;
+				if ((min == null)||(min.getDecY().compareTo(v.getDecY()) > 0)) min = v;
+			}		
+			maxes.add(max); mines.add(min);
+		}
+
+		for (Vecteur v : maxes) {
+			surface.points.add(new Vecteur (Decimal.ZERO, v.getDecY(), v.getDecZ()));
+		}
+		for (int p = mines.size()-1; p >= 0; p--) {
+			Vecteur v = mines.get(p);
+			surface.points.add(new Vecteur (Decimal.ZERO, v.getDecY(), v.getDecZ()));
+		}
+
+		return surface;
 	}
 
 }

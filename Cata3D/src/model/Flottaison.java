@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import model.math.Axis;
 import model.math.Decimal;
@@ -32,16 +33,12 @@ public class Flottaison implements Serializable {
 	
 	public Decimal gite;
 	
-	public Decimal densiteSurfaciqueCoque;
-	
-	
 	/**
 	 * Elements calcul�s pour affichage
 	 */
-	public MapDeVecteurs coque;
-	public MapDeVecteurs carene;
+	// Autant de carènes que de volumes immergés
+	public ArrayList<MapDeVecteurs> carenes;
 	
-	public Poids poidsDeLaCoque;
 	public Poids poidsTotal;
 	public Poids pousseeArchimede;
 	
@@ -49,9 +46,11 @@ public class Flottaison implements Serializable {
 
 	// Elements calculés à partir de la surface de carène
 	public Vecteur centreAntiDerive;
-	public Area surfaceAntiDerive;
+	public ArrayList<Area> surfaceAntiDerive;
+	public Decimal surfaceTotale;
 
 	public Flottaison () {
+		carenes = new ArrayList<MapDeVecteurs>();
 		pilonnement = new Decimal(0);
 		tangage = new Decimal(0); // Angle de tangage (rotation selon Y )
 		gite = new Decimal(0); // Angle de gite (rotation selon Z)

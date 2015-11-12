@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.Area;
 import model.Cata;
 import model.Poids;
+import model.composants.Composant;
 import model.math.Axis;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
@@ -43,8 +44,12 @@ public class CalculCoque {
 
 	public static void calculeCarene (Cata bateau) {
 		Plan3D surface = bateau.mer.getPlan();
-		bateau.mer.coque = bateau.mapAffichage.transforme(bateau.mer.getTransformation());
-		bateau.mer.carene= bateau.mer.coque.truncate(surface);
+		bateau.mer.carenes.clear();
+        for (Composant cmp : bateau.composants) {
+        	MapDeVecteurs mdv = cmp.mapAffichage.transforme(bateau.mer.getTransformation());
+        	MapDeVecteurs crn = mdv.truncate(surface);
+        	bateau.mer.carenes.add(crn);
+        }
 	}
 	
 	/** Calcule la surface totale de la coque et multiplie par le coeficient 
@@ -79,17 +84,24 @@ public class CalculCoque {
 	 * @param cata
 	 */
 	public static void calculeFlottaison(Cata cata) {
-		cata.mer.pousseeArchimede = CalculVolume.getPoussee(cata.mer.carene);
+		ArrayList<Poids> poussees = new ArrayList<Poids>(); 
+        for (MapDeVecteurs cmp : cata.mer.carenes) {
+        	poussees.add(CalculVolume.getPoussee(cmp));
+        }
+        cata.mer.pousseeArchimede = CalculVolume.getCentreGravite("Poussée", poussees);
+        
 		ArrayList<Poids> pds = new ArrayList<Poids>();
-		pds.addAll(cata.poids);
-		pds.add(cata.mer.poidsDeLaCoque);
+        for (Composant cmp : cata.composants) {
+    		pds.addAll(cmp.poids);
+        	pds.add(cmp.gravite);
+        }
 		
 		cata.mer.poidsTotal = CalculVolume.getCentreGravite("Poids total ", pds);
-		// calcul si le bateau est stable
+		// TODO : calcul si le bateau est stable
 		
 	}
 
-
+	
 	/** 
 	 * TODO : Calcul du centre de dérive et de la surface anti-dérive
 	 * 
@@ -97,29 +109,13 @@ public class CalculCoque {
 	 */
 	public static void calculeDerive(Cata cata) {
 		// Création d'une projection
-		Area surface = new Area();
-		ArrayList<Vecteur> maxes = new ArrayList<Vecteur>();
-		ArrayList<Vecteur> mines = new ArrayList<Vecteur>();
-		
-		for (int y = 0; y < cata.mer.carene.ySize(); y++) {
-			Vecteur max = null;
-			Vecteur min = null;
-			for (int x = 0; x < cata.mer.carene.xSize(); x++) {
-				Vecteur v = cata.mer.carene.getPoint(x, y);
-				if ((max == null)||(max.getDecY().compareTo(v.getDecY()) < 0)) max = v;
-				if ((min == null)||(min.getDecY().compareTo(v.getDecY()) > 0)) min = v;
-			}		
-			maxes.add(max); mines.add(min);
-		}
+		ArrayList<Area> surfaces = new ArrayList<Area>(); 
+        for (MapDeVecteurs cmp : cata.mer.carenes) {
+        	surfaces.add(cmp.getProjection());
+        }
 
-		for (Vecteur v : maxes) {
-			surface.points.add(new Vecteur (Decimal.ZERO, v.getDecY(), v.getDecZ()));
-		}
-		for (int p = mines.size()-1; p >= 0; p--) {
-			Vecteur v = mines.get(p);
-			surface.points.add(new Vecteur (Decimal.ZERO, v.getDecY(), v.getDecZ()));
-		}
-		
+        Decimal surf = new 
+        
 		cata.mer.centreAntiDerive = CalculSurface.getCentreSurface(surface.points);
 		cata.mer.surfaceAntiDerive = surface;
 	}

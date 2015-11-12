@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import model.calcul.CalculCoque;
-import model.math.MapDeVecteurs;
-import model.patch.Patch;
+import model.composants.Composant;
 
 
 /**
@@ -32,16 +31,8 @@ public class Cata implements Serializable{
 	 */
 	private static final long serialVersionUID = -5490545959071227392L;
 
-	public Patch patch;
+	public ArrayList<Composant> composants;
 	
-	/** Pr�cision de calcul et d'affichage **/
-	public int precisionDeCalcul;
-	public int precisionDAffichage;
-	
-	/** Mod�les matematiques d'affichage et de calcul **/
-	public MapDeVecteurs mapAffichage;
-	public MapDeVecteurs mapCalcul;
-
 	/** Flottaison **/
 	public Flottaison mer;
 	
@@ -56,11 +47,6 @@ public class Cata implements Serializable{
 	 * Constructeur --> intialisation des listes
 	 */
 	public Cata () {
-		patch = new Patch();
-		precisionDeCalcul = 20;
-		precisionDAffichage = 80;
-		mapAffichage = patch.getMap(precisionDAffichage);
-		mapCalcul = patch.getMap(precisionDeCalcul);
 		
 		mer = new Flottaison();
 
@@ -70,25 +56,16 @@ public class Cata implements Serializable{
 	}
 	
 
-	/**
-	 * Si les donne�s de patch sont modifi�es 
-	 * 
-	 * @param y 
-	 * @param x 
-	 */
-	public void setPatch(int x, int y) {
-		patch.recalcule(x, y);
-		recalcule();
-	}
 
 	/**
 	 * Changement de patch sans resizing
 	 */
 	public void recalcule() {
-		// Recalcul des coques
-		mapAffichage = CalculCoque.createCoque(patch, precisionDAffichage);
+		// Force le reclacul sur tous les composants
+		for (Composant cmp : composants) {
+			cmp.recalcule();
+		}
 		CalculCoque.calculeCarene(this);
-		this.mer.poidsDeLaCoque = CalculCoque.calculePoidsCoque(this.mapAffichage, this.mer.densiteSurfaciqueCoque);
 		CalculCoque.calculeFlottaison(this);
 		CalculCoque.calculeDerive(this);
 		
@@ -97,8 +74,10 @@ public class Cata implements Serializable{
 	
     public String toString() {
         StringBuilder sb = new StringBuilder("Cata = ");
-        sb.append(patch.toString());
-        sb.append(" ");
+		for (Composant cmp : composants) {
+			sb.append(cmp.toString());
+	        sb.append(" ");
+		}
         if (mer != null) sb.append(mer.toString());
         if (poids != null) for (Poids pds : poids) sb.append(pds.toString());
         if (structure != null) sb.append(structure.toString());

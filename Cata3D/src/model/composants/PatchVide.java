@@ -34,6 +34,17 @@ public class PatchVide extends Composant {
 		patch = new Patch();	
 	}
 	
+	/**
+	 * Si les donne�s de patch sont modifi�es 
+	 * 
+	 * @param y 
+	 * @param x 
+	 */
+	public void setPatch(int x, int y) {
+		patch.recalcule(x, y);
+		recalcule();
+	}
+
     /**
      * Recalcule les éléments essentiels de la pièce :
      *    Map affichage et calcul
