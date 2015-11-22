@@ -1,5 +1,6 @@
 package model.composants;
 
+import model.Cata;
 import model.math.transfo.Rotation;
 import model.math.transfo.Translation;
 
@@ -9,13 +10,15 @@ import model.math.transfo.Translation;
  * @author lemoyne
  *
  */
-public class recopie extends Composant {
+public class Recopie extends Composant {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -487937364652537453L;
 
+	public Cata source;
+	
 	public Composant autre;
 	
 	/** décalage de la forme **/
@@ -25,7 +28,7 @@ public class recopie extends Composant {
 	public Translation decalage;
 
 
-	public recopie () {
+	public Recopie () {
 		super(); // Creation des données liées au patch	
 	}
 	

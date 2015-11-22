@@ -6,7 +6,7 @@ import appli.values.updater.ObjectUpdater;
 import model.composants.PatchVide;
 import model.math.Decimal;
 
-public class PatchVideTreeNode extends ComposantTreeNode {
+public class PatchVideTreeNode extends PatchTreeNode {
 
 	/**
 	 * 

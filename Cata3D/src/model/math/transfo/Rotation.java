@@ -20,6 +20,8 @@ public class Rotation extends Transformation {
 	 */
 	public int axis;
 	
+	public Decimal angle;
+	
 	/**
 	 * Transformation
 	 */
@@ -32,17 +34,18 @@ public class Rotation extends Transformation {
 	 * @param ax
 	 * @param angle
 	 */
-	public Rotation(int ax, Decimal angle, Transformation u) {
+	public Rotation(int ax, Decimal angl, Transformation u) {
 		super(u);
+		angle = angl;
 		Decimal radAngle = angle.divide(new Decimal(180)).multiply(new Decimal(Math.PI));
 		float flt = radAngle.floatValue();
 		trans = AffineTransform.getRotateInstance(flt);
 		axis = ax;
 	}
-
+	
 	
 	public Vecteur getPoint(Vecteur ret) {
-		if (ret == null) throw new NullPointerException ("Rotation : point de départ nul");
+		if (ret == null) throw new NullPointerException ("Rotation : point de dï¿½part nul");
 		if (axis == Axis.XAxis) {
 			Point2D.Double pt = new Point2D.Double(ret.getDecY().doubleValue(), ret.getDecZ().doubleValue());
 			Point2D.Double f = new Point2D.Double();
