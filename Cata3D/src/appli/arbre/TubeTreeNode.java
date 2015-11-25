@@ -3,14 +3,10 @@ package appli.arbre;
 import java.util.ArrayList;
 
 import appli.values.updater.ObjectUpdater;
-import model.composants.Composant;
 import model.composants.Recopie;
 import model.composants.Tube;
-import model.math.Axis;
 import model.math.Decimal;
 import model.math.Vecteur;
-import model.math.transfo.Rotation;
-import model.math.transfo.Translation;
 
 public class TubeTreeNode extends ComposantTreeNode {
 
@@ -45,30 +41,24 @@ public class TubeTreeNode extends ComposantTreeNode {
 		Tube pv = (Tube)composant;
 
 		if (fld.equals("Densité")) {
-			String a = (String)value;
-			// Recherche le composant
-			for (Composant c : pv.source.composants) if (c.nom.equals(a)) pv.autre = c;
+			pv.densite = (Decimal)value;
 		}
 
-		// set la position de de la recopie
-		if (fld.equals("Position")) {			
-			pv.decalage = new Translation((Vecteur)value, null);
+		if (fld.equals("Diamètre")) {
+			pv.diametre = (Decimal)value;
 		}
 
-		if (fld.equals("Axe de rotation")) {
-			String v = (String)value;
-			int axe = -1;
-			if (v.equals("Axe X")) axe = Axis.XAxis;
-			if (v.equals("Axe Y")) axe = Axis.YAxis;
-			if (v.equals("Axe Z")) axe = Axis.ZAxis;
-				
-			pv.pivot  = new Rotation(axe, pv.pivot.angle, null); 
+		if (fld.equals("Direction")) {
+			pv.direction = (Vecteur)value;
 		}
 
-		if (fld.equals("Angle de rotation")) {
-			pv.pivot  = new Rotation(pv.pivot.axis, (Decimal)value, null); 
+		if (fld.equals("Epaisseur")) {
+			pv.epaisseur = (Decimal)value;
 		}
 
+		if (fld.equals("Longueur")) {
+			pv.longueur = (Decimal)value;
+		}
 	}
 	
 }

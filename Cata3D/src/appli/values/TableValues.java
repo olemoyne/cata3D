@@ -19,10 +19,11 @@ import javax.swing.event.TableModelEvent;
 
 import appli.Controleur;
 import appli.Message;
+import appli.arbre.DesignTreeNode;
 import appli.values.updater.PropertyValueUpdater;
 
 /***
- * Permet d'éditer les éléments de conception de la coque
+ * Permet d'ï¿½diter les ï¿½lï¿½ments de conception de la coque
  * 
  * @author olemoyne
  *
@@ -38,9 +39,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 	private JTable table;
 	
 	private JButton ajoute, supprime;
-	
-	private CataDataManager dataManager;
-	
+		
 	private PropertyValueUpdater fields;
 	
 	private int selectedRow;
@@ -50,16 +49,15 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 	
 	private Message msg;
 	
-	public TableValues (CataDataManager cdm, Controleur ctrl, Message log) {
+	public TableValues (Controleur ctrl, Message log) {
 		super();
 		
 		
 		Color buttonColor = this.getBackground();
-		dataManager = cdm;
 		msg = log;
 		control = ctrl;
 
-		model = new ValuesTableModel (cdm, log, ctrl);
+		model = new ValuesTableModel (log, ctrl);
 		table = new JTable(model);
 		table.setAutoscrolls(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -80,7 +78,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		ajoute = new JButton("Ajoute");
 		ajoute.setForeground(Color.black);
 		ajoute.setBackground(buttonColor);
-		ajoute.setToolTipText("Ajoute un élément dans le tableau");
+		ajoute.setToolTipText("Ajoute un ï¿½lï¿½ment dans le tableau");
 		ajoute.setActionCommand("ajoute");
 		ajoute.addActionListener(this);		
 		sub.add(ajoute);
@@ -89,7 +87,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		supprime = new JButton("Supprime");
 		supprime.setForeground(Color.black);
 		supprime.setBackground(buttonColor);
-		supprime.setToolTipText("Supprime un élément dans le tableau");
+		supprime.setToolTipText("Supprime un ï¿½lï¿½ment dans le tableau");
 		supprime.setActionCommand("supprime");
 		supprime.addActionListener(this);		
 		sub.add(supprime);
@@ -102,10 +100,10 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 	}
 	
 	/** 
-	 * Affiche les données d'un noeuds
+	 * Affiche les donnï¿½es d'un noeuds
 	 * 
 	 */
-	public void showNode (String nodeName) throws CataValuesException{
+	public void showNode (DesignTreeNode node) throws CataValuesException{
 		// Modifie l'affichage des boutons
 		if (dataManager.areButtonsNeeded(nodeName)) {
 			supprime.setEnabled(true);
@@ -116,10 +114,10 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 			ajoute.setEnabled(false);
 			buttonsShown = false;
 		}
-		// Modifie les données de la table
+		// Modifie les donnï¿½es de la table
 		model.setNodeName (nodeName);
 		selectedRow = 0;
-    	/** Mise à jour des données dans l'éditeur **/
+    	/** Mise ï¿½ jour des donnï¿½es dans l'ï¿½diteur **/
 		Object val = model.getValueAt(0, 1);
 		
     	fields.setValue(val, model.isDataEditable(0, 1));
@@ -168,7 +166,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
             /** enable des buttons si necessaire**/
         	supprime.setEnabled(this.buttonsShown);
         	
-        	/** Mise à jour des données dans l'éditeur **/
+        	/** Mise ï¿½ jour des donnï¿½es dans l'ï¿½diteur **/
     		Object val = model.getValueAt(selectedRow, 1);
     		if (val == null) this.msg.logError("Null value returned");
         	fields.setValue(val, model.isDataEditable(selectedRow, 1));

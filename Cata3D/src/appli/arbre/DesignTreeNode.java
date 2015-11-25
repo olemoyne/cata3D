@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import appli.values.CataValuesException;
+import view.scene.PrintableScene;
+
 public class DesignTreeNode extends DefaultMutableTreeNode {
 
 	/**
@@ -24,6 +27,11 @@ public class DesignTreeNode extends DefaultMutableTreeNode {
 	}
 	
 	public ArrayList<TreeNodeProperty> getProperties() {
+		return null;
+	}
+
+	public PrintableScene getView() throws CataValuesException{
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

@@ -12,10 +12,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import appli.Controleur;
+import model.Cata;
 
 /**
  * Permet de g�rer le menu des param�tres de design de la coque
@@ -49,7 +51,6 @@ public class ArbreDesign extends JPanel {
 		this.setBackground(Color.black);
 		
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode("D�finition de la coque");
-		createNodes(top);
 
 		arbre = new JTree(top);
 		arbre.setBackground(Color.white);
@@ -91,40 +92,13 @@ public class ArbreDesign extends JPanel {
 		this.add(sub, BorderLayout.NORTH);
 	}
 
-	// Les neuds sont cr��s en dur
-	private void createNodes(DefaultMutableTreeNode top) {
-
-	    DefaultMutableTreeNode design = null;
-	    DefaultMutableTreeNode optimisation = null;
-	    DefaultMutableTreeNode construction = null;
-
-	    design= new DefaultMutableTreeNode("Design");
-	    top.add(design);
-	    
-	    //Patches de design de la coque
-	    design.add(new DefaultMutableTreeNode("Patch"));
-	    design.add(new DefaultMutableTreeNode("Poids"));
-
-	    //optimisation du design
-	    optimisation= new DefaultMutableTreeNode("Optimisation");
-	    top.add(optimisation);
-	    optimisation.add(new DefaultMutableTreeNode("Flottaison"));
-	    optimisation.add(new DefaultMutableTreeNode("Fluidité"));
-	    DefaultMutableTreeNode derive = new DefaultMutableTreeNode("Dérive");
-	    optimisation.add(derive);
-	    derive.add(new DefaultMutableTreeNode("Forme de dérive"));
-	    optimisation.add(new DefaultMutableTreeNode("Habitabilité"));
-
-	    //construction de la coque
-	    construction= new DefaultMutableTreeNode("Construction");
-	    top.add(construction);
-	    construction.add(new DefaultMutableTreeNode("Gabarits"));
-	    construction.add(new DefaultMutableTreeNode("Poutres"));
-	    construction.add(new DefaultMutableTreeNode("Plans"));
+	public DesignTreeNode getTheNode() {
+		return (DesignTreeNode) this.arbre.getLastSelectedPathComponent();	
 	}
-
-	public DefaultMutableTreeNode getTheNode() {
-		return (DefaultMutableTreeNode) this.arbre.getLastSelectedPathComponent();	
+	
+	public void setBoatTree (Cata data) {
+		DefaultMutableTreeNode tn = CataTreeNode.getNodes(data);
+		tn.setParent((MutableTreeNode) this.arbre.getModel().getRoot());
 	}
 	
 	public TreePath getPath () {
