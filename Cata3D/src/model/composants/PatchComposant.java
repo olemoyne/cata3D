@@ -15,7 +15,7 @@ public class PatchComposant extends Composant {
 
 	/** Patch permettant de stocker les données et calculer la forme **/
 	public Patch patch;	
-
+	
 	public PatchComposant () {
 		super(); // Creation des données liées au patch
 		patch = new Patch();	

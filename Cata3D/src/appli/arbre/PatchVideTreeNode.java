@@ -16,6 +16,8 @@ public class PatchVideTreeNode extends PatchTreeNode {
 
 	public PatchVideTreeNode(DesignTreeNode up, String name, PatchVide cmp) {
 		super(up, name, cmp);
+	    new DesignTreeNode(this, "Gabarits");
+	    new DesignTreeNode(this, "Poutres");
 	}
 
 	

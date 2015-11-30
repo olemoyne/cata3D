@@ -1,14 +1,17 @@
 package appli.values;
 
+import java.util.ArrayList;
+
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
-import appli.Controleur;
 import appli.Message;
+import appli.arbre.DesignTreeNode;
+import appli.arbre.TreeNodeProperty;
 
 
 /**
- * Le value table model est automatiquement géré sous la forme de :
+ * Le value table model est automatiquement gï¿½rï¿½ sous la forme de :
  *    Nom --> Statique (String)
  *    Valeur --> Editable (avec validation)
  *     
@@ -24,19 +27,13 @@ public class ValuesTableModel extends AbstractTableModel {
 
 	private final String[] entetes = { "Nom", "Valeur" };	
 	
-	private CataDataManager dataProvider;
-
-	private String nodeName;
+	private DesignTreeNode node;
+	private ArrayList<TreeNodeProperty> nodeData;
 	
 	private Message log;
 	
-	private Controleur control;
-	
-	public ValuesTableModel (CataDataManager cdm, Message l, Controleur ctrl) {
-		dataProvider = cdm;
-		nodeName = "Patch";
+	public ValuesTableModel (Message l) {
 		log = l;
-		control = ctrl;
 	}
 	
 	@Override
@@ -51,42 +48,31 @@ public class ValuesTableModel extends AbstractTableModel {
 		
 	@Override
 	public Object getValueAt(int row, int col) {
+
+		if (nodeData == null) return ("No boat found");
+		if (row >= nodeData.size()) return ("Out of value");
+		TreeNodeProperty prop = nodeData.get(row);
+		if (prop == null) return ("No property found");
 		
-		try {
-			if (col ==0 )return this.dataProvider.getPropertyName(nodeName, row);
-			if (col ==1 ) return this.dataProvider.getPropertyValue(nodeName, row);	
-			return "Wrong structure";
-		} catch (CataValuesException e) {
-			e.printStackTrace();
-			log.logError(e.getLocalizedMessage());
-			return e.getLocalizedMessage();
-		}
+		if (col ==0 )return prop.nom;
+		if (col ==1 ) return prop.value;	
+		return "Wrong structure";
 	}
 
 	@Override
 	public int getRowCount() {
-		try {
-			return dataProvider.getPropertiesCount(this.nodeName);
-		} catch (CataValuesException e) {
-			log.logError(e.getLocalizedMessage());
-			e.printStackTrace();
-			return 0;
-		}
+		if (nodeData == null) return 0;
+		return nodeData.size();
 	}
 
 	@Override
 	public Class<?> getColumnClass(int col) {
-		switch (col) {
-		case 0: return String.class;
-		case 1: return String.class;
-		default:
-			throw new IllegalArgumentException();
-		}
+		return String.class;
 	}
 
 	
     /*
-     * Détermine si la cellule peut être éditée.
+     * Dï¿½termine si la cellule peut ï¿½tre ï¿½ditï¿½e.
      */
     public boolean isCellEditable(int row, int col) {
     	return false;
@@ -98,38 +84,33 @@ public class ValuesTableModel extends AbstractTableModel {
     /**
      * En cas de modification de la cellule
      */
-    public void setValueAt(Object value, int row, int col) {    	
-    	try {
-			dataProvider.setPropertyValue(this.nodeName, row, value);
-			// Mise à jour de la vue
-			this.control.showDessin(nodeName);
-			fireTableCellUpdated(row, col);
-		} catch (CataValuesException e) {
-			log.logError(e.getLocalizedMessage());
-			e.printStackTrace();
-		}
+    public void setValueAt(Object value, int row, int col){    	
+		if (nodeData == null) return;
+		if (row >= nodeData.size()) return;
+		TreeNodeProperty prop = nodeData.get(row);
+		if (prop == null) return;
+		
+		node.updateValue(prop.nom, value);
+		fireTableCellUpdated(row, col);
     }
 
     /**
-     * Premet de positionner les données d'un noeud
-     * En mettant à jour les donneés du tableau
+     * Premet de positionner les donnï¿½es d'un noeud
+     * En mettant ï¿½ jour les donneï¿½s du tableau
      * 
      * @param name
      */
-	public void setNodeName(String name) {
-		nodeName = name;
+	public void setNode(DesignTreeNode nd) {
+		node = nd;
+		this.nodeData = node.getProperties();
 		fireTableChanged(new TableModelEvent (this));
 	}
 
 	
-	public String getNodeName() {
-		return nodeName;
-	}
-
-	public void addRow() {
+	public void addRow(int position) {
 		// Ajoute une nouvelle propriete
 		try {
-			dataProvider.addProperty(nodeName);
+			node.addProperty(nodeData.get(position));
 			fireTableChanged(new TableModelEvent (this));
 		} catch (CataValuesException e) {
 			log.logError(e.getLocalizedMessage());
@@ -141,7 +122,7 @@ public class ValuesTableModel extends AbstractTableModel {
 	public void deleteRow(int position) {
 		// Ajoute une nouvelle propriete
 		try {
-			dataProvider.deleteProperty(nodeName, position);
+			node.removeProperty(nodeData.get(position));
 			fireTableChanged(new TableModelEvent (this));
 		} catch (CataValuesException e) {
 			log.logError(e.getLocalizedMessage());
@@ -150,13 +131,15 @@ public class ValuesTableModel extends AbstractTableModel {
 	}
 
 	public boolean isDataEditable(int selectedRow, int i) {
-		try {
-			return dataProvider.isUpdatable(nodeName, i);
-		} catch (CataValuesException e) {
-			log.logError(e.getLocalizedMessage());
-			e.printStackTrace();
-			return false;
-		}
-	}
+		if (nodeData == null) return false;
+		if (selectedRow >= nodeData.size()) return false;
+		TreeNodeProperty prop = nodeData.get(selectedRow);
+		if (prop == null) return false;
 
+		return prop.editable;
+	}
+	
+	public DesignTreeNode getNode() {
+		return node;
+	}
 }

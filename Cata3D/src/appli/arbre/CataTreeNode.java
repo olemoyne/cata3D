@@ -1,5 +1,7 @@
 package appli.arbre;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import model.Cata;
 import model.composants.Composant;
 import model.composants.PatchPlein;
@@ -15,33 +17,19 @@ import model.composants.Recopie;
 public class CataTreeNode {
 	
 	/** Retourne une liste de noeuds correspondant au bateau **/
-	public static DesignTreeNode getNodes(Cata boat) {
-		DesignTreeNode top = new DesignTreeNode(null, "Définition d'un bateau");
-		
-		DesignTreeNode  sub = new DesignTreeNode(top, "Design");
-	    
+	public static DefaultMutableTreeNode getNodes(Cata boat, DefaultMutableTreeNode top) {
+		DesignTreeNode  sub = new DesignTreeNode( top, "Design");
+		    
 		/**
 		 *  Ajoute les compostants de construction
 		 */
 	    for (Composant cmp : boat.composants) {
 	    	// Selon le type de composant
 	    	if (cmp.getType() == Composant.PATCH_PLEIN) {
-		    	DesignTreeNode node= new PatchPleinTreeNode(sub, cmp.nom, (PatchPlein)cmp);
-			    //Patches de design de la coque
-			    new DesignTreeNode(node, "Patch");
-			    new DesignTreeNode(node, "Poids");
-			    new DesignTreeNode(node, "Gabarits");
-			    new DesignTreeNode(node, "Poutres");
-			    new DesignTreeNode(node, "plans");
+		    	new PatchPleinTreeNode(sub, cmp.nom, (PatchPlein)cmp);
 	    	}
 	    	if (cmp.getType() == Composant.PATCH_VIDE) {
-		    	DesignTreeNode node= new PatchVideTreeNode(sub, cmp.nom, (PatchVide)cmp);
-			    //Patches de design de la coque
-			    new DesignTreeNode(node, "Patch");
-			    new DesignTreeNode(node, "Poids");
-			    new DesignTreeNode(node, "Gabarits");
-			    new DesignTreeNode(node, "Poutres");
-			    new DesignTreeNode(node, "plans");
+		    	new PatchVideTreeNode(sub, cmp.nom, (PatchVide)cmp);
 	    	}
 	    	if (cmp.getType() == Composant.RECOPIE) {
 		    	new RecopieTreeNode(sub, cmp.nom, (Recopie)cmp);

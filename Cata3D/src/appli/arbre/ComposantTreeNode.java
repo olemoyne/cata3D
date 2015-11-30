@@ -16,6 +16,7 @@ public class ComposantTreeNode extends DesignTreeNode {
 
 	public ComposantTreeNode(DesignTreeNode up, String name, Composant cmp) {
 		super(up, name);
+		composant= cmp;
 	}
 
 	

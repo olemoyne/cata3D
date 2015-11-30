@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -36,6 +37,7 @@ public class ArbreDesign extends JPanel {
 	 * Arbre de visualisation des donn�es 
 	 */
 	private JTree arbre;
+	private DefaultMutableTreeNode top;
 	
 	/**
 	 * Constructeur avec la r�f�rence vers le viewer pour changer les donn�es ou rafraichir la vision
@@ -50,14 +52,14 @@ public class ArbreDesign extends JPanel {
 		this.setPreferredSize(new Dimension(400, 1000));
 		this.setBackground(Color.black);
 		
-		DefaultMutableTreeNode top = new DefaultMutableTreeNode("D�finition de la coque");
+		top = new DefaultMutableTreeNode("D�finition d'un bateau");
 
 		arbre = new JTree(top);
 		arbre.setBackground(Color.white);
 
 		arbre.getSelectionModel().setSelectionMode
         (TreeSelectionModel.SINGLE_TREE_SELECTION);
-		arbre.setRootVisible(false);
+		arbre.setRootVisible(true);
 
 		//Listen for when the selection changes.
 		arbre.addTreeSelectionListener(crtl);
@@ -72,9 +74,10 @@ public class ArbreDesign extends JPanel {
 		    arbre.setCellRenderer(renderer);
 		}
 		
-// Ajoute les boutons de gestion 
+// Ajoute les boutons de gestion
 		JPanel sub = new JPanel();
 		sub.setLayout(new FlowLayout());
+		sub.add(new JLabel("Gestion des composants"));
 		JButton ajoute = new JButton("Ajoute");
 		ajoute.setForeground(Color.black);
 		ajoute.setToolTipText("Ajoute un composant");
@@ -93,11 +96,13 @@ public class ArbreDesign extends JPanel {
 	}
 
 	public DesignTreeNode getTheNode() {
-		return (DesignTreeNode) this.arbre.getLastSelectedPathComponent();	
+		MutableTreeNode mtn = (MutableTreeNode) this.arbre.getLastSelectedPathComponent();
+		if (mtn == top) return null;
+		return (DesignTreeNode)mtn; 	
 	}
 	
 	public void setBoatTree (Cata data) {
-		DefaultMutableTreeNode tn = CataTreeNode.getNodes(data);
+		DefaultMutableTreeNode tn = CataTreeNode.getNodes(data, top);
 		tn.setParent((MutableTreeNode) this.arbre.getModel().getRoot());
 	}
 	

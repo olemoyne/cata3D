@@ -15,7 +15,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
 
 import appli.Controleur;
 import appli.Message;
@@ -57,7 +56,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		msg = log;
 		control = ctrl;
 
-		model = new ValuesTableModel (log, ctrl);
+		model = new ValuesTableModel (log);
 		table = new JTable(model);
 		table.setAutoscrolls(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -105,7 +104,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 	 */
 	public void showNode (DesignTreeNode node) throws CataValuesException{
 		// Modifie l'affichage des boutons
-		if (dataManager.areButtonsNeeded(nodeName)) {
+		if (node.requireButtons()) {
 			supprime.setEnabled(true);
 			ajoute.setEnabled(true);
 			buttonsShown = true;
@@ -115,7 +114,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 			buttonsShown = false;
 		}
 		// Modifie les donn�es de la table
-		model.setNodeName (nodeName);
+		model.setNode (node);
 		selectedRow = 0;
     	/** Mise � jour des donn�es dans l'�diteur **/
 		Object val = model.getValueAt(0, 1);
@@ -133,7 +132,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 
 		/** Ajoute une ligne dans le tableau **/
 		if (action.getActionCommand().equals("ajoute")) {
-			model.addRow();
+			model.addRow(selectedRow);
 		}
 		/** supprime une ligne du tableau **/
 		if (action.getActionCommand().equals("supprime")) {
@@ -141,14 +140,8 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		}
 		/** Modification de la valeur dans le tableau  **/
 		if (action.getActionCommand().equals("modifie")) {
-			try {
-				dataManager.setPropertyValue(model.getNodeName(), selectedRow, fields.getValue());
-				model.fireTableChanged(new TableModelEvent(model));
-		    	control.showDessin(model.getNodeName());
-			} catch (CataValuesException e) {
-				e.printStackTrace();
-				msg.logError(e.getLocalizedMessage());
-			}
+			model.setValueAt(fields.getValue(), 1, selectedRow);
+	    	control.showDessin(model.getNode());
 		}
 	}
 

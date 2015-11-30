@@ -3,6 +3,7 @@ package model.composants;
 import model.Structure;
 import model.calcul.CalculCoque;
 import model.math.Decimal;
+import model.patch.Patch;
 
 /**
  * Composant généré à partir d'un patch 
@@ -56,6 +57,18 @@ public class PatchVide extends PatchComposant {
     
 	public int getType() {
 		return Composant.PATCH_VIDE;
+	}
+
+	/**
+	 * Creation d'un patch par defaut
+	 * 
+	 * @return
+	 */
+	public static Composant getDefaultPatch() {
+		PatchVide ret = new PatchVide();
+		ret.nom = "Flotteur";
+		ret.patch= Patch.getPatch();
+		return ret;
 	}
 
 

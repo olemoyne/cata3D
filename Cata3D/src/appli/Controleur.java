@@ -103,20 +103,12 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 
 		//Nothing is selected.     
 		if (node == null) return;
-		String nodeName = (String) node.getUserObject();
-		log.writeLog("Loading screen "+nodeName);
-		this.message.logTrace("Loading screen "+nodeName);
 		
 		try {
-			if (node.isLeaf()) {
-				// Positionne la bonne view
-				this.showDessin(node);
-				// Positionne les bonnes valeurs
-				values.showNode(node);
-			} else {
-				// Positionne la bonne view
-				// Pas de valeurs
-			}
+			// Positionne la bonne view
+			this.showDessin(node);
+			// Positionne les bonnes valeurs
+			values.showNode(node);
 		} catch (CataValuesException e) {
 			message.logError (e.getLocalizedMessage());
 		}
@@ -167,12 +159,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 
 	public void showDessin(DesignTreeNode node) {
 		// Positionne la bonne view
-		try {
-			PrintableScene scene = node.getView();
-			vue.setScene(scene);
-		} catch (CataValuesException e) {
-			e.printStackTrace();
-			this.message.logError(e.getLocalizedMessage());
-		}
+		PrintableScene scene = node.getScene();
+		vue.setScene(scene);
 	}
 }

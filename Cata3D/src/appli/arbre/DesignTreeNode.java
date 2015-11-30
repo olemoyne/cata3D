@@ -16,7 +16,7 @@ public class DesignTreeNode extends DefaultMutableTreeNode {
 	
 	private String nomAffiche;
 
-	public DesignTreeNode (DesignTreeNode up, String name) {
+	public DesignTreeNode (DefaultMutableTreeNode up, String name) {
 		super();
 		nomAffiche = name;
 		if (up != null) up.add(this);
@@ -26,12 +26,30 @@ public class DesignTreeNode extends DefaultMutableTreeNode {
 		return nomAffiche;
 	}
 	
+	public boolean requireButtons() {
+		return false;
+	}
+	
 	public ArrayList<TreeNodeProperty> getProperties() {
-		return null;
+		return new ArrayList<TreeNodeProperty> ();
 	}
 
-	public PrintableScene getView() throws CataValuesException{
-		// TODO Auto-generated method stub
-		return null;
+	public void updateValue (String fld, Object value) {
+		
 	}
+
+	public void addProperty(TreeNodeProperty treeNodeProperty) throws CataValuesException{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void removeProperty(TreeNodeProperty treeNodeProperty) throws CataValuesException{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public PrintableScene getScene() {
+		return new PrintableScene();
+	}
+
 }

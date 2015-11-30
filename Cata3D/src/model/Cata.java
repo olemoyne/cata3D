@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import model.calcul.CalculCoque;
 import model.composants.Composant;
+import model.composants.PatchVide;
 
 
 /**
@@ -36,11 +37,6 @@ public class Cata implements Serializable{
 	/** Flottaison **/
 	public Flottaison mer;
 	
-	/** Poids **/
-	public ArrayList<Poids> poids;
-
-		
-	
 	/**
 	 * Constructeur --> intialisation des listes
 	 */
@@ -48,7 +44,8 @@ public class Cata implements Serializable{
 		
 		mer = new Flottaison();
 
-		poids = new ArrayList<Poids> ();
+		composants = new ArrayList<Composant>(); 
+		composants.add(PatchVide.getDefaultPatch());
 	}
 	
 
@@ -75,7 +72,6 @@ public class Cata implements Serializable{
 	        sb.append(" ");
 		}
         if (mer != null) sb.append(mer.toString());
-        if (poids != null) for (Poids pds : poids) sb.append(pds.toString());
         return sb.toString();
     }	
 }
