@@ -11,7 +11,7 @@ import model.math.Plan3D;
 import model.math.Vecteur;
 
 /**
- * Patch de donneés
+ * Patch de donneï¿½s
  * 
  * @author olemoyne
  *
@@ -23,14 +23,14 @@ public class Patch implements Serializable {
 	 */
 	private static final long serialVersionUID = 3819829819391630423L;
 
-	// Définition des xx points 
+	// Dï¿½finition des xx points 
 	public int x, y;
 
 	// Liste des points
 	public Vecteur[][] points;
 
 	/**
-	 * Construction du Patch par défaut
+	 * Construction du Patch par dï¿½faut
 	 */
 	public Patch () {
 		x = 0;
@@ -40,8 +40,8 @@ public class Patch implements Serializable {
 	}
 
 	/**
-	 * Construit la MAP de vecteurs correspondant au patch définit
-	 * Puis définit une liste de tranches verticales (plans) et calcule la MAP correspondant à la section entre ces plans 
+	 * Construit la MAP de vecteurs correspondant au patch dï¿½finit
+	 * Puis dï¿½finit une liste de tranches verticales (plans) et calcule la MAP correspondant ï¿½ la section entre ces plans 
 	 *   et ma MAP
 	 * 
 	 * @param precisionDAffichage
@@ -49,19 +49,19 @@ public class Patch implements Serializable {
 	 */
 	public MapDeVecteurs getMap(int nbPoints) {
 		if (x+y == 0) return new MapDeVecteurs(0, 0);
-		// Détermine compbien de sous éléments sont nécessaires
+		// Dï¿½termine compbien de sous ï¿½lï¿½ments sont nï¿½cessaires
 		int nbX = (y-1)/3;
 		int nbY = (x-1)/3;
 		
-		// Agrégation totale
+		// Agrï¿½gation totale
 		MapDeVecteurs map = new MapDeVecteurs(nbY*(nbPoints), nbX*(nbPoints));
 		
 		for (int posX = 0; posX < nbX; posX++) {
 			// Parcours toutes les zones par les X
 			for (int posY = 0; posY < nbY; posY++) {
-				// Récupère la MAP asssociée
+				// Rï¿½cupï¿½re la MAP asssociï¿½e
 				Vecteur[][] subMap = this.getSubMap(posY*3, posX*3, nbPoints);
-				// Ajout la MAP dans la MAP générale
+				// Ajout la MAP dans la MAP gï¿½nï¿½rale
 				int maxy = nbPoints;
 //				if (posY == nbY-1) maxy ++;
 				int maxx = nbPoints;
@@ -81,11 +81,14 @@ public class Patch implements Serializable {
 				bnds.addPoint(points[posX][posY]);
 			}
 		}
-		// Par défaut 10 positions
+		// Par dï¿½faut 10 positions
 		Decimal ecart = bnds.getMax().getDecZ().minus(bnds.getMin().getDecZ()).divide(new Decimal(nbPoints-1));
 		MapDeVecteurs ret = new MapDeVecteurs(temp.xSize(), nbPoints);
 		for (int nb = 0; nb < nbPoints; nb ++) {
 			Decimal pos = bnds.getMin().getDecZ().add(new Decimal(nb).multiply(ecart));
+			if (pos.compareTo(bnds.getMax().getDecZ())>= 0) {
+				pos = bnds.getMax().getDecZ().minus(new Decimal(0.001d));
+			}
 			Vecteur a = new Vecteur(Decimal.UN, Decimal.ZERO, pos);
 			Vecteur b = new Vecteur(Decimal.ZERO, Decimal.ZERO, pos);
 			Vecteur c = new Vecteur(Decimal.ZERO, Decimal.UN, pos);
@@ -136,7 +139,7 @@ public class Patch implements Serializable {
 		for (int l= 0; l<taille; l++) {
 			pts[l] = points [pos+x][l+y];
 		}
-		// Calcule la spline définie par le point
+		// Calcule la spline dï¿½finie par le point
 		ArrayList<Vecteur> al = CourbeParametree3D.getCurvePoints(pts[0], pts[1], pts[2], pts[3], nbPoints-1);
 		// recopie les points du arrayList vers le tableau
 		Vecteur[] ret = new Vecteur[nbPoints];
@@ -174,7 +177,7 @@ public class Patch implements Serializable {
 			// Gestion de la SKIN
 //			map[pos][0] = new Vecteur(0, v.getY(), v.getZ());
 //			Vecteur v = map[pos][al.size()];
-			// Rajoute des points vides équivalents au dernier point
+			// Rajoute des points vides ï¿½quivalents au dernier point
 //			for (int h = al.size()+1; h < nbPoints; h++ ) {
 				// Gestion de la SKIN
 //				map[pos][h] = new Vecteur(0, v.getY(), v.getZ());

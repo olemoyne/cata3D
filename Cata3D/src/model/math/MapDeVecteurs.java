@@ -191,7 +191,9 @@ public class MapDeVecteurs implements Serializable {
 		for (int xpos = 0; xpos < this.xSize; xpos ++) {
 			// calcule la position du plan pour une tranche
 			for (int ypos = 1; ypos < this.ySize; ypos ++) {
-				Vecteur v = pl.intersection(this.getPoint(xpos, ypos-1), this.getPoint(xpos, ypos));
+				Vecteur A = this.getPoint(xpos, ypos-1);
+				Vecteur B = this.getPoint(xpos, ypos);
+				Vecteur v = pl.intersection(A, B);
 				if (v!= null) ret.points.add(v);
 			}
 		}

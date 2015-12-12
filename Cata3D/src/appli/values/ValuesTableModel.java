@@ -106,6 +106,11 @@ public class ValuesTableModel extends AbstractTableModel {
 		fireTableChanged(new TableModelEvent (this));
 	}
 
+	public void refreshData() {
+		this.nodeData = node.getProperties();
+		fireTableChanged(new TableModelEvent (this));		
+	}
+
 	
 	public void addRow(int position) {
 		// Ajoute une nouvelle propriete
@@ -142,4 +147,15 @@ public class ValuesTableModel extends AbstractTableModel {
 	public DesignTreeNode getNode() {
 		return node;
 	}
+
+	/**
+	 * retrourne la propriété associée à la ligne donnée 
+	 * */
+	public TreeNodeProperty getProperty(int selectedRow) {
+		if (nodeData == null) return null;
+		if (selectedRow >= nodeData.size()) return null;
+		TreeNodeProperty prop = nodeData.get(selectedRow);
+		return prop;
+	}
+
 }

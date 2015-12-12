@@ -68,6 +68,9 @@ public class PatchVide extends PatchComposant {
 		PatchVide ret = new PatchVide();
 		ret.nom = "Flotteur";
 		ret.patch= Patch.getPatch();
+		ret.epaisseurDeBardage = new Decimal(0.01d);
+		ret.densiteBardage = new Decimal(0.6d);
+		ret.recalcule();
 		return ret;
 	}
 

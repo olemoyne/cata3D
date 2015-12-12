@@ -8,17 +8,20 @@ import java.awt.event.ActionListener;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import appli.Controleur;
 import appli.Message;
 import appli.arbre.DesignTreeNode;
+import appli.arbre.TreeNodeProperty;
 import appli.values.updater.PropertyValueUpdater;
 
 /***
@@ -37,7 +40,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 	private ValuesTableModel model;
 	private JTable table;
 	
-	private JButton ajoute, supprime;
+	private JButton ajoute, supprime, modifie;
 		
 	private PropertyValueUpdater fields;
 	
@@ -45,15 +48,12 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 	private boolean buttonsShown;
 	
 	private Controleur control;
-	
-	private Message msg;
-	
+		
 	public TableValues (Controleur ctrl, Message log) {
 		super();
 		
 		
 		Color buttonColor = this.getBackground();
-		msg = log;
 		control = ctrl;
 
 		model = new ValuesTableModel (log);
@@ -90,12 +90,20 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		supprime.setActionCommand("supprime");
 		supprime.addActionListener(this);		
 		sub.add(supprime);
-		
+
+		modifie = new JButton("Modifie");
+		modifie.setForeground(Color.black);
+		modifie.setBackground(buttonColor);
+		modifie.setToolTipText("Modifie un élément dans le tableau");
+		modifie.setActionCommand("modifie");
+		modifie.addActionListener(this);		
+		sub.add(modifie);
+
+
 		this.add(sub, BorderLayout.NORTH);
 		
-		fields = new PropertyValueUpdater(this);
-		this.add(fields, BorderLayout.SOUTH);
 
+ 		fields = new PropertyValueUpdater();
 	}
 	
 	/** 
@@ -113,14 +121,9 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 			ajoute.setEnabled(false);
 			buttonsShown = false;
 		}
-		// Modifie les donn�es de la table
+		// Modifie les données de la table
 		model.setNode (node);
 		selectedRow = 0;
-    	/** Mise � jour des donn�es dans l'�diteur **/
-		Object val = model.getValueAt(0, 1);
-		
-    	fields.setValue(val, model.isDataEditable(0, 1));
-    	repaint();
 	}
 
 	/***
@@ -140,8 +143,17 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		}
 		/** Modification de la valeur dans le tableau  **/
 		if (action.getActionCommand().equals("modifie")) {
-			model.setValueAt(fields.getValue(), 1, selectedRow);
-	    	control.showDessin(model.getNode());
+			// Affiche la fenentre de modification des données 
+			TreeNodeProperty prop = model.getProperty(selectedRow);
+			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+			boolean ok = fields.showEditionScreen(prop, topFrame);
+			if (ok) {
+				// modifie la valeur
+				model.getNode().updateValue(prop.nom, prop.value);
+				model.refreshData();
+//				model.setValueAt(fields.getValue(), 1, selectedRow);
+		    	control.showDessin(model.getNode());
+			}
 		}
 	}
 
@@ -155,14 +167,13 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
         else{
         	this.selectedRow = lsm.getMaxSelectionIndex();
         	table.setEditingRow(selectedRow);
+        	TreeNodeProperty prp = this.model.getProperty(selectedRow);
+        	if (prp != null) modifie.setEnabled(prp.editable); 
+        	
         	
             /** enable des buttons si necessaire**/
         	supprime.setEnabled(this.buttonsShown);
         	
-        	/** Mise � jour des donn�es dans l'�diteur **/
-    		Object val = model.getValueAt(selectedRow, 1);
-    		if (val == null) this.msg.logError("Null value returned");
-        	fields.setValue(val, model.isDataEditable(selectedRow, 1));
         	this.repaint();
         }
 	}

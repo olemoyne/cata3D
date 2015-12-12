@@ -95,10 +95,10 @@ public class ArbreDesign extends JPanel {
 		this.add(sub, BorderLayout.NORTH);
 	}
 
-	public DesignTreeNode getTheNode() {
+	public MutableTreeNode getTheNode() {
 		MutableTreeNode mtn = (MutableTreeNode) this.arbre.getLastSelectedPathComponent();
 		if (mtn == top) return null;
-		return (DesignTreeNode)mtn; 	
+		return (MutableTreeNode)mtn; 	
 	}
 	
 	public void setBoatTree (Cata data) {

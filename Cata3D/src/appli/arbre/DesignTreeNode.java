@@ -9,6 +9,12 @@ import view.scene.PrintableScene;
 
 public class DesignTreeNode extends DefaultMutableTreeNode {
 
+	
+	public static int LEVEL_CATA = 0;
+	public static int LEVEL_COMPOSANT = 1;
+	public static int LEVEL_COMPOSANT_DESIGN = 2;
+	public static int LEVEL_CATA_DESIGN = 3;
+	
 	/**
 	 * 
 	 */

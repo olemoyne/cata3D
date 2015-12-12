@@ -1,102 +1,50 @@
 package appli.values.updater;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
+
 import java.util.Hashtable;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JFrame;
 
-import model.Gabarit;
-import model.Poids;
-import model.Poutre;
-import model.math.Decimal;
-import model.math.Vecteur;
+import appli.arbre.TreeNodeProperty;
 
-
-public class PropertyValueUpdater extends JPanel {
-
-	private ObjectUpdater active;
+public class PropertyValueUpdater {
 	
 	private Hashtable<String, ObjectUpdater> panels;
-
-	private JButton modifie;
-	
-	private JScrollPane scroll;
-
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7196472580862805817L;
 	
-	public PropertyValueUpdater (ActionListener ctr) {
-		super();
+	public PropertyValueUpdater () {
 		
-		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension(380, 200));
-		this.setBackground(Color.white);
 		panels = new Hashtable<String, ObjectUpdater>();
 		
-		JLabel lab = new JLabel ("Propriété sélectionnée :");
-		this.add(lab, BorderLayout.NORTH);
-
 		ObjectUpdater o = new VecteurUpdater();
-		panels.put(Vecteur.class.toString(), o);
+		panels.put(ObjectUpdater.VECTEUR, o);
 		
-		o = new GabaritUpdater();
-		panels.put(Gabarit.class.toString(), o);
+/**		o = new GabaritUpdater();
+		panels.put(ObjectUpdater.GABARIT, o);
 
 		o = new PoutreUpdater();
-		panels.put(Poutre.class.toString(), o);
-
+		panels.put(ObjectUpdater.POUTRE, o);
+*/
 		o = new PoidsUpdater();
-		panels.put(Poids.class.toString(), o);
+		panels.put(ObjectUpdater.POIDS, o);
 
 		o = new IntegerUpdater();
-		panels.put(Integer.class.toString(), o);
-
-		o = new DecimalUpdater();
-		panels.put(Decimal.class.toString(), o);
-
-		JPanel sub = new JPanel();
-		sub.setLayout(new FlowLayout(FlowLayout.CENTER));
-		// Ajoute les boutons de gestion 
-		modifie = new JButton("Modifie");
-		modifie.setForeground(Color.black);
-		modifie.setToolTipText("Modifie l'élément dans le tableau");
-		modifie.setActionCommand("modifie");
-		modifie.addActionListener(ctr);		
-		sub.add(modifie);
+		panels.put(ObjectUpdater.DECIMAL, o);
+	}
+	
+	
+	
+	/**  
+	 * Affiche une fenetre de confirmation de modification de la valeur **/
+	public boolean showEditionScreen(TreeNodeProperty prop, JFrame frm) {
+		if (prop == null) return false;
 		
-		scroll = new JScrollPane();
-		this.add(scroll, BorderLayout.CENTER);
+		ObjectUpdater pnl = this.panels.get(prop.editeurType);
+		pnl.setProperty(prop.value);
 
-		this.add(sub, BorderLayout.SOUTH);
-	}
-	
-	
-	public void setValue (Object val, boolean modif) {
-		if (val == null) return;
-		String cl = val.getClass().toString();
-		if (active != null) scroll.remove(active);
-		active = panels.get(cl);
-		if (active != null) {
-			active.setProperty(val);
-			scroll.setViewportView(active);
-			modifie.setEnabled(modif);
-			this.repaint();
-		}
-	}
-	
-	public Object getValue () {
-		if (active != null) {
-			return active.getData();
-		}
-		return null;
+		DialogValue dial = new DialogValue(frm, prop, pnl); 
+		return dial.isOk;
 	}
 
 }

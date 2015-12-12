@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.MutableTreeNode;
 
 import model.Cata;
 import view.scene.PrintableScene;
@@ -99,19 +100,21 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 	
 	
 	private void showNodeDetails () {
-		DesignTreeNode node = arbre.getTheNode();
-
+		MutableTreeNode node = arbre.getTheNode();
 		//Nothing is selected.     
 		if (node == null) return;
 		
 		try {
+			DesignTreeNode des = (DesignTreeNode) node;
 			// Positionne la bonne view
-			this.showDessin(node);
+			this.showDessin(des);
 			// Positionne les bonnes valeurs
-			values.showNode(node);
+			values.showNode(des);
 		} catch (CataValuesException e) {
 			message.logError (e.getLocalizedMessage());
+		} catch (ClassCastException e) {
 		}
+		
 	}
 
 	/**

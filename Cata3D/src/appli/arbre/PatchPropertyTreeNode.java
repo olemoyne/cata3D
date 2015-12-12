@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import appli.values.updater.ObjectUpdater;
+import model.composants.PatchComposant;
 import model.math.Decimal;
 import model.math.Vecteur;
 import model.patch.Patch;
@@ -83,16 +84,18 @@ public class PatchPropertyTreeNode extends DesignTreeNode{
 	 * 
 	 */
 	public PrintableScene getScene () {
-		PrintableScene ret = super.getScene();
+		PatchTreeNode father = (PatchTreeNode)this.parent;
+		PatchComposant cmp = (PatchComposant)father.composant;
+		PrintableScene ret = super.getScene(); 
+
+		// Affiche la coque en gris
+		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", false, Color.darkGray));					
 
 		// Affiche les points en jaune
 		for (int y = 0; y < data.y; y++) 
 			for (int x = 0; x < data.x; x++) 
 				ret.add(new PrintedPoint(data.points[x][y], "", Color.yellow));
 
-		// Affiche la coque en gris
-		ret.add(new PrintedMap (data.getMap(10), "Coque", false, Color.darkGray));
-					
 		return ret;
 	}
 	
