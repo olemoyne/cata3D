@@ -27,7 +27,7 @@ public class DialogValue extends JDialog implements ActionListener {
 	 */
 	public DialogValue(JFrame frm, TreeNodeProperty prop, ObjectUpdater pnl) {
 		super(frm, true);
-		this.setLocation(200, 100);
+		this.setLocation(frm.getMousePosition());
 		this.setTitle("Modification d'un paramètre");
 		property = prop;
 		update = pnl;

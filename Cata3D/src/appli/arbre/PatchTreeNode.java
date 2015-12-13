@@ -16,7 +16,7 @@ public class PatchTreeNode extends ComposantTreeNode {
 		// Ajoute les TreeNode correspondant au composant
 	    new PatchPropertyTreeNode(this, cmp.patch);
 	    //Patches de design de la coque
-	    new DesignTreeNode(this, "Poids");
+	    new PoidsTreeNode(this, cmp);
 	    new DesignTreeNode(this, "plans");
 	}		
 
