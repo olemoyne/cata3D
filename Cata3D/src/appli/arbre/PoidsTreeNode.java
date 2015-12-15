@@ -10,12 +10,9 @@ import appli.values.updater.ObjectUpdater;
 import model.Poids;
 import model.composants.Composant;
 import model.composants.PatchComposant;
-import model.math.Decimal;
-import model.math.Vecteur;
 import view.scene.PrintableScene;
 import view.scene.PrintedForce;
 import view.scene.PrintedMap;
-import view.scene.PrintedPoint;
 
 /**
  * Liste des poids soumis 
@@ -61,6 +58,7 @@ public class PoidsTreeNode extends DesignTreeNode {
 		Poids p = (Poids)value;
 		the.force= p.force;
 		the.position = p.position;
+		the.nom = p.nom;
 		
 		comp.recalcule();
 	}
@@ -82,21 +80,41 @@ public class PoidsTreeNode extends DesignTreeNode {
 			ret.add(new PrintedForce(pds, Color.RED));
 		}
 
+		comp.recalcule();
 		return ret;
 	}
 	
 	public boolean requireButtons() {
 		return true;
 	}
-	
+
+	/** 
+	 * Ajoute un poids dans la liste 
+	 * **/
 	public void addProperty(TreeNodeProperty treeNodeProperty) throws CataValuesException{
-		// TODO Ajoute un poids
-		
+		Poids n = (Poids) treeNodeProperty.value;
+		poids.add(n);
+
+		comp.recalcule();
 	}
 
+	/**
+	 * Supprime un poids dans la liste
+	 */
+	
 	public void removeProperty(TreeNodeProperty treeNodeProperty) throws CataValuesException{
-		// TODO Supprime le poids
+		if (treeNodeProperty == null) return;
+		Poids the = null;
+		for (Poids pds : poids) if (pds.nom.equals(treeNodeProperty.nom)) the = pds;
+		if (the == null) return;
 		
+		poids.remove(the);
+		comp.recalcule();
+	}
+
+	public TreeNodeProperty getNewProperty() {
+		Poids pds = new Poids();
+		return new TreeNodeProperty (pds.nom, pds, true, ObjectUpdater.POIDS);
 	}
 
 }

@@ -112,10 +112,16 @@ public class ValuesTableModel extends AbstractTableModel {
 	}
 
 	
-	public void addRow(int position) {
+	public TreeNodeProperty getNewRow () {
+		// Ajoute une nouvelle propriete
+		return node.getNewProperty();
+	}
+	
+	public void addRow(TreeNodeProperty prp) {
 		// Ajoute une nouvelle propriete
 		try {
-			node.addProperty(nodeData.get(position));
+			node.addProperty(prp);
+			this.nodeData = node.getProperties();
 			fireTableChanged(new TableModelEvent (this));
 		} catch (CataValuesException e) {
 			log.logError(e.getLocalizedMessage());
@@ -128,6 +134,7 @@ public class ValuesTableModel extends AbstractTableModel {
 		// Ajoute une nouvelle propriete
 		try {
 			node.removeProperty(nodeData.get(position));
+			this.nodeData = node.getProperties();
 			fireTableChanged(new TableModelEvent (this));
 		} catch (CataValuesException e) {
 			log.logError(e.getLocalizedMessage());

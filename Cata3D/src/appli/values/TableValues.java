@@ -133,13 +133,24 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 	@Override
 	public void actionPerformed(ActionEvent action) {
 
+
 		/** Ajoute une ligne dans le tableau **/
 		if (action.getActionCommand().equals("ajoute")) {
-			model.addRow(selectedRow);
+			// Ajoute une ligne dans le gestionnaire 
+			TreeNodeProperty prp = model.getNewRow();
+			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+			boolean ok = fields.showEditionScreen(prp, topFrame);
+			if (ok) {
+				model.addRow(prp);
+				this.control.recalcule();
+		    	control.showDessin(model.getNode());
+			}
 		}
 		/** supprime une ligne du tableau **/
 		if (action.getActionCommand().equals("supprime")) {
 			model.deleteRow(selectedRow);
+			this.control.recalcule();
+	    	control.showDessin(model.getNode());
 		}
 		/** Modification de la valeur dans le tableau  **/
 		if (action.getActionCommand().equals("modifie")) {

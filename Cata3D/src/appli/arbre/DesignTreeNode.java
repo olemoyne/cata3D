@@ -58,4 +58,9 @@ public class DesignTreeNode extends DefaultMutableTreeNode {
 		return new PrintableScene();
 	}
 
+	public TreeNodeProperty getNewProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -165,4 +165,8 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		PrintableScene scene = node.getScene();
 		vue.setScene(scene);
 	}
+	
+	public void recalcule () {
+		this.dessin.recalcule();
+	}
 }
