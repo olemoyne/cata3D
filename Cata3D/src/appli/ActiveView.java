@@ -30,7 +30,7 @@ public class ActiveView {
 		fondDeVue = fond;
 		
 		/** Creation de la vue 3D **/
-		PrintableViewUpdate upd = new PrintableViewUpdate("0.25");
+		PrintableViewUpdate upd = new PrintableViewUpdate("0.025");
 		viewer3D = new PrintableObjectViewer(upd);
 		fond.add(viewer3D, BorderLayout.CENTER);
 		active = viewer3D;

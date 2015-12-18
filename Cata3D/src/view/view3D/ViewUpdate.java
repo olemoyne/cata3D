@@ -38,7 +38,7 @@ public class ViewUpdate implements GLEventListener{
       GL2 gl = drawable.getGL().getGL2();
       gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //erasing color
       gl.glColor3f(0.0f, 0.0f, 0.0f); // drawing color
-      gl.glViewport(-100, -100, 200, 200);
+      gl.glViewport(-400, -400, 800, 800);
       
       drawInside(gl);
       changeCameraPosition(gl);
@@ -105,7 +105,7 @@ public class ViewUpdate implements GLEventListener{
             gl.glLoadIdentity();
 
             GLU glu=new GLU();
-            glu.gluPerspective(90, 1, 1, 120);
+            glu.gluPerspective(90, 1, 1, 12);
             camera.lookAt(glu);
       }
     }
@@ -183,7 +183,7 @@ public class ViewUpdate implements GLEventListener{
 	    GLUquadric quadric = glu.gluNewQuadric();    //In Jogl
 	    glu.gluQuadricTexture(quadric, true);
         gl.glTranslatef(v.getDecX().floatValue(), v.getDecY().floatValue(), v.getDecZ().floatValue());
-        glu.gluSphere(quadric, 0.01f, 5, 5);
+        glu.gluSphere(quadric, 0.005f, 2, 2);
 	    gl.glPopMatrix();        //equivalent to 'load the last position saved'
 	}
 

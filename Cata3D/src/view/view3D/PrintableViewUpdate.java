@@ -39,7 +39,8 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
     	scene.printScene(gl);
 	}
 
-	/** Définit le composant à afficher :
+	/** 
+	 * Définit le composant à afficher :
 	 *    --> label noir avec en fond blanc le nom de la forme
 	 *      --> gras si selectionné
 	 */

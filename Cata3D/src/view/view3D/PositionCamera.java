@@ -89,7 +89,7 @@ public class PositionCamera {
 
 
 	public void reset() {
-		position = new Vecteur("0;0;10");
+		position = new Vecteur("0;0;4");
 		direction = new Vecteur("0;0;0");
 		haut = new Vecteur("0;1;0");
 		updated = true;

@@ -36,6 +36,8 @@ public class PrintableObjectViewer extends View3D implements ListSelectionListen
 		objectListTable.getSelectionModel().addListSelectionListener(this);
 
 		if (objectListTable != null) this.add(new JScrollPane(objectListTable), BorderLayout.EAST);
+		// Ajoute un bouton de gestion de l'échelle
+		
 
 	}
 
