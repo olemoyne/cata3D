@@ -142,7 +142,7 @@ public class CalculVolume {
 	 * @param pds
 	 * @return
 	 */
-	static Poids getCentreGravite (String n, ArrayList<Poids> pds){
+	static public Poids getCentreGravite (String n, ArrayList<Poids> pds){
 		
 		// calcule le Centre de gravité
 		Vecteur centre = new Vecteur (0, 0, 0);

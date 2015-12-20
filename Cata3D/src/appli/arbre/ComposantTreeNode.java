@@ -25,7 +25,7 @@ public class ComposantTreeNode extends DesignTreeNode {
 		ret.add(new TreeNodeProperty ("Nom", composant.nom, true, ObjectUpdater.STRING) );
 		ret.add(new TreeNodeProperty ("Description", composant.description, true, ObjectUpdater.STRING) );
 		ret.add(new TreeNodeProperty ("Position", composant.position, true, ObjectUpdater.VECTEUR) );
-		ret.add(new TreeNodeProperty ("poids total", composant.poids, false, ObjectUpdater.POIDS) );
+		ret.add(new TreeNodeProperty ("Poids total", composant.gravite, false, ObjectUpdater.POIDS) );
 		return ret;
 	}
 
@@ -34,6 +34,7 @@ public class ComposantTreeNode extends DesignTreeNode {
 		if (fld.equals("Nom")) composant.nom = (String)value;
 		if (fld.equals("Description")) composant.description = (String)value;
 		if (fld.equals("Position")) composant.position= (Vecteur)value;
+		// TODO : Modification des calculs au niveau deu bateau
 	}
 	
 }

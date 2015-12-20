@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -30,7 +32,7 @@ import appli.values.updater.PropertyValueUpdater;
  * @author olemoyne
  *
  */
-public class TableValues extends JPanel implements ActionListener, ListSelectionListener{
+public class TableValues extends JPanel implements ActionListener, ListSelectionListener, MouseListener{
 	
 	/**
 	 * 
@@ -65,6 +67,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		table.setDefaultRenderer(Color.class, new ColorRenderer(true));
         table.setDefaultEditor(Color.class, new ColorEditor());
         table.setDefaultEditor(String.class, new DefaultCellEditor(new JTextField()));
+        table.addMouseListener(this);
 
 
 		this.setLayout(new BorderLayout());
@@ -154,17 +157,21 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		}
 		/** Modification de la valeur dans le tableau  **/
 		if (action.getActionCommand().equals("modifie")) {
-			// Affiche la fenentre de modification des données 
-			TreeNodeProperty prop = model.getProperty(selectedRow);
-			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-			boolean ok = fields.showEditionScreen(prop, topFrame);
-			if (ok) {
-				// modifie la valeur
-				model.getNode().updateValue(prop.nom, prop.value);
-				model.refreshData();
-//				model.setValueAt(fields.getValue(), 1, selectedRow);
-		    	control.showDessin(model.getNode());
-			}
+			modifyColumn();
+		}
+	}
+
+	private void modifyColumn() {
+		// Affiche la fenentre de modification des données 
+		TreeNodeProperty prop = model.getProperty(selectedRow);
+		JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+		boolean ok = fields.showEditionScreen(prop, topFrame);
+		if (ok) {
+			// modifie la valeur
+			model.getNode().updateValue(prop.nom, prop.value);
+			model.refreshData();
+//			model.setValueAt(fields.getValue(), 1, selectedRow);
+	    	control.showDessin(model.getNode());
 		}
 	}
 
@@ -187,6 +194,37 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
         	
         	this.repaint();
         }
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent evt) {
+		if (evt.getClickCount() == 2 ) {
+			modifyColumn();
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

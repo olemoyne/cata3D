@@ -51,6 +51,8 @@ public class Composant implements Serializable{
 	 * Constructeur --> intialisation des listes
 	 */
 	public Composant () {
+		nom = "Nom";
+		description = "Description";
 		poids = new ArrayList<Poids> ();
 		position = new Vecteur();
 	}

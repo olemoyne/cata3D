@@ -20,7 +20,7 @@ public class RecopieTreeNode extends ComposantTreeNode {
 
 
 	public RecopieTreeNode(DesignTreeNode up, String name, Recopie cmp) {
-		super(up, name, cmp);
+		super(up, "Recopie : "+name, cmp);
 	}
 
 	/**

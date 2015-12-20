@@ -1,7 +1,5 @@
 package appli.values.updater;
 
-import model.math.Decimal;
-
 /** 
  * Permet de mettre � jour une chaine de caractère
  * 
@@ -10,7 +8,7 @@ import model.math.Decimal;
  */
 public class StringUpdater extends ObjectUpdater {
 
-	DecimalField fld;
+	StringField fld;
 	
 	/**
 	 * 
@@ -19,17 +17,17 @@ public class StringUpdater extends ObjectUpdater {
 
 	public StringUpdater () {
 		super();	
-		fld = new DecimalField("Valeur : ", "");
+		fld = new StringField("Valeur : ");
 		add(fld);
 	}
 	
 	public void setProperty (Object val) {
-		Decimal v = (Decimal)val;
+		String v = (String)val;
 		fld.setField(v);
 	}
 	
 	public Object getData() {
-		return (Decimal) fld.getValue();
+		return (String) fld.getValue();
 	}
 	
 }

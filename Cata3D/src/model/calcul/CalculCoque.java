@@ -67,7 +67,8 @@ public class CalculCoque {
 				Vecteur C = map.getPoint(x,  y);
 				Vecteur D = map.getPoint(x-1,  y);
 				Decimal aire = Vecteur.calculeSurface(A, B, C).add(Vecteur.calculeSurface(A, C, D));
-				Decimal kg = aire.multiply(densiteSurfacique);
+				Decimal kg = aire.multiply(densiteSurfacique).multiply(Decimal.MILLE);
+				
 				// Centre du poids
 				Vecteur centre = A.add(B).add(C).add(D).multiply(new Decimal(0.25f));
 				Poids p = new Poids ("", centre, kg);

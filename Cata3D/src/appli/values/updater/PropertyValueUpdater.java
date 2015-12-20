@@ -20,6 +20,9 @@ public class PropertyValueUpdater {
 		ObjectUpdater o = new VecteurUpdater();
 		panels.put(ObjectUpdater.VECTEUR, o);
 		
+		o = new StringUpdater();
+		panels.put(ObjectUpdater.STRING, o);
+		
 /**		o = new GabaritUpdater();
 		panels.put(ObjectUpdater.GABARIT, o);
 
@@ -29,7 +32,7 @@ public class PropertyValueUpdater {
 		o = new PoidsUpdater();
 		panels.put(ObjectUpdater.POIDS, o);
 
-		o = new IntegerUpdater();
+		o = new DecimalUpdater();
 		panels.put(ObjectUpdater.DECIMAL, o);
 	}
 	
@@ -41,7 +44,8 @@ public class PropertyValueUpdater {
 		if (prop == null) return false;
 		
 		ObjectUpdater pnl = this.panels.get(prop.editeurType);
-		pnl.setProperty(prop.value);
+		if (pnl != null) pnl.setProperty(prop.value);
+		else return true;
 
 		DialogValue dial = new DialogValue(frm, prop, pnl); 
 		return dial.isOk;

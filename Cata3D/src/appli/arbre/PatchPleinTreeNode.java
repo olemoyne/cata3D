@@ -15,7 +15,7 @@ public class PatchPleinTreeNode extends PatchTreeNode {
 
 
 	public PatchPleinTreeNode(DesignTreeNode up, String name, PatchPlein cmp) {
-		super(up, name, cmp);
+		super(up, "Patch plein : "+name, cmp);
 	}
 
 	

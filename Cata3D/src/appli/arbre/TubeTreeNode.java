@@ -17,7 +17,7 @@ public class TubeTreeNode extends ComposantTreeNode {
 
 
 	public TubeTreeNode(DesignTreeNode up, String name, Recopie cmp) {
-		super(up, name, cmp);
+		super(up, "Tube : "+name, cmp);
 	}
 
 	/**

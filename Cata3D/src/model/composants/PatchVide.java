@@ -1,7 +1,11 @@
 package model.composants;
 
+import java.util.ArrayList;
+
+import model.Poids;
 import model.Structure;
 import model.calcul.CalculCoque;
+import model.calcul.CalculVolume;
 import model.math.Decimal;
 import model.patch.Patch;
 
@@ -52,7 +56,11 @@ public class PatchVide extends PatchComposant {
      */
     public void recalcule () {
     	super.recalcule();
-		this.gravite = CalculCoque.calculePoidsCoque(mapAffichage, epaisseurDeBardage.multiply(densiteBardage));
+		Poids pdsCoque = CalculCoque.calculePoidsCoque(mapAffichage, epaisseurDeBardage.multiply(densiteBardage));
+		ArrayList<Poids> lst = new ArrayList<Poids>();
+		lst.add(pdsCoque);
+		lst.addAll(this.poids);
+		this.gravite= CalculVolume.getCentreGravite("Poids total", lst);
     }
     
 	public int getType() {
