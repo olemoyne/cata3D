@@ -22,7 +22,7 @@ import view.scene.PrintedMap;
  */
 public class PoidsTreeNode extends DesignTreeNode {
 
-	 ArrayList<Poids> poids;
+//	 ArrayList<Poids> poids;
 	 Composant comp;
 	
 	/**
@@ -34,7 +34,6 @@ public class PoidsTreeNode extends DesignTreeNode {
 		super(up, "Poids");
 		
 		comp = cmp;
-		poids = cmp.poids;
 	}
 	
 	/**
@@ -43,7 +42,7 @@ public class PoidsTreeNode extends DesignTreeNode {
 	public ArrayList<TreeNodeProperty> getProperties() {
 		
 		ArrayList<TreeNodeProperty> ret = super.getProperties();
-		for (Poids pds : poids) {
+		for (Poids pds : comp.poids) {
 			ret.add(new TreeNodeProperty (pds.nom, pds, true, ObjectUpdater.POIDS) );			
 		}
 		return ret;
@@ -52,7 +51,7 @@ public class PoidsTreeNode extends DesignTreeNode {
 	
 	public void updateValue (String fld, Object value) {
 		Poids the = null;
-		for (Poids pds : poids) if (pds.nom.equals(fld)) the = pds;
+		for (Poids pds : comp.poids) if (pds.nom.equals(fld)) the = pds;
 		if (the == null) return;
 		
 		Poids p = (Poids)value;
@@ -76,7 +75,7 @@ public class PoidsTreeNode extends DesignTreeNode {
 		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", false, Color.darkGray));					
 
 		// Affiche les poids en rouge
-		for (Poids pds : poids) {
+		for (Poids pds : comp.poids) {
 			ret.add(new PrintedForce(pds, Color.RED));
 		}
 
@@ -93,7 +92,7 @@ public class PoidsTreeNode extends DesignTreeNode {
 	 * **/
 	public void addProperty(TreeNodeProperty treeNodeProperty) throws CataValuesException{
 		Poids n = (Poids) treeNodeProperty.value;
-		poids.add(n);
+		comp.poids.add(n);
 
 		comp.recalcule();
 	}
@@ -105,10 +104,10 @@ public class PoidsTreeNode extends DesignTreeNode {
 	public void removeProperty(TreeNodeProperty treeNodeProperty) throws CataValuesException{
 		if (treeNodeProperty == null) return;
 		Poids the = null;
-		for (Poids pds : poids) if (pds.nom.equals(treeNodeProperty.nom)) the = pds;
+		for (Poids pds : comp.poids) if (pds.nom.equals(treeNodeProperty.nom)) the = pds;
 		if (the == null) return;
 		
-		poids.remove(the);
+		comp.poids.remove(the);
 		comp.recalcule();
 	}
 

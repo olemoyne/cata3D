@@ -23,10 +23,11 @@ public class PropertyValueUpdater {
 		o = new StringUpdater();
 		panels.put(ObjectUpdater.STRING, o);
 		
-/**		o = new GabaritUpdater();
+		o = new GabaritUpdater();
 		panels.put(ObjectUpdater.GABARIT, o);
 
-		o = new PoutreUpdater();
+/**
+  		o = new PoutreUpdater();
 		panels.put(ObjectUpdater.POUTRE, o);
 */
 		o = new PoidsUpdater();

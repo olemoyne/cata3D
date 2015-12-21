@@ -30,6 +30,13 @@ public class Gabarit implements Serializable {
 		epaisseur = new Decimal(0.01d);
 	}
 	
+
+	public Plan3D getPlan(Decimal i) {
+		Plan3D pl = new Plan3D(new Vecteur(Decimal.UN, Decimal.ZERO, position.add(i)), 
+				new Vecteur(Decimal.ZERO, Decimal.ZERO, position.add(i)), new Vecteur(Decimal.ZERO, Decimal.UN, position.add(i)));
+		return pl;
+	}
+	
 	/** 
 	 * Retourne la surface (liste de points) corrrespondant au gabarit
 	 * 
@@ -39,9 +46,7 @@ public class Gabarit implements Serializable {
 	 */
 	public Area getArea(PatchVide cmp, Decimal i) {
 		// Plan Z = position;
-		Plan3D pl = new Plan3D(new Vecteur(Decimal.UN, Decimal.ZERO, position.add(i)), 
-				new Vecteur(Decimal.ZERO, Decimal.ZERO, position.add(i)), new Vecteur(Decimal.ZERO, Decimal.UN, position.add(i)));
-		
+		Plan3D pl = this.getPlan(i);
 		Area coupe = cmp.mapAffichage.intersectionHorizontale(pl);
 		
 		return coupe.resize(cmp.epaisseurDeBardage.negate());
