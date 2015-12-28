@@ -29,6 +29,8 @@ public class PatchPleinTreeNode extends PatchTreeNode {
 
 	
 	public void updateValue (String fld, Object value) {
+		super.updateValue(fld, value);
+
 		PatchPlein pv = (PatchPlein)composant;
 
 		if (fld.equals("Densité")) pv.densite = (Decimal)value;

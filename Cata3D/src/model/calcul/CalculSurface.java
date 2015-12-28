@@ -1,7 +1,9 @@
 package model.calcul;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import model.math.Axis;
 import model.math.Decimal;
 import model.math.Vecteur;
 
@@ -26,47 +28,51 @@ public class CalculSurface {
 	/** 
 	 * Calcul la surface 
 	 * */
-	public static Decimal getSurface(ArrayList<Vecteur> lst) {
+	public static Decimal getSurface(ArrayList<Vecteur> lst, int ax) {
 		// FORMULE : Aire = 1/2 * somme[I=0 --> n-1] (XiYi+1 - YiXi+1)
 		Decimal total = Decimal.ZERO;
 		
 		for (int i = 0; i < lst.size()-1; i++) {
-			Vecteur v = lst.get(i);
-			Vecteur vplusun = lst.get(i+1);
-			Decimal sub = v.getDecY().multiply(vplusun.getDecZ()).minus(v.getDecZ().multiply(vplusun.getDecY()));
-			total = total.add(sub);
+			Point2D.Double v = lst.get(i).get2D(ax);
+			Point2D.Double vplusun = lst.get(i+1).get2D(ax);
+			double dble = v.x*vplusun.y - v.y*vplusun.x;
+//			Decimal sub = v.getDecY().multiply(vplusun.getDecZ()).minus(v.getDecZ().multiply(vplusun.getDecY()));
+			total = total.add(new Decimal(dble));
 		}
 		
-		return total.divide(Decimal.DEUX);		
+		return total.abs().divide(Decimal.DEUX);		
 	}
 
 
 	/** 
 	 * Calcul le centre de surface d'une aire
 	 * */
-	public static Vecteur getCentreSurface(ArrayList<Vecteur> lst) {
+	public static Vecteur getCentreSurface(ArrayList<Vecteur> lst, int ax) {
 		// FORMULE : centre =(xg, yg) A = aire
 		// xg = 1/(6*A) * somme[I=0 --> n-1] (Xi + Xi+1)*(XiYi+1 - YiXi+1)
 		// yg = 1/(6*A) * somme[I=0 --> n-1] (Yi + Yi+1)*(XiYi+1 - YiXi+1)
 		
-		Decimal A = getSurface(lst);
+		Decimal A = getSurface(lst, ax);
 		if (A.isZero()) return new Vecteur();
 		
+		Decimal totX = Decimal.ZERO;
 		Decimal totY = Decimal.ZERO;
-		Decimal totZ = Decimal.ZERO;
 
 		for (int i = 0; i < lst.size()-1; i++) {
-			Vecteur v = lst.get(i);
-			Vecteur vplusun = lst.get(i+1);
-			Decimal y = v.getDecY().add(vplusun.getDecY());
-			Decimal z = v.getDecZ().add(vplusun.getDecZ());
-			Decimal sub = v.getDecY().multiply(vplusun.getDecZ()).minus(v.getDecZ().multiply(vplusun.getDecY()));
+			Point2D.Double v = lst.get(i).get2D(ax);
+			Point2D.Double  vplusun = lst.get(i+1).get2D(ax);
+			Decimal x = new Decimal(v.x+vplusun.x);
+			Decimal y = new Decimal(v.y+vplusun.y);
+			Decimal sub = new Decimal((v.x*vplusun.y) - (v.y*vplusun.y));
+			totX = totX.add(sub.multiply(x));
 			totY = totY.add(sub.multiply(y));
-			totZ = totZ.add(sub.multiply(z));
 		}
 		
 		Decimal delta = new Decimal(6).multiply(A);
-		return new Vecteur (Decimal.ZERO, totY.divide(delta), totZ.divide(delta));
+		if (ax == Axis.XAxis) return new Vecteur (Decimal.ZERO, totX.divide(delta), totY.divide(delta));
+		if (ax == Axis.YAxis) return new Vecteur (totX.divide(delta), Decimal.ZERO, totY.divide(delta));
+		if (ax == Axis.ZAxis) return new Vecteur (Decimal.ZERO, totX.divide(delta), totY.divide(delta));
+		return null;
 	}
 
 	/***
@@ -76,18 +82,18 @@ public class CalculSurface {
 	 * --> retourne une valeu entre 0 et 256 
 	 */
 
-	public static Decimal getCoeficient (ArrayList<Vecteur> lst) {
+	public static Decimal getCoeficient (ArrayList<Vecteur> lst, int ax) {
 		if (lst == null) return Decimal.ZERO;
 		if (lst.size() != 4 ) return Decimal.ZERO;
 		
 		
-		Decimal srf = CalculSurface.getSurface(lst);
+		Decimal srf = CalculSurface.getSurface(lst, ax);
 		if (srf.isZero()) return Decimal.ZERO;
 
 		ArrayList<Vecteur> pts = new ArrayList<Vecteur> (4);
 		for (Vecteur v : lst) pts.add(new Vecteur(v.getDecX(), v.getDecY(), Decimal.ZERO));
 
-		Decimal frein = CalculSurface.getSurface(pts);
+		Decimal frein = CalculSurface.getSurface(pts, ax);
 
 		
 		Decimal res = frein.divide(srf).multiply(new Decimal(10f));
@@ -123,8 +129,8 @@ public class CalculSurface {
 		pts.add(new Vecteur("0;-0.1356;0.5594"));
 		pts.add(new Vecteur("0;-0.1039;0.0034"));
 		
-		System.out.println("Centre GET : "+getCentreSurface(pts));
-		System.out.println("Surface GET : "+getSurface(pts));
+		System.out.println("Centre GET : "+getCentreSurface(pts, Axis.XAxis));
+		System.out.println("Surface GET : "+getSurface(pts, Axis.XAxis));
 
 	}
 }

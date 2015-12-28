@@ -1,8 +1,10 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import model.composants.PatchVide;
+import model.math.Axis;
 import model.math.Decimal;
 import model.math.Plan3D;
 import model.math.Vecteur;
@@ -49,7 +51,7 @@ public class Gabarit implements Serializable {
 		Plan3D pl = this.getPlan(i);
 		Area coupe = cmp.mapAffichage.intersectionHorizontale(pl);
 		
-		return coupe.resize(cmp.epaisseurDeBardage.negate());
+		return coupe.resize(cmp.epaisseurDeBardage.negate(), Axis.ZAxis);
 	}
 	
 	public String toString() {
@@ -74,7 +76,7 @@ public class Gabarit implements Serializable {
 				new Vecteur(Decimal.ZERO, Decimal.ZERO, position), new Vecteur(Decimal.ZERO, Decimal.UN, position.add(i)));
 
 		
-		Vecteur start = ptr.depart;
+		Vecteur start = ptr.getStart();
 		Vecteur end = ptr.getEnd();
 		
 		long pStart = pl.donneCote(start);
@@ -109,6 +111,18 @@ public class Gabarit implements Serializable {
 		if (c!= null) ret.points.add(c);
 		
 		return ret;
+	}
+	
+	public ArrayList<Area> getTrous (ArrayList<Poutre> poutres) {
+		ArrayList<Area> trous = new ArrayList<Area>();
+		
+		// Liste des trous
+		for (Poutre ptr : poutres) {
+			// Définit la section d'intersection entre la poutre et le gabarit
+			Area a = getArea(ptr, Decimal.ZERO);
+			if (a != null) trous.add(a);
+		}
+		return trous;
 	}
 	
 }

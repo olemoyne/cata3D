@@ -1,10 +1,13 @@
 package model.composants;
 
+import model.Cata;
 import model.calcul.CalculCoque;
-import model.calcul.CalculVolume;
 import model.patch.Patch;
 
 public class PatchComposant extends Composant {
+	
+	/** Densit� de la mati�re de construction **/
+	public static final double DENSITE_BOIS = 0.6d;
 
 	public static final int PRECISION = 10;
 
@@ -16,8 +19,8 @@ public class PatchComposant extends Composant {
 	/** Patch permettant de stocker les données et calculer la forme **/
 	public Patch patch;	
 	
-	public PatchComposant () {
-		super(); // Creation des données liées au patch
+	public PatchComposant (Cata bato) {
+		super(bato); // Creation des données liées au patch
 		patch = new Patch();	
 	}
 	
@@ -41,7 +44,8 @@ public class PatchComposant extends Composant {
      */
     public void recalcule () {
     	mapAffichage = CalculCoque.createCoque(patch, PRECISION);
-		this.gravite = CalculVolume.getPoussee(mapAffichage);
+//		this.gravite = CalculVolume.getPoussee(mapAffichage);
+		super.recalcule();
     }
 
     

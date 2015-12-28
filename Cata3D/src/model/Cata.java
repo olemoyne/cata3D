@@ -45,7 +45,8 @@ public class Cata implements Serializable{
 		mer = new Flottaison();
 
 		composants = new ArrayList<Composant>(); 
-		composants.add(PatchVide.getDefaultPatch());
+		composants.add(PatchVide.getDefaultPatch(this));
+		recalculeAll();
 	}
 	
 
@@ -53,11 +54,20 @@ public class Cata implements Serializable{
 	/**
 	 * Changement de patch sans resizing
 	 */
-	public void recalcule() {
+	public void recalculeAll() {
 		// Force le reclacul sur tous les composants
 		for (Composant cmp : composants) {
+			cmp.boat = this;
 			cmp.recalcule();
 		}
+		this.recalcule();
+	}
+	
+	
+	/**
+	 * Changement de patch sans resizing
+	 */
+	public void recalcule() {
 		CalculCoque.calculeCarene(this);
 		CalculCoque.calculeFlottaison(this);
 		CalculCoque.calculeDerive(this);

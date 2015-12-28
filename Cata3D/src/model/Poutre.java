@@ -35,8 +35,18 @@ public class Poutre implements Serializable{
 	}
 
 	public Vecteur  getEnd() {
-		return new Vecteur (depart.getDecX().add(epaisseur), 
-				depart.getDecY().minus(hauteur), depart.getDecZ().add(longueur));
-	}
+		return new Vecteur (depart.getDecX().add(epaisseur.divide(Decimal.DEUX)), 
+				depart.getDecY().minus(hauteur.divide(Decimal.DEUX)), depart.getDecZ().add(longueur));
+	}	
 	
+	// Génère les données à afficher
+	public String toString () {
+		Vecteur end = this.getEnd();
+		return depart.toString().concat("-").concat(end.toString());
+	}
+
+	public Vecteur getStart() {
+		return new Vecteur (depart.getDecX().add(epaisseur.divide(Decimal.DEUX).negate()), 
+				depart.getDecY().minus(hauteur.divide(Decimal.DEUX).negate()), depart.getDecZ());
+	}
 }

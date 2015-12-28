@@ -52,7 +52,7 @@ public class ArbreDesign extends JPanel {
 		this.setPreferredSize(new Dimension(400, 1000));
 		this.setBackground(Color.black);
 		
-		top = new DefaultMutableTreeNode("D�finition d'un bateau");
+		top = new DefaultMutableTreeNode("Definition d'un bateau");
 
 		arbre = new JTree(top);
 		arbre.setBackground(Color.white);

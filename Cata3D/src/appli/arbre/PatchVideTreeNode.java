@@ -17,7 +17,7 @@ public class PatchVideTreeNode extends PatchTreeNode {
 	public PatchVideTreeNode(DesignTreeNode up, String name, PatchVide cmp) {
 		super(up, "Patch vide : "+name, cmp);
 	    new GabaritsTreeNode(this, cmp);
-	    new DesignTreeNode(this, "Poutres");
+	    new PoutresTreeNode(this, cmp);
 	}
 
 	
@@ -32,6 +32,7 @@ public class PatchVideTreeNode extends PatchTreeNode {
 
 	
 	public void updateValue (String fld, Object value) {
+		super.updateValue(fld, value);
 		PatchVide pv = (PatchVide)composant;
 
 		if (fld.equals("Epaisseur de bardage")) pv.epaisseurDeBardage = (Decimal)value;

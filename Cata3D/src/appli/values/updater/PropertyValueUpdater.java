@@ -22,14 +22,16 @@ public class PropertyValueUpdater {
 		
 		o = new StringUpdater();
 		panels.put(ObjectUpdater.STRING, o);
+
+		o = new IntegerUpdater();
+		panels.put(ObjectUpdater.INTEGER, o);
 		
 		o = new GabaritUpdater();
 		panels.put(ObjectUpdater.GABARIT, o);
 
-/**
   		o = new PoutreUpdater();
 		panels.put(ObjectUpdater.POUTRE, o);
-*/
+
 		o = new PoidsUpdater();
 		panels.put(ObjectUpdater.POIDS, o);
 

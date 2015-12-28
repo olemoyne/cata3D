@@ -2,6 +2,7 @@ package model.composants;
 
 import java.util.ArrayList;
 
+import model.Cata;
 import model.Poids;
 import model.Structure;
 import model.calcul.CalculCoque;
@@ -32,8 +33,8 @@ public class PatchVide extends PatchComposant {
 	public Structure structure;
 
 
-	public PatchVide () {
-		super(); // Creation des données liées au patch
+	public PatchVide (Cata bato) {
+		super(bato); // Creation des données liées au patch
 		structure = new Structure(); 
 	}
 	
@@ -55,13 +56,14 @@ public class PatchVide extends PatchComposant {
      *     
      */
     public void recalcule () {
-    	super.recalcule();
 		Poids pdsCoque = CalculCoque.calculePoidsCoque(mapAffichage, epaisseurDeBardage.multiply(densiteBardage));
 		ArrayList<Poids> lst = new ArrayList<Poids>();
-		lst.add(pdsCoque);
-		lst.addAll(this.poids);
+		lst.add(pdsCoque); // Ajoute le poids du bardage
+		lst.addAll(this.poids); // Ajoute les poids d�finis
+		lst.addAll(this.structure.getAllPoids(this, PatchComposant.DENSITE_BOIS));
 		this.gravite= CalculVolume.getCentreGravite("Poids total", lst);
-    }
+     	super.recalcule();
+   }
     
 	public int getType() {
 		return Composant.PATCH_VIDE;
@@ -72,8 +74,8 @@ public class PatchVide extends PatchComposant {
 	 * 
 	 * @return
 	 */
-	public static Composant getDefaultPatch() {
-		PatchVide ret = new PatchVide();
+	public static Composant getDefaultPatch(Cata bato) {
+		PatchVide ret = new PatchVide(bato);
 		ret.nom = "Flotteur";
 		ret.patch= Patch.getPatch();
 		ret.epaisseurDeBardage = new Decimal(0.01d);

@@ -38,6 +38,8 @@ public class TubeTreeNode extends ComposantTreeNode {
 
 	
 	public void updateValue (String fld, Object value) {
+		super.updateValue(fld, value);
+
 		Tube pv = (Tube)composant;
 
 		if (fld.equals("Densité")) {

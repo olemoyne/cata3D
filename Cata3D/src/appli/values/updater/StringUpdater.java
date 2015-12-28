@@ -23,6 +23,7 @@ public class StringUpdater extends ObjectUpdater {
 	
 	public void setProperty (Object val) {
 		String v = (String)val;
+		if (v == null) v = "";
 		fld.setField(v);
 	}
 	

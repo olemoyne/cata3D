@@ -42,7 +42,7 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 		//Liste des gabarits
 		JPanel sub = new JPanel();
 		sub.setLayout(new BoxLayout(sub, BoxLayout.LINE_AXIS));
-		sub.add(new JLabel("Choisissez le gabarit � �tudier"));
+		sub.add(new JLabel("Choisissez le gabarit a etudier"));
 		select = new JComboBox<PrintedGabarit>();
 		select.addActionListener(this);
 		sub.add(select);

@@ -93,7 +93,7 @@ public class CataFileManager extends JPanel {
 		    ObjectInputStream ois = new ObjectInputStream(fis);
 		    
 		    Cata bato = (Cata)ois.readObject();
-		    bato.recalcule();
+		    bato.recalculeAll();
 		    ois.close();
 		    
 		    return bato;

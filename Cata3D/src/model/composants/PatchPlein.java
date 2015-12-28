@@ -1,5 +1,6 @@
 package model.composants;
 
+import model.Cata;
 import model.calcul.CalculVolume;
 import model.math.Decimal;
 
@@ -19,8 +20,8 @@ public class PatchPlein extends PatchComposant {
 	public Decimal densite;
 	
 
-	public PatchPlein () {
-		super(); // Creation des données liées au patch
+	public PatchPlein (Cata bato) {
+		super(bato); // Creation des données liées au patch
 	}
 	
 	/**
@@ -42,11 +43,10 @@ public class PatchPlein extends PatchComposant {
      *     
      */
     public void recalcule () {
-    	super.recalcule();
-
 		this.gravite = CalculVolume.getPoussee(mapAffichage);
 		this.gravite.force = this.gravite.force.multiply(densite); 
-    }
+     	super.recalcule();
+   }
 
     
 	public int getType() {

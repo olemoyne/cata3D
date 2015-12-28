@@ -31,9 +31,9 @@ public class Area implements Serializable {
 	 * @param negate
 	 * @return
 	 */
-	public Area resize(Decimal enPlus) {
+	public Area resize(Decimal enPlus, int ax) {
 		Area ret = new Area();
-		Vecteur ctr = CalculSurface.getCentreSurface(points);
+		Vecteur ctr = CalculSurface.getCentreSurface(points, ax);
 		for (Vecteur v : points) {
 			// Calcule la nouvelle position du vecteur
 			Decimal l = v.distance(ctr);

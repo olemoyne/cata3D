@@ -78,8 +78,6 @@ public class PoidsTreeNode extends DesignTreeNode {
 		for (Poids pds : comp.poids) {
 			ret.add(new PrintedForce(pds, Color.RED));
 		}
-
-		comp.recalcule();
 		return ret;
 	}
 	

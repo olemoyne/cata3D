@@ -34,7 +34,6 @@ public class ComposantTreeNode extends DesignTreeNode {
 		if (fld.equals("Nom")) composant.nom = (String)value;
 		if (fld.equals("Description")) composant.description = (String)value;
 		if (fld.equals("Position")) composant.position= (Vecteur)value;
-		// TODO : Modification des calculs au niveau deu bateau
 	}
 	
 }

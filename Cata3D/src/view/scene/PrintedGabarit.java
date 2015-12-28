@@ -7,7 +7,6 @@ import com.jogamp.opengl.GL2;
 
 import model.Area;
 import model.Gabarit;
-import model.Poutre;
 import model.composants.PatchVide;
 import model.math.Bounds3D;
 import model.math.Decimal;
@@ -37,23 +36,15 @@ public class PrintedGabarit extends PrintableObject {
 		
 		bns = new Bounds3D(); 
 		
-		devant = gab.getArea(coque, Decimal.ZERO);
+		Decimal delta = gab.epaisseur.divide(Decimal.DEUX);
+		
+		devant = gab.getArea(coque, delta.negate());
 		bns.add(devant);
-		fond = gab.getArea(coque, gab.epaisseur);
+		fond = gab.getArea(coque, delta);
 		bns.add(fond);
 		
-		trous = new ArrayList<Area>();
-		
-		// Liste des trous
-		for (Poutre ptr : coque.structure.poutres) {
-			// Définit la section d'intersection entre la poutre et le gabarit
-			Area a = gab.getArea(ptr, Decimal.ZERO);
-			if (a != null) {
-				trous.add(a);
-				bns.add(devant);
-			}
-		}
-				
+		trous = gab.getTrous(coque.structure.poutres);
+						
 		Vecteur s = bns.getMin();
 		Vecteur e = new Vecteur (bns.getMin().getDecX(), bns.getMax().getDecY(), bns.getMin().getDecZ());
 		Vecteur mstart = pl.intersection(e,  s);

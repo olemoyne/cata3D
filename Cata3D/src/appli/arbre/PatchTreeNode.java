@@ -1,6 +1,11 @@
 package appli.arbre;
 
 
+import java.awt.Color;
+
+import view.scene.PrintableScene;
+import view.scene.PrintedForce;
+import view.scene.PrintedMap;
 import model.composants.PatchComposant;
 
 public class PatchTreeNode extends ComposantTreeNode {
@@ -17,7 +22,26 @@ public class PatchTreeNode extends ComposantTreeNode {
 	    new PatchPropertyTreeNode(this, cmp.patch);
 	    //Patches de design de la coque
 	    new PoidsTreeNode(this, cmp);
-	    new DesignTreeNode(this, "plans");
+	    // gestion des plans de construction
+	    new PlanTreeNode(this);
 	}		
+	
+	/** 
+	 * Permet d'afficher la scene correspondant à la vue définie
+	 * 
+	 */
+	public PrintableScene getScene () {
+		PrintableScene ret = super.getScene(); 
+
+		// Affiche la coque en gris
+		ret.add(new PrintedMap (composant.mapAffichage, "Coque", false, Color.darkGray));					
+		
+		ret.add(new PrintedForce(this.composant.gravite, Color.RED));
+
+		return ret;
+	}
+	
+
+
 
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import model.calcul.CalculSurface;
+import model.math.Axis;
 import model.math.MapDeVecteurs;
 import model.math.Vecteur;
 
@@ -18,7 +19,7 @@ public class PrintedFluidityMap extends PrintedMap {
 	public void setColor(GL2 gl, ArrayList<Vecteur> pts) {
 
 		
-		float r = CalculSurface.getCoeficient(pts).floatValue();
+		float r = CalculSurface.getCoeficient(pts, Axis.ZAxis).floatValue();
 		float g = 0f; // color.getGreen()/(float)256;
 		float b = 1f; //color.getBlue()/(float)256;
 		

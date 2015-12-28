@@ -116,11 +116,11 @@ public class CalculCoque {
         }
 
         Decimal surf = Decimal.ZERO;
-        for (Area a : cata.mer.surfaceAntiDerive) surf = surf.add(CalculSurface.getSurface(a.points));
+        for (Area a : cata.mer.surfaceAntiDerive) surf = surf.add(CalculSurface.getSurface(a.points, Axis.XAxis));
 		cata.mer.surfaceTotale = surf;
 
 		Vecteur ctr = new Vecteur();
-        for (Area a : cata.mer.surfaceAntiDerive) ctr = ctr.add(CalculSurface.getCentreSurface(a.points).multiply(CalculSurface.getSurface(a.points)));
+        for (Area a : cata.mer.surfaceAntiDerive) ctr = ctr.add(CalculSurface.getCentreSurface(a.points, Axis.XAxis).multiply(CalculSurface.getSurface(a.points, Axis.XAxis)));
 		cata.mer.centreAntiDerive = ctr.multiply(Decimal.UN.divide(surf));
 	}
 	

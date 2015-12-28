@@ -20,7 +20,9 @@ public class ObjectUpdater extends JPanel {
 	public static final String VECTEUR = "Vecteur";
 	public static final String POIDS = "Poids";
 	public static final String DECIMAL = "Decimal";
+	public static final String INTEGER = "Integer";
 	public static final String GABARIT = "Gabarit";
+	public static final String POUTRE = "Poutre";
 
 	public ObjectUpdater () {
 		super();

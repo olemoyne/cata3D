@@ -136,7 +136,7 @@ public class Viewer extends JFrame implements WindowListener {
 		//creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Viewer ddWindow = new Viewer("modelisation", "Modélisation 3D", "D:/dev/code/model3D/data/model3D.config");
+				Viewer ddWindow = new Viewer("modelisation", "Modelisation 3D", "D:/dev/code/model3D/data/model3D.config");
 				ddWindow.createAndShowGUI();
 			}
 		});

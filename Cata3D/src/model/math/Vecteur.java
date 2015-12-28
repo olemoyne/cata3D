@@ -1,5 +1,7 @@
 package model.math;
 
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.io.Serializable;
 
 
@@ -344,6 +346,14 @@ public class Vecteur implements Serializable{
 		Vecteur somme = a.add(b).add(c);
 		Decimal tiers = new Decimal(1d/3d);
 		return somme.multiply(tiers);
+	}
+	
+	// Retourne les un point 2D selon l'axe choisi
+	public Double get2D(int ax) {
+		if (ax == Axis.XAxis) return new Point2D.Double(this.getDecY().floatValue(), this.getDecZ().floatValue());
+		if (ax == Axis.YAxis) return new Point2D.Double(this.getDecX().floatValue(), this.getDecZ().floatValue());
+		if (ax == Axis.ZAxis) return new Point2D.Double(this.getDecX().floatValue(), this.getDecY().floatValue());
+		return null;
 	}
 	
 }

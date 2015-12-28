@@ -36,8 +36,8 @@ public class PatchPropertyTreeNode extends DesignTreeNode{
 	public ArrayList<TreeNodeProperty> getProperties() {
 		
 		ArrayList<TreeNodeProperty> ret = super.getProperties();
-		ret.add(new TreeNodeProperty ("Taille X", data.x, true, ObjectUpdater.DECIMAL) );
-		ret.add(new TreeNodeProperty ("Taille Y", data.y, true, ObjectUpdater.DECIMAL) );
+		ret.add(new TreeNodeProperty ("Taille X", data.x, true, ObjectUpdater.INTEGER) );
+		ret.add(new TreeNodeProperty ("Taille Y", data.y, true, ObjectUpdater.INTEGER) );
 		
 		for (int x = 0; x < data.x ; x++) {
 			for (int y = 0; y < data.y ; y++) {
@@ -77,6 +77,8 @@ public class PatchPropertyTreeNode extends DesignTreeNode{
 			
 			data.points[x][y] = (Vecteur)value;
 		}
+		ComposantTreeNode ctn = (ComposantTreeNode)this.getParent();
+		ctn.composant.recalcule();
 	}
 
 	/** 

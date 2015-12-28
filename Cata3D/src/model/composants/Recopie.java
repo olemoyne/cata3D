@@ -28,8 +28,8 @@ public class Recopie extends Composant {
 	public Translation decalage;
 
 
-	public Recopie () {
-		super(); // Creation des données liées au patch	
+	public Recopie (Cata bato) {
+		super(bato); // Creation des données liées au patch	
 	}
 	
     /**
@@ -42,6 +42,7 @@ public class Recopie extends Composant {
     	mapAffichage = autre.mapAffichage.transforme(pivot).transforme(decalage);
 		this.gravite = autre.gravite;
 		gravite.position = decalage.getPoint(pivot.transforme(gravite.position));
+		super.recalcule();
     }
 
 	public int getType() {

@@ -3,6 +3,7 @@ package model.composants;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import model.Cata;
 import model.Poids;
 import model.math.MapDeVecteurs;
 import model.math.Vecteur;
@@ -47,11 +48,15 @@ public class Composant implements Serializable{
 	/** Centre de gravité du composant **/
 	public Poids gravite;
 	
+	/** Lien vers le bateau du composant **/
+	public Cata boat;
+	
 	/**
 	 * Constructeur --> intialisation des listes
 	 */
-	public Composant () {
+	public Composant (Cata bato) {
 		nom = "Nom";
+		boat = bato;
 		description = "Description";
 		poids = new ArrayList<Poids> ();
 		position = new Vecteur();
@@ -75,7 +80,7 @@ public class Composant implements Serializable{
      *     
      */
     public void recalcule () {
-    	
+    	if (boat != null) boat.recalcule();
     }
 
 	public int getType() {

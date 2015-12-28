@@ -35,8 +35,11 @@ public class DecimalField extends JPanel implements KeyListener{
 	}
 
 	public Object getValue() {
-		if (validateField())
-			return new Decimal(val.getText());
+		if (validateField()) {
+			String init = val.getText();
+			String text = init.replace(',', '.');
+			return new Decimal(text);
+		}
 		else return null;
 	}
 
@@ -50,12 +53,10 @@ public class DecimalField extends JPanel implements KeyListener{
 		if (init.length() == 0 ) return false;
 		
 		String text = init.replace(',', '.');
-		
-		
+			
 		try {
 			Decimal.parse(text);
 			val.setForeground(Color.black);
-			val.setText(text);
 			return true;
 		} catch (NumberFormatException e) {
 			val.setForeground(Color.red);

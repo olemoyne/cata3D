@@ -45,6 +45,8 @@ public class RecopieTreeNode extends ComposantTreeNode {
 
 	
 	public void updateValue (String fld, Object value) {
+		super.updateValue(fld, value);
+
 		Recopie pv = (Recopie)composant;
 
 		if (fld.equals("Source de recopie")) {

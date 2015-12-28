@@ -1,5 +1,6 @@
 package model.composants;
 
+import model.Cata;
 import model.Poids;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
@@ -35,8 +36,8 @@ public class Tube extends Composant {
 	/** Densité du tube **/
 	public Decimal densite;
 	
-	public Tube () {
-		super(); // Creation des données liées au patch
+	public Tube (Cata bato) {
+		super(bato); // Creation des données liées au patch
 	}
 	
     /**
@@ -50,6 +51,7 @@ public class Tube extends Composant {
 		Decimal pds = new Decimal(Math.PI).multiply(diametre.square().minus(diametre.minus(Decimal.DEUX.multiply(epaisseur)).square())).multiply(densite);
 		Vecteur ctr = this.position.add(direction.multiply(longueur.divide(Decimal.DEUX).divide(direction.getNorme())));
 		this.gravite = new Poids ("Centre de gravité", ctr, pds);
+		super.recalcule();
     }
 
 	private MapDeVecteurs createMap() {

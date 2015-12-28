@@ -83,7 +83,7 @@ public class CalculVolume {
 				lst.add(map.getPoint(x,  y).set(Axis.ZAxis, 0));
 				lst.add(map.getPoint(x-1,  y).set(Axis.ZAxis, 0));
 				// Centre sde poussée
-				Vecteur centre = CalculSurface.getCentreSurface (lst);
+				Vecteur centre = CalculSurface.getCentreSurface (lst, Axis.ZAxis);
 				Decimal vol = getVolume(centre, lst);
 				pds.add(new Poids (" ", centre, vol));
 			}
@@ -111,8 +111,8 @@ public class CalculVolume {
 			for (int x = 0; x < map.xSize(); x ++) 
 				lst.add(map.getPoint(x, y));
 				// Centre sde poussée
-			centresSurf.add(CalculSurface.getCentreSurface (lst));
-			surfaces.add(CalculSurface.getSurface(lst));
+			centresSurf.add(CalculSurface.getCentreSurface (lst, Axis.YAxis));
+			surfaces.add(CalculSurface.getSurface(lst, Axis.YAxis));
 		}
 
 		// Calcule le volume et le centre de poussée de chaque bloc
