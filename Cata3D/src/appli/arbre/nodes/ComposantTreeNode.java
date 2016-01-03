@@ -1,7 +1,8 @@
-package appli.arbre;
+package appli.arbre.nodes;
 
 import java.util.ArrayList;
 
+import appli.arbre.TreeNodeProperty;
 import appli.values.updater.ObjectUpdater;
 import model.composants.Composant;
 import model.math.Vecteur;
@@ -17,6 +18,10 @@ public class ComposantTreeNode extends DesignTreeNode {
 	public ComposantTreeNode(DesignTreeNode up, String name, Composant cmp) {
 		super(up, name);
 		composant= cmp;
+	}
+	
+	public Composant getComposant () {
+		return composant;
 	}
 
 	

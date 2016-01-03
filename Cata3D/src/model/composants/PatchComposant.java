@@ -1,7 +1,14 @@
 package model.composants;
 
+import java.awt.Color;
+import java.util.ArrayList;
+
+import view.scene.PrintableObject;
+import view.scene.PrintedForce;
+import view.scene.PrintedMap;
 import model.Cata;
 import model.calcul.CalculCoque;
+import model.math.transfo.Translation;
 import model.patch.Patch;
 
 public class PatchComposant extends Composant {
@@ -9,7 +16,7 @@ public class PatchComposant extends Composant {
 	/** Densité de la matière de construction **/
 	public static final double DENSITE_BOIS = 0.6d;
 
-	public static final int PRECISION = 10;
+	public static final int PRECISION = 20;
 
 	/**
 	 * 
@@ -48,6 +55,17 @@ public class PatchComposant extends Composant {
 		super.recalcule();
     }
 
-    
+	public ArrayList<PrintableObject> getSceneObjects() {
+		ArrayList<PrintableObject> ret = new ArrayList<PrintableObject>();
+
+		Translation trsl = new Translation(position, null); 
+		
+		//** Décaler le desssin **/
+		ret.add(new PrintedMap (mapAffichage.transforme(trsl), "Coque", false, Color.darkGray));
+		ret.add(new PrintedForce(gravite.transforme(trsl), Color.RED));
+
+		return ret; 
+	}
+
 
 }

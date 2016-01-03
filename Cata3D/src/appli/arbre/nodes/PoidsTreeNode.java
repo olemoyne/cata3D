@@ -1,10 +1,11 @@
-package appli.arbre;
+package appli.arbre.nodes;
 
 import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import appli.arbre.TreeNodeProperty;
 import appli.values.CataValuesException;
 import appli.values.updater.ObjectUpdater;
 import model.Poids;

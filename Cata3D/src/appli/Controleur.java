@@ -5,15 +5,20 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.MutableTreeNode;
 
 import model.Cata;
+import model.composants.Composant;
 import view.scene.PrintableScene;
 import appli.arbre.ArbreDesign;
-import appli.arbre.DesignTreeNode;
+import appli.arbre.DialogComponant;
+import appli.arbre.nodes.ComposantTreeNode;
+import appli.arbre.nodes.DesignTreeNode;
 import appli.values.CataValuesException;
 import appli.values.TableValues;
 
@@ -30,7 +35,6 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 	private TableValues values;
 	private ArbreDesign arbre;
 	private ActiveView vue; 
-	
 	
 	private Logger log;
 
@@ -85,7 +89,6 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		}
 
 		arbre.add(values, BorderLayout.SOUTH);
-
 	}
 	
 	/**
@@ -146,10 +149,33 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 			}
 		}
 		
+		// Ajoute un composant Ã  l'arbre de visualisation
 		if ("ajouteComposant".equals(e.getActionCommand())) {
-			// Ajoute un composant Ã  l'arbre de visualisation
+			// affiche une fenetre avec le choix du type de composant et le nom du composant
+			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this.arbre);
+			DialogComponant dial = new DialogComponant(topFrame, this.dessin); 
+			// Si OK : ajoute un composant sur le bateau
+			if (dial.isOk) {
+				Composant cmp = dial.composant;
+				//et ajoute un nouveau node dans l'arbre 
+				this.dessin.composants.add(cmp);
+				arbre.setBoatTree(dessin);
+			}
 		}
 
+		// Ajoute un composant Ã  l'arbre de visualisation
+		if ("SupprimeComposant".equals(e.getActionCommand())) {
+			// Récupère le composant actif et le supprime
+			MutableTreeNode node = arbre.getTheNode();
+			if (node != null) {
+				DesignTreeNode nde = (DesignTreeNode) node;
+				if (nde.getLevel() == DesignTreeNode.LEVEL_COMPOSANT) {
+					ComposantTreeNode cnd = (ComposantTreeNode) node;
+					this.dessin.composants.remove(cnd.getComposant());
+					arbre.setBoatTree(dessin);
+				}
+			}
+		}
 	}
 
 	public void saveContext() {

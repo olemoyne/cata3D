@@ -18,6 +18,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import appli.Controleur;
+import appli.arbre.nodes.CataTreeNode;
 import model.Cata;
 
 /**
@@ -102,8 +103,12 @@ public class ArbreDesign extends JPanel {
 	}
 	
 	public void setBoatTree (Cata data) {
+		top.removeAllChildren();
 		DefaultMutableTreeNode tn = CataTreeNode.getNodes(data, top);
 		tn.setParent((MutableTreeNode) this.arbre.getModel().getRoot());
+		// Repositionner l'arbre sur le bateau
+		TreePath tp = new TreePath(tn.getPath());
+		gotToPath(tp);
 	}
 	
 	public TreePath getPath () {
@@ -114,6 +119,10 @@ public class ArbreDesign extends JPanel {
 	public void gotToPath(TreePath path) { 
 		arbre.expandPath(path);
 		arbre.addSelectionPath(path);
+	}
+
+	public DefaultMutableTreeNode getRootNode() {
+		return this.top;
 	}
 	
 }

@@ -78,8 +78,7 @@ public class DialogValue extends JDialog implements ActionListener {
 			this.setVisible(false);
 		}
 		if (arg0.getActionCommand().equals("Annule")) {
-			Object data = update.getData();
-			this.property.value = data;
+			this.isOk = false;
 			this.setVisible(false);
 		}
 		

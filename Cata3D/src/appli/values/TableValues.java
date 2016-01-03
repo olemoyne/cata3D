@@ -22,8 +22,8 @@ import javax.swing.event.ListSelectionListener;
 
 import appli.Controleur;
 import appli.Message;
-import appli.arbre.DesignTreeNode;
 import appli.arbre.TreeNodeProperty;
+import appli.arbre.nodes.DesignTreeNode;
 import appli.values.updater.PropertyValueUpdater;
 
 /***

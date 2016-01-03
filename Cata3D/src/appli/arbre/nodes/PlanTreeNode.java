@@ -1,4 +1,4 @@
-package appli.arbre;
+package appli.arbre.nodes;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 

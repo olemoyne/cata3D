@@ -59,6 +59,7 @@ public class CalculCoque {
 	 */
 	public static Poids calculePoidsCoque(MapDeVecteurs map, Decimal densiteSurfacique) {
 		ArrayList<Poids> pds = new ArrayList<Poids>();
+		if (map == null) return new Poids();
 		// Trace tous les carrrés
 		for (int x = 1; x < map.xSize(); x ++) {
 			for (int y = 1; y < map.ySize(); y ++) {
@@ -121,7 +122,10 @@ public class CalculCoque {
 
 		Vecteur ctr = new Vecteur();
         for (Area a : cata.mer.surfaceAntiDerive) ctr = ctr.add(CalculSurface.getCentreSurface(a.points, Axis.XAxis).multiply(CalculSurface.getSurface(a.points, Axis.XAxis)));
-		cata.mer.centreAntiDerive = ctr.multiply(Decimal.UN.divide(surf));
+        if (surf.isZero()) 
+        	cata.mer.centreAntiDerive = new Vecteur();
+        else 
+        	cata.mer.centreAntiDerive = ctr.multiply(Decimal.UN.divide(surf));
 	}
 	
 }

@@ -6,8 +6,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
 import appli.Message;
-import appli.arbre.DesignTreeNode;
 import appli.arbre.TreeNodeProperty;
+import appli.arbre.nodes.DesignTreeNode;
 
 
 /**

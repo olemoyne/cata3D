@@ -1,7 +1,8 @@
-package appli.arbre;
+package appli.arbre.nodes;
 
 import java.util.ArrayList;
 
+import appli.arbre.TreeNodeProperty;
 import appli.values.updater.ObjectUpdater;
 import model.composants.Recopie;
 import model.composants.Tube;

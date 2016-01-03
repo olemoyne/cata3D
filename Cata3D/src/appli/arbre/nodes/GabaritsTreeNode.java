@@ -1,4 +1,4 @@
-package appli.arbre;
+package appli.arbre.nodes;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import view.scene.PrintableScene;
 import view.scene.PrintedArea;
 import view.scene.PrintedMap;
+import appli.arbre.TreeNodeProperty;
 import appli.values.CataValuesException;
 import appli.values.updater.ObjectUpdater;
 import model.Gabarit;

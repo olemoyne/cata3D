@@ -3,6 +3,7 @@ package model.composants;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import view.scene.PrintableObject;
 import model.Cata;
 import model.Poids;
 import model.math.MapDeVecteurs;
@@ -85,6 +86,10 @@ public class Composant implements Serializable{
 
 	public int getType() {
 		return -1;
+	}
+
+	public ArrayList<PrintableObject> getSceneObjects() {
+		return new ArrayList<PrintableObject>();
 	}
     
 }

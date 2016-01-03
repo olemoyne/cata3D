@@ -1,4 +1,4 @@
-package appli.arbre;
+package appli.arbre.nodes;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -24,6 +24,14 @@ public class CataTreeNode {
 		 *  Ajoute les compostants de construction
 		 */
 	    for (Composant cmp : boat.composants) {
+	    	getNodeForComponent(cmp, sub);
+	    }
+	    
+	    return top;
+	}
+
+	
+	public static void getNodeForComponent(Composant cmp, DesignTreeNode sub) {
 	    	// Selon le type de composant
 	    	if (cmp.getType() == Composant.PATCH_PLEIN) {
 		    	new PatchPleinTreeNode(sub, cmp.nom, (PatchPlein)cmp);
@@ -37,27 +45,5 @@ public class CataTreeNode {
 	    	if (cmp.getType() == Composant.TUBE) {
 		    	new TubeTreeNode(sub, cmp.nom, (Recopie)cmp);
 	    	}
-	    }
-	    
-	    return top;
-
-/**	    //optimisation du design
-	    optimisation= new DefaultMutableTreeNode("Optimisation");
-	    top.add(optimisation);
-	    optimisation.add(new DefaultMutableTreeNode("Flottaison"));
-	    optimisation.add(new DefaultMutableTreeNode("Fluidité"));
-	    DefaultMutableTreeNode derive = new DefaultMutableTreeNode("Dérive");
-	    optimisation.add(derive);
-	    derive.add(new DefaultMutableTreeNode("Forme de dérive"));
-	    optimisation.add(new DefaultMutableTreeNode("Habitabilité"));
-
-	    //construction de la coque
-	    construction= new DefaultMutableTreeNode("Construction");
-	    top.add(construction);
-	    construction.add(new DefaultMutableTreeNode("Gabarits"));
-	    construction.add(new DefaultMutableTreeNode("Poutres"));
-	    construction.add(new DefaultMutableTreeNode("Plans"));
-**/
 	}
-
 }
