@@ -38,8 +38,6 @@ public class PatchVideTreeNode extends PatchTreeNode {
 
 		if (fld.equals("Epaisseur de bardage")) pv.epaisseurDeBardage = (Decimal)value;
 		if (fld.equals("Densité de bardage")) pv.densiteBardage = (Decimal)value;
-		
-		this.composant.recalcule();
 	}
 	
 }

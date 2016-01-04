@@ -171,6 +171,7 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 			model.getNode().updateValue(prop.nom, prop.value);
 			model.refreshData();
 //			model.setValueAt(fields.getValue(), 1, selectedRow);
+			control.recalcule();
 	    	control.showDessin(model.getNode());
 		}
 	}

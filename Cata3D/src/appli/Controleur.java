@@ -160,6 +160,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 				//et ajoute un nouveau node dans l'arbre 
 				this.dessin.composants.add(cmp);
 				arbre.setBoatTree(dessin);
+				this.recalcule();
 			}
 		}
 
@@ -173,6 +174,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 					ComposantTreeNode cnd = (ComposantTreeNode) node;
 					this.dessin.composants.remove(cnd.getComposant());
 					arbre.setBoatTree(dessin);
+					this.recalcule();
 				}
 			}
 		}

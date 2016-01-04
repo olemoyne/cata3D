@@ -81,7 +81,6 @@ public class Composant implements Serializable{
      *     
      */
     public void recalcule () {
-    	if (boat != null) boat.recalcule();
     }
 
 	public int getType() {

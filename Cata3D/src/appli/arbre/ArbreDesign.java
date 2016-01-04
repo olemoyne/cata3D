@@ -106,9 +106,7 @@ public class ArbreDesign extends JPanel {
 		top.removeAllChildren();
 		DefaultMutableTreeNode tn = CataTreeNode.getNodes(data, top);
 		tn.setParent((MutableTreeNode) this.arbre.getModel().getRoot());
-		// Repositionner l'arbre sur le bateau
-		TreePath tp = new TreePath(tn.getPath());
-		gotToPath(tp);
+		// TODO : Repositionner l'arbre sur le bateau
 	}
 	
 	public TreePath getPath () {

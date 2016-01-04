@@ -78,8 +78,6 @@ public class PatchPropertyTreeNode extends DesignTreeNode{
 			
 			data.points[x][y] = (Vecteur)value;
 		}
-		ComposantTreeNode ctn = (ComposantTreeNode)this.getParent();
-		ctn.composant.recalcule();
 	}
 
 	/** 

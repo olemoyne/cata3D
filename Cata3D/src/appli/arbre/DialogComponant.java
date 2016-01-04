@@ -47,14 +47,14 @@ public class DialogComponant extends JDialog implements ActionListener {
 		
 		//** Construit le panel central avec le choix du type de composant **/
 		JPanel centre = new JPanel();
-		centre.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		centre.setLayout(new BoxLayout(centre, BoxLayout.PAGE_AXIS));
 		// Choix du nom
 		nom = new StringField("Nom du composant :");
 		centre.add(nom);
 		// Choix du type
 		String[] lst = {"Patch vide", "Patch plein", "Recopie", "Tube"};
 		JPanel sub = new JPanel ();
-		sub.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+		sub.setLayout(new BoxLayout(sub, BoxLayout.LINE_AXIS));
 		sub.add(new JLabel ("Type de composant :"));
 		select = new JComboBox<String>();
 		for (String str : lst) select.addItem(str);

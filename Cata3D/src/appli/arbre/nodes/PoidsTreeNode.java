@@ -59,8 +59,6 @@ public class PoidsTreeNode extends DesignTreeNode {
 		the.force= p.force;
 		the.position = p.position;
 		the.nom = p.nom;
-		
-		comp.recalcule();
 	}
 
 	/** 

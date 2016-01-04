@@ -48,8 +48,6 @@ public class GabaritsTreeNode extends DesignTreeNode {
 		Gabarit p = (Gabarit)value;
 		the.epaisseur = p.epaisseur;
 		the.position = p.position;
-
-		comp.recalcule();
 	}
 
 	/** 

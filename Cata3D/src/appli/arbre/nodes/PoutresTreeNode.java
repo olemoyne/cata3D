@@ -55,8 +55,6 @@ public class PoutresTreeNode extends DesignTreeNode {
 		the.epaisseur = p.epaisseur;
 		the.hauteur = p.hauteur;
 		the.longueur = p.longueur;
-
-		comp.recalcule();
 	}
 
 	/** 
