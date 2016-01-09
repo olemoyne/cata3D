@@ -27,7 +27,7 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 	}
 	
 	/**
-	 *  Affichage des données dans le CANVAS
+	 *  Affichage des donnï¿½es dans le CANVAS
 	 *   
 	 * @param gl
 	 */
@@ -36,13 +36,13 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 		
     	if (scene == null) return ;
     	
-    	scene.printScene(gl);
+    	scene.printScene(gl, echelle);
 	}
 
 	/** 
-	 * Définit le composant à afficher :
+	 * Dï¿½finit le composant ï¿½ afficher :
 	 *    --> label noir avec en fond blanc le nom de la forme
-	 *      --> gras si selectionné
+	 *      --> gras si selectionnï¿½
 	 */
 	@Override
 	public Component getListCellRendererComponent(JList<? extends PrintableObject> list,

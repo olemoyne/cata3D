@@ -1,6 +1,8 @@
 package view.view3D;
 
 import java.awt.Color;
+
+import model.math.Decimal;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL;
@@ -23,12 +25,15 @@ public class ViewUpdate implements GLEventListener{
     
     protected int precision;
     
+    protected Decimal echelle;
+    
     /**
      * Initialisation de la vue 3D
      */
 	public ViewUpdate(String inc) {
 		camera = new PositionCamera(inc);
 		precision = 2;
+		echelle = Decimal.UN;
 	}
 
 	/** 
@@ -68,7 +73,7 @@ public class ViewUpdate implements GLEventListener{
     }
 
 	/**
-	 *  Affichage des données dans le CANVAS
+	 *  Affichage des donnï¿½es dans le CANVAS
 	 *   
 	 * @param gl
 	 */
@@ -95,7 +100,7 @@ public class ViewUpdate implements GLEventListener{
     }
 
 	/**
-	 *  Position de la caméra
+	 *  Position de la camï¿½ra
 	 *   
 	 * @param gl
 	 */
@@ -113,7 +118,7 @@ public class ViewUpdate implements GLEventListener{
     
 
 	/**
-	 *  positionnement de la taille de l'écran
+	 *  positionnement de la taille de l'ï¿½cran
 	 *   
 	 * @param gl
 	 */
@@ -162,6 +167,10 @@ public class ViewUpdate implements GLEventListener{
 		camera.reset();
 	}
 	
+	// Ajoute un vecteur en appliquant l'echelle
+	public void setPoint(Vecteur a, GL2 gl) {
+		gl.glVertex3f(a.getDecX().multiply(echelle).floatValue(), a.getDecY().multiply(echelle).floatValue(), a.getDecZ().multiply(echelle).floatValue());
+	}
 
 	/**
 	 * Affichage d'un point
@@ -182,35 +191,11 @@ public class ViewUpdate implements GLEventListener{
 		GLU glu = new GLU();
 	    GLUquadric quadric = glu.gluNewQuadric();    //In Jogl
 	    glu.gluQuadricTexture(quadric, true);
-        gl.glTranslatef(v.getDecX().floatValue(), v.getDecY().floatValue(), v.getDecZ().floatValue());
+        gl.glTranslatef(v.getDecX().multiply(echelle).floatValue(), v.getDecY().multiply(echelle).floatValue(), v.getDecZ().multiply(echelle).floatValue());
         glu.gluSphere(quadric, 0.005f, 2, 2);
 	    gl.glPopMatrix();        //equivalent to 'load the last position saved'
 	}
 
-	/**
-	 * Affiche une Facette **
-	 *
-	 * 
-	 * @param fac
-	 * @param col
-	 * @param gl
-	 *
-	public void printFacette (Triangle fac, Color col, GL2 gl) {
-        gl.glBegin(GL2.GL_LINE_STRIP);
-
-        float r = col.getRed()/(float)256;
-		float g = col.getGreen()/(float)256;
-		float b = col.getBlue()/(float)256;
-		
-		gl.glColor3f(r, g, b);
-
-		for (Vecteur pt : fac.getSommets()) {
-			gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
-		}
-		Vecteur pt = fac.getSommets()[0];
-		gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
-        gl.glEnd();
-	}
 
 	/**
 	 * Affiche une Arrete 
@@ -228,33 +213,12 @@ public class ViewUpdate implements GLEventListener{
 		
 		gl.glColor3f(r, g, bl);
 
-		gl.glVertex3f(a.getDecX().floatValue(), a.getDecY().floatValue(), a.getDecZ().floatValue());
-		gl.glVertex3f(b.getDecX().floatValue(), b.getDecY().floatValue(), b.getDecZ().floatValue());
+		setPoint(a, gl);
+		setPoint(b, gl);
+		
         gl.glEnd();
 	}
 	
-	/**
-	 * Affiche un polyedre
-	 *
-	public void printForme (Triangle facette, Color col, GL2 gl, int type) {
-		if (facette== null) return;
-		
-		// Affiche chaque arrête du polyedre
-		if (type == 0) { 
-			Vecteur[] pts = facette.getSommets();
-			printSegment(pts[0], pts [1], col, gl);
-			printSegment(pts[1], pts [2], col, gl);
-			printSegment(pts[2], pts [0], col, gl);
-		} else {
-			printFacette(facette, col, gl);
-			Vecteur[] pts = facette.getSommets();
-			printSegment(pts[0], pts [1], col.darker(), gl);
-			printSegment(pts[1], pts [2], col.darker(), gl);
-			printSegment(pts[2], pts [0], col.darker(), gl);
-		}
-	}
-*/
-
 
 	@Override
 	public void dispose(GLAutoDrawable drawable) {

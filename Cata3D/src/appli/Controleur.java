@@ -166,7 +166,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 
 		// Ajoute un composant Ã  l'arbre de visualisation
 		if ("SupprimeComposant".equals(e.getActionCommand())) {
-			// Récupère le composant actif et le supprime
+			// Rï¿½cupï¿½re le composant actif et le supprime
 			MutableTreeNode node = arbre.getTheNode();
 			if (node != null) {
 				DesignTreeNode nde = (DesignTreeNode) node;
@@ -195,6 +195,6 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 	}
 	
 	public void recalcule () {
-		this.dessin.recalcule();
+		this.dessin.recalculeAll();
 	}
 }

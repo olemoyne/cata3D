@@ -2,6 +2,7 @@ package view.scene;
 
 import java.awt.Color;
 
+import model.math.Decimal;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL2;
@@ -18,7 +19,7 @@ public class PrintedPoint extends PrintableObject {
 	}
 	
 	@Override
-	public void drawObject(GL2 gl) {
+	public void drawObject(GL2 gl, Decimal echelle) {
 	    gl.glPushMatrix();       //equivalent to 'save current position'
 
         float r = color.getRed()/(float)256;
@@ -31,7 +32,8 @@ public class PrintedPoint extends PrintableObject {
 		GLU glu = new GLU();
 	    GLUquadric quadric = glu.gluNewQuadric();    //In Jogl
 	    glu.gluQuadricTexture(quadric, true);
-        gl.glTranslatef(point.getDecX().floatValue(), point.getDecY().floatValue(), point.getDecZ().floatValue());
+        gl.glTranslatef(point.getDecX().multiply(echelle).floatValue(), 
+        		point.getDecY().multiply(echelle).floatValue(), point.getDecZ().multiply(echelle).floatValue());
         glu.gluSphere(quadric, 0.01f, 5, 5);
 	    gl.glPopMatrix();        //equivalent to 'load the last position saved'
 			

@@ -22,6 +22,7 @@ public class PatchPlein extends PatchComposant {
 
 	public PatchPlein (Cata bato) {
 		super(bato); // Creation des données liées au patch
+		densite = new Decimal(1f);
 	}
 	
 	/**
@@ -43,9 +44,12 @@ public class PatchPlein extends PatchComposant {
      *     
      */
     public void recalcule () {
-		this.gravite = CalculVolume.getPoussee(mapAffichage);
-		this.gravite.force = this.gravite.force.multiply(densite); 
      	super.recalcule();
+     	if (mapAffichage != null) {
+			this.gravite = CalculVolume.getPoussee(mapAffichage);
+			if (densite == null) densite = new Decimal(1f);
+			this.gravite.force = this.gravite.force.multiply(densite); 
+     	}
    }
 
     

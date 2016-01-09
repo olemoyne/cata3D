@@ -104,8 +104,8 @@ public class ArbreDesign extends JPanel {
 	
 	public void setBoatTree (Cata data) {
 		top.removeAllChildren();
-		DefaultMutableTreeNode tn = CataTreeNode.getNodes(data, top);
-		tn.setParent((MutableTreeNode) this.arbre.getModel().getRoot());
+		CataTreeNode.getNodes(data, top);
+//		tn.setParent((MutableTreeNode) this.arbre.getModel().getRoot());
 		// TODO : Repositionner l'arbre sur le bateau
 	}
 	

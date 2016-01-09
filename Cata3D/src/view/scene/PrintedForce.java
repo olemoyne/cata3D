@@ -3,6 +3,8 @@ package view.scene;
 import java.awt.Color;
 
 import model.Poids;
+import model.math.Decimal;
+import model.math.Vecteur;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
@@ -19,7 +21,7 @@ public class PrintedForce extends PrintableObject {
 	}
 	
 	@Override
-	public void drawObject(GL2 gl) {
+	public void drawObject(GL2 gl, Decimal echelle) {
 	    gl.glPushMatrix();       //equivalent to 'save current position'
 
         float r = color.getRed()/(float)256;
@@ -32,16 +34,16 @@ public class PrintedForce extends PrintableObject {
 		GLU glu = new GLU();
 	    GLUquadric quadric = glu.gluNewQuadric();    //In Jogl
 	    glu.gluQuadricTexture(quadric, true);
-        gl.glTranslatef(pds.position.getDecX().floatValue(), pds.position.getDecY().floatValue(), pds.position.getDecZ().floatValue());
+        gl.glTranslatef(pds.position.getDecX().multiply(echelle).floatValue(), 
+        		pds.position.getDecY().multiply(echelle).floatValue(), pds.position.getDecZ().multiply(echelle).floatValue());
         glu.gluSphere(quadric, 0.01f, 5, 5);
 	    gl.glPopMatrix();        //equivalent to 'load the last position saved'
 	    
         gl.glBegin(GL.GL_LINE_STRIP);
-			gl.glVertex3f(pds.position.getDecX().floatValue(), pds.position.getDecY().floatValue(), pds.position.getDecZ().floatValue());
-			gl.glVertex3f(pds.position.getDecX().floatValue(), pds.position.getDecY().floatValue()-pds.force.floatValue()/20f, pds.position.getDecZ().floatValue());
+        	setPoint(pds.position, gl, echelle);
+        	Vecteur e = pds.position.add(new Vecteur (Decimal.ZERO, pds.force.divide(new Decimal(20f)).negate(), Decimal.ZERO));
+        	setPoint(e, gl, echelle);
         gl.glEnd();
-
-			
 	}
 
 }

@@ -3,6 +3,7 @@ package view.scene;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import model.math.Decimal;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL2;
@@ -28,70 +29,50 @@ public class PrintedBlock extends PrintableObject {
 		gl.glColor3f(r, g, b);		
 	}
 
-	private void drawPoint(GL2 gl, Vecteur pt) {
-		gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+	
+	public void drawCarre(GL2 gl, Vecteur a, Vecteur b, Vecteur c, Vecteur d, Decimal echelle) {
+		if (!fillup) gl.glBegin(GL2.GL_LINE_STRIP);
+		else gl.glBegin(GL2.GL_POLYGON);		
+		setPoint(a, gl, echelle);
+		setPoint(b, gl, echelle);
+		setPoint(c, gl, echelle);
+		setPoint(d, gl, echelle);
+		setPoint(a, gl, echelle);
+		gl.glEnd();
+		
 	}
 	
-	
 	@Override
-	public void drawObject(GL2 gl) {
+	public void drawObject(GL2 gl, Decimal echelle) {
 
 		setColor (gl, null);
-		
-		if (!fillup) gl.glBegin(GL2.GL_LINE_STRIP);
-		else gl.glBegin(GL2.GL_POLYGON);		
-		drawPoint(gl, deb);
-		drawPoint(gl, new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()));
-		drawPoint(gl, new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()));
-		drawPoint(gl, deb);
-		gl.glEnd();
+		drawCarre(gl, deb, new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()),
+				new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()), 
+				new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()), echelle);
 
-		if (!fillup) gl.glBegin(GL2.GL_LINE_STRIP);
-		else gl.glBegin(GL2.GL_POLYGON);		
-		drawPoint(gl, new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), deb.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), fin.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(deb.getDecX(), fin.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()));
-		gl.glEnd();
+		drawCarre(gl, new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()),
+				new Vecteur(fin.getDecX(), deb.getDecY(), fin.getDecZ()),
+				new Vecteur(fin.getDecX(), fin.getDecY(), fin.getDecZ()), 
+				new Vecteur(deb.getDecX(), fin.getDecY(), fin.getDecZ()), echelle);
 
-		if (!fillup) gl.glBegin(GL2.GL_LINE_STRIP);
-		else gl.glBegin(GL2.GL_POLYGON);		
-		drawPoint(gl, deb);
-		drawPoint(gl, new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()));
-		drawPoint(gl, new Vecteur(deb.getDecX(), fin.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()));
-		drawPoint(gl, deb);
-		gl.glEnd();
+		drawCarre(gl, deb, new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()), 
+				new Vecteur(deb.getDecX(), fin.getDecY(), fin.getDecZ()),
+				new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()), echelle);
 
-		if (!fillup) gl.glBegin(GL2.GL_LINE_STRIP);
-		else gl.glBegin(GL2.GL_POLYGON);		
-		drawPoint(gl, new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), fin.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), deb.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()));
-		gl.glEnd();
+		drawCarre(gl, new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()), 
+				new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()), 
+				new Vecteur(fin.getDecX(), fin.getDecY(), fin.getDecZ()),
+				new Vecteur(fin.getDecX(), deb.getDecY(), fin.getDecZ()), echelle);
 
+		drawCarre(gl, new Vecteur(deb.getDecX(), deb.getDecY(), deb.getDecZ()), 
+				new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()), 
+				new Vecteur(fin.getDecX(), deb.getDecY(), fin.getDecZ()),
+				new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()), echelle);
 
-		if (!fillup) gl.glBegin(GL2.GL_LINE_STRIP);
-		else gl.glBegin(GL2.GL_POLYGON);		
-		drawPoint(gl, new Vecteur(deb.getDecX(), deb.getDecY(), deb.getDecZ()));
-		drawPoint(gl, new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), deb.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()));
-		drawPoint(gl, new Vecteur(deb.getDecX(), deb.getDecY(), deb.getDecZ()));
-		gl.glEnd();
-
-		if (!fillup) gl.glBegin(GL2.GL_LINE_STRIP);
-		else gl.glBegin(GL2.GL_POLYGON);		
-		drawPoint(gl, new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()));
-		drawPoint(gl, new Vecteur(deb.getDecX(), fin.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), fin.getDecY(), fin.getDecZ()));
-		drawPoint(gl, new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()));
-		drawPoint(gl, new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()));
-		gl.glEnd();
+		drawCarre(gl, new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()),
+				new Vecteur(deb.getDecX(), fin.getDecY(), fin.getDecZ()),
+				new Vecteur(fin.getDecX(), fin.getDecY(), fin.getDecZ()),
+				new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()), echelle);
 
 	}
 

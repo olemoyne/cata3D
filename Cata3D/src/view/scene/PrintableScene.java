@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.jogamp.opengl.GL2;
 
+import model.math.Decimal;
+
 public class PrintableScene {
 
 	public ArrayList<PrintableObject> allObjects;
@@ -12,9 +14,9 @@ public class PrintableScene {
 		allObjects = new ArrayList<PrintableObject> ();
 	}
 	
-	public void printScene(GL2 gl) {
+	public void printScene(GL2 gl, Decimal echelle) {
 		for (PrintableObject obj : allObjects) {
-			if (obj.toBePrinted) obj.drawObject(gl);
+			if (obj.toBePrinted) obj.drawObject(gl, echelle);
 		}
 	}
 

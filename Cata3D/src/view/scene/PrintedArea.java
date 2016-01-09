@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import model.Area;
+import model.math.Decimal;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL2;
@@ -28,7 +29,7 @@ public class PrintedArea extends PrintableObject {
 	}
 	
 	@Override
-	public void drawObject(GL2 gl) {
+	public void drawObject(GL2 gl, Decimal echelle) {
 
 		if (zone == null) return;
 		setColor (gl, null);
@@ -37,10 +38,10 @@ public class PrintedArea extends PrintableObject {
 		else gl.glBegin(GL2.GL_POLYGON);
 		
 		for (Vecteur pt : zone.points) {
-			gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+			setPoint(pt, gl, echelle);
 		}
 		Vecteur pt = zone.points.get(0);
-		gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+		setPoint(pt, gl, echelle);
 
 		gl.glEnd();
 			

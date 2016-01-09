@@ -3,6 +3,7 @@ package view.scene;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import model.math.Decimal;
 import model.math.MapDeVecteurs;
 import model.math.Vecteur;
 
@@ -33,7 +34,7 @@ public class PrintedMap extends PrintableObject {
 	}
 	
 	@Override
-	public void drawObject(GL2 gl) {
+	public void drawObject(GL2 gl, Decimal echelle) {
 
 		if (map == null) return;
 		setColor (gl, null);
@@ -45,10 +46,10 @@ public class PrintedMap extends PrintableObject {
 		        gl.glBegin(GL2.GL_LINE_STRIP);
 				for (int x = 0; x < map.xSize(); x ++) {
 					pt = map.getPoint(x,  y);
-					gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+					setPoint(pt, gl, echelle);
 				}
 				pt = map.getPoint(0,  y);
-				gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+				setPoint(pt, gl, echelle);
 				gl.glEnd();
 			}
 			// Trace tous les trais horizontaux
@@ -56,7 +57,7 @@ public class PrintedMap extends PrintableObject {
 		        gl.glBegin(GL2.GL_LINE_STRIP);
 				for (int y = 0; y < map.ySize(); y ++) {
 					pt = map.getPoint(x,  y);
-					gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+					setPoint(pt, gl, echelle);
 				}
 				pt = map.getPoint(x,  0);
 //				gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
@@ -77,13 +78,13 @@ public class PrintedMap extends PrintableObject {
 					setColor (gl, lst);
 			        gl.glBegin(GL2.GL_POLYGON);
 						pt = map.getPoint(x-1,  y-1);
-						gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+						setPoint(pt, gl, echelle);
 						pt = map.getPoint(x,  y-1);
-						gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+						setPoint(pt, gl, echelle);
 						pt = map.getPoint(x,  y);
-						gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());
+						setPoint(pt, gl, echelle);
 						pt = map.getPoint(x-1,  y);
-						gl.glVertex3f(pt.getDecX().floatValue(), pt.getDecY().floatValue(), pt.getDecZ().floatValue());			
+						setPoint(pt, gl, echelle);
 					gl.glEnd();
 				}
 			}

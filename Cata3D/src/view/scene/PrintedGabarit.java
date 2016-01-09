@@ -61,7 +61,7 @@ public class PrintedGabarit extends PrintableObject {
 	 * Pas d'implementation en 3D
 	 */
 	@Override
-	public void drawObject(GL2 gl) {
+	public void drawObject(GL2 gl, Decimal e) {
 	}
 	
 	
