@@ -63,6 +63,15 @@ public class Composant implements Serializable{
 		position = new Vecteur();
 	}
 	
+	public Composant () {
+		nom = "Nom";
+		boat = null;
+		description = "Description";
+		poids = new ArrayList<Poids> ();
+		position = new Vecteur();
+	}
+	
+	
 	/**
 	 * Génère une description
 	 */
@@ -90,5 +99,4 @@ public class Composant implements Serializable{
 	public ArrayList<PrintableObject> getSceneObjects() {
 		return new ArrayList<PrintableObject>();
 	}
-    
 }

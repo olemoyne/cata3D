@@ -213,6 +213,31 @@ public class Patch implements Serializable {
 		return patch;
 	}
 
+	public static final void main(String[] a) {
+		Patch patch = new Patch();
+		patch.x = 4;
+		patch.y = 4;
+		patch.points = new Vecteur[4][4];
+		patch.points[0][0] = new Vecteur("0.001;0;0.0");
+		patch.points[0][1] = new Vecteur("0.001;-0.01;0");
+		patch.points[0][2] = new Vecteur("0.001;-0.02;0");
+		patch.points[0][3] = new Vecteur("0.001;-0.04;0");
+		patch.points[1][0] = new Vecteur("0.001;0;0.001");
+		patch.points[1][1] = new Vecteur("0.001;-0.01;0.001");
+		patch.points[1][2] = new Vecteur("0.001;-0.02;0.001");
+		patch.points[1][3] = new Vecteur("0.001;-0.04;0.001");
+		patch.points[2][0] = new Vecteur("0.001;0;0.002");
+		patch.points[2][1] = new Vecteur("0.001;-0.01;0.002");
+		patch.points[2][2] = new Vecteur("0.001;-0.02;0.002");
+		patch.points[2][3] = new Vecteur("0.001;-0.04;0.002");
+		patch.points[3][0] = new Vecteur("0.001;0;0.004");
+		patch.points[3][1] = new Vecteur("0.001;-0.01;0.004");
+		patch.points[3][2] = new Vecteur("0.001;-0.02;0.004");
+		patch.points[3][3] = new Vecteur("0.001;-0.04;0.004");
+
+		System.out.println(patch.getMap(10).toString());
+	}
+
     public String toString() {
         StringBuilder sb = new StringBuilder("Patch = ");
         sb.append(x);
@@ -230,5 +255,7 @@ public class Patch implements Serializable {
         return sb.toString();
     }
 
+    
+    
 	
 }

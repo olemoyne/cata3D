@@ -194,7 +194,12 @@ public class MapDeVecteurs implements Serializable {
 				Vecteur A = this.getPoint(xpos, ypos-1);
 				Vecteur B = this.getPoint(xpos, ypos);
 				Vecteur v = pl.intersection(A, B);
-				if (v!= null) ret.points.add(v);
+				if (v!= null) {
+					if (!ret.points.contains(v)) {
+						ret.points.add(v);
+					}
+					
+				}
 			}
 		}
 		return ret;
@@ -233,4 +238,19 @@ public class MapDeVecteurs implements Serializable {
 		return surface;
 	}
 
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Patch = ");
+
+		for (int ysm = 0 ; ysm < this.ySize; ysm++) {					
+			for (int xsm = 0 ; xsm < xSize; xsm ++) {
+				sb.append (this.getPoint(xsm, ysm));
+				sb.append (", ");
+			}
+			sb.append("\n"); 
+		}
+
+        return sb.toString();
+    }
+
+	
 }

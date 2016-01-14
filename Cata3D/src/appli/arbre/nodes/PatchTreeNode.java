@@ -2,11 +2,15 @@ package appli.arbre.nodes;
 
 
 import java.awt.Color;
+import java.util.ArrayList;
 
+import appli.arbre.TreeNodeProperty;
+import appli.values.updater.ObjectUpdater;
 import view.scene.PrintableScene;
 import view.scene.PrintedForce;
 import view.scene.PrintedMap;
 import model.composants.PatchComposant;
+import model.math.Decimal;
 
 public class PatchTreeNode extends ComposantTreeNode {
 
@@ -25,6 +29,31 @@ public class PatchTreeNode extends ComposantTreeNode {
 	    // gestion des plans de construction
 	    new PlanTreeNode(this);
 	}		
+	
+	
+	public ArrayList<TreeNodeProperty> getProperties() {
+		PatchComposant p = (PatchComposant)composant;
+		
+		ArrayList<TreeNodeProperty> ret = super.getProperties();
+		ret.add(new TreeNodeProperty ("Précision", p.precision, true, ObjectUpdater.INTEGER) );
+		return ret;
+	}
+	
+	
+	
+	public void updateValue (String fld, Object value) {
+		super.updateValue(fld, value);
+
+		PatchComposant pv = (PatchComposant)composant;
+
+		
+		if (fld.equals("Précision")) {
+			Decimal dec = (Decimal)value;
+			pv.precision = (int)Math.round(dec.doubleValue());
+		}
+	}
+
+
 	
 	/** 
 	 * Permet d'afficher la scene correspondant à la vue définie

@@ -13,10 +13,8 @@ import model.patch.Patch;
 
 public class PatchComposant extends Composant {
 	
-	/** Densité de la matière de construction **/
+	/** Densitï¿½ de la matiï¿½re de construction **/
 	public static final double DENSITE_BOIS = 0.6d;
-
-	public static final int PRECISION = 20;
 
 	/**
 	 * 
@@ -25,10 +23,19 @@ public class PatchComposant extends Composant {
 
 	/** Patch permettant de stocker les donnÃ©es et calculer la forme **/
 	public Patch patch;	
+	public int precision;
+	
+	public PatchComposant() {
+		super(); // Creation des donnÃ©es liÃ©es au patch
+		patch = new Patch();	
+		precision = 20;
+	}
+	
 	
 	public PatchComposant (Cata bato) {
 		super(bato); // Creation des donnÃ©es liÃ©es au patch
 		patch = new Patch();	
+		precision = 20;
 	}
 	
 	/**
@@ -50,7 +57,8 @@ public class PatchComposant extends Composant {
      *     
      */
     public void recalcule () {
-    	mapAffichage = CalculCoque.createCoque(patch, PRECISION);
+    	if (precision <= 0) precision = 20;
+    	mapAffichage = CalculCoque.createCoque(patch, precision);
 //		this.gravite = CalculVolume.getPoussee(mapAffichage);
 		super.recalcule();
     }
@@ -60,12 +68,11 @@ public class PatchComposant extends Composant {
 
 		Translation trsl = new Translation(position, null); 
 		
-		//** Décaler le desssin **/
+		//** Dï¿½caler le desssin **/
 		ret.add(new PrintedMap (mapAffichage.transforme(trsl), "Coque", false, Color.darkGray));
 		ret.add(new PrintedForce(gravite.transforme(trsl), Color.RED));
 
 		return ret; 
 	}
-
 
 }
