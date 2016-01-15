@@ -13,12 +13,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import appli.Controleur;
 import appli.arbre.nodes.CataTreeNode;
+import appli.arbre.nodes.DesignTreeNode;
 import model.Cata;
 
 /**
@@ -38,6 +40,7 @@ public class ArbreDesign extends JPanel {
 	 * Arbre de visualisation des donnï¿½es 
 	 */
 	private JTree arbre;
+	private DefaultTreeModel treeModel;
 	private DefaultMutableTreeNode top;
 	
 	/**
@@ -54,8 +57,10 @@ public class ArbreDesign extends JPanel {
 		this.setBackground(Color.black);
 		
 		top = new DefaultMutableTreeNode("Definition d'un bateau");
+		treeModel = new DefaultTreeModel(top);
 
-		arbre = new JTree(top);
+		arbre = new JTree(treeModel);
+		arbre.addMouseListener(crtl);
 		arbre.setBackground(Color.white);
 
 		arbre.getSelectionModel().setSelectionMode
@@ -75,7 +80,7 @@ public class ArbreDesign extends JPanel {
 		    arbre.setCellRenderer(renderer);
 		}
 		
-// Ajoute les boutons de gestion
+/** Ajoute les boutons de gestion remplacé par des popup menus
 		JPanel sub = new JPanel();
 		sub.setLayout(new FlowLayout());
 		sub.add(new JLabel("Gestion des composants"));
@@ -94,6 +99,7 @@ public class ArbreDesign extends JPanel {
 		if (crtl != null) supprime.addActionListener(crtl);		
 		sub.add(supprime);
 		this.add(sub, BorderLayout.NORTH);
+******/
 	}
 
 	public MutableTreeNode getTheNode() {
@@ -101,6 +107,19 @@ public class ArbreDesign extends JPanel {
 		if (mtn == top) return null;
 		return (MutableTreeNode)mtn; 	
 	}
+	
+	
+	public void addNode (DesignTreeNode fils, DesignTreeNode father) {
+		this.treeModel.insertNodeInto(fils, father, father.getChildCount()-1);
+		arbre.scrollPathToVisible(new TreePath(fils.getPath()));
+	}
+
+	public void removeNode (DesignTreeNode fils) {
+		DesignTreeNode up = (DesignTreeNode)fils.getParent();
+		this.treeModel.removeNodeFromParent(fils);
+		arbre.scrollPathToVisible(new TreePath(up.getPath()));
+	}
+
 	
 	public void setBoatTree (Cata data) {
 		top.removeAllChildren();
@@ -117,10 +136,15 @@ public class ArbreDesign extends JPanel {
 	public void gotToPath(TreePath path) { 
 		arbre.expandPath(path);
 		arbre.addSelectionPath(path);
+		arbre.scrollPathToVisible(path);
 	}
 
 	public DefaultMutableTreeNode getRootNode() {
 		return this.top;
+	}
+
+	public DesignTreeNode getDesignNode() {
+		return CataTreeNode.getDesignNode(top);
 	}
 	
 }

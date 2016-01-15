@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import model.math.Decimal;
+
 import com.jogamp.opengl.GL2;
 
 import view.scene.PrintableObject;
@@ -17,8 +19,9 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 
 	public PrintableScene scene;
 	
-	public PrintableViewUpdate(String inc) {
+	public PrintableViewUpdate(String inc, Decimal ech) {
 		super(inc);
+		echelle = ech;
 		
 	}
 	

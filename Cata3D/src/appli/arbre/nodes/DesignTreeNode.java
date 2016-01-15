@@ -64,4 +64,8 @@ public class DesignTreeNode extends DefaultMutableTreeNode {
 		return null;
 	}
 
+	public String[] getActionList() {
+		return null;
+	}
+
 }

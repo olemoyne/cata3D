@@ -41,4 +41,9 @@ public class ComposantTreeNode extends DesignTreeNode {
 		if (fld.equals("Position")) composant.position= (Vecteur)value;
 	}
 	
+	public String[] getActionList() {
+		String[] strs =  {"Ajoute composant", "Supprime composant"};
+		return strs;
+	}
+
 }

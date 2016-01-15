@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import model.math.Decimal;
 import view.scene.PrintableObject;
 import view.scene.PrintableScene;
 
@@ -97,6 +98,10 @@ public class PrintableObjectViewer extends View3D implements ListSelectionListen
 
 		}
 
+	}
+
+	public Decimal getEchelle() {
+		return view.echelle;
 	}
 	
 }

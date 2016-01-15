@@ -71,6 +71,10 @@ public class PatchTreeNode extends ComposantTreeNode {
 	}
 	
 
+	public String[] getActionList() {
+		String[] strs =  {"Fichier STL"};
+		return strs;
+	}
 
 
 }

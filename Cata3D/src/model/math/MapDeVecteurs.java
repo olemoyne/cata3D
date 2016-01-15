@@ -251,6 +251,4 @@ public class MapDeVecteurs implements Serializable {
 
         return sb.toString();
     }
-
-	
 }

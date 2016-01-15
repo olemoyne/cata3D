@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
+import model.math.Decimal;
 import view.gabarits.GabaritDetailsViewer;
 import view.scene.GabaritScene;
 import view.scene.PrintableScene;
@@ -26,11 +27,11 @@ public class ActiveView {
 	private JPanel active;
 	
 	
-	public ActiveView (JPanel fond) {
+	public ActiveView (JPanel fond, Decimal echelle) {
 		fondDeVue = fond;
 		
 		/** Creation de la vue 3D **/
-		PrintableViewUpdate upd = new PrintableViewUpdate("0.025");
+		PrintableViewUpdate upd = new PrintableViewUpdate("0.025", echelle);
 		viewer3D = new PrintableObjectViewer(upd);
 		fond.add(viewer3D, BorderLayout.CENTER);
 		active = viewer3D;
@@ -57,6 +58,10 @@ public class ActiveView {
 				active = gabView;
 			}
 		}
+	}
+
+	public Decimal getEchelle() {
+		return this.viewer3D.getEchelle();
 	}
 	
 	

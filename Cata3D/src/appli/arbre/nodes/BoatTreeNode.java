@@ -61,4 +61,9 @@ public class BoatTreeNode extends DesignTreeNode {
 	}
 
 
+	public String[] getActionList() {
+		String[] strs =  {"Ajoute composant", "Supprime composant"};
+		return strs;
+	}
+
 }

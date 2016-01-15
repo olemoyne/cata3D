@@ -4,9 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -14,15 +18,17 @@ import javax.swing.tree.MutableTreeNode;
 
 import model.Cata;
 import model.composants.Composant;
+import model.math.Decimal;
 import view.scene.PrintableScene;
 import appli.arbre.ArbreDesign;
 import appli.arbre.DialogComponant;
+import appli.arbre.nodes.CataTreeNode;
 import appli.arbre.nodes.ComposantTreeNode;
 import appli.arbre.nodes.DesignTreeNode;
 import appli.values.CataValuesException;
 import appli.values.TableValues;
 
-public class Controleur implements ActionListener, TreeSelectionListener{
+public class Controleur implements ActionListener, TreeSelectionListener, MouseListener{
 	
 	/**
 	 * Catamaran affich� 
@@ -54,7 +60,8 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		 * Creation du manager de formes
 		 */
 		log.writeLog("Starting the view");
-		vue = new ActiveView(fond);
+		if (ctx.echelle == null) ctx.echelle = Decimal.UN;
+		vue = new ActiveView(fond, ctx.echelle);
 
 		log.writeLog("Drawing the tree");
 		arbre = new ArbreDesign(this);
@@ -102,6 +109,11 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 	}
 	
 	
+	/**
+	 * Parcours des noeuds de l'arbre
+	 *   --affiche les valeurs 
+	 *   --affiche la vue 3D
+	 */
 	private void showNodeDetails () {
 		MutableTreeNode node = arbre.getTheNode();
 		//Nothing is selected.     
@@ -150,7 +162,8 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		}
 		
 		// Ajoute un composant à l'arbre de visualisation
-		if ("ajouteComposant".equals(e.getActionCommand())) {
+		if ("Ajoute composant".equals(e.getActionCommand())) {
+			DesignTreeNode prt = this.arbre.getDesignNode();
 			// affiche une fenetre avec le choix du type de composant et le nom du composant
 			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this.arbre);
 			DialogComponant dial = new DialogComponant(topFrame, this.dessin); 
@@ -159,13 +172,14 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 				Composant cmp = dial.composant;
 				//et ajoute un nouveau node dans l'arbre 
 				this.dessin.composants.add(cmp);
-				arbre.setBoatTree(dessin);
+				DesignTreeNode sub = CataTreeNode.getNodeForComponent(cmp, prt);
+				arbre.addNode(sub, prt);
 				this.recalcule();
 			}
 		}
 
 		// Ajoute un composant à l'arbre de visualisation
-		if ("SupprimeComposant".equals(e.getActionCommand())) {
+		if ("Supprime composant".equals(e.getActionCommand())) {
 			// R�cup�re le composant actif et le supprime
 			MutableTreeNode node = arbre.getTheNode();
 			if (node != null) {
@@ -173,7 +187,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 				if (nde.getLevel() == DesignTreeNode.LEVEL_COMPOSANT) {
 					ComposantTreeNode cnd = (ComposantTreeNode) node;
 					this.dessin.composants.remove(cnd.getComposant());
-					arbre.setBoatTree(dessin);
+					arbre.removeNode(nde);
 					this.recalcule();
 				}
 			}
@@ -184,6 +198,7 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 		Context ctx = new Context();
 		ctx.lastCataFile = mngr.getFile();
 		ctx.lastTreePath = arbre.getPath();
+		ctx.echelle = this.vue.getEchelle();
 		System.out.println("Actual path = "+ctx.lastTreePath);
 		Context.saveTofile(ctx);
 	}
@@ -196,5 +211,54 @@ public class Controleur implements ActionListener, TreeSelectionListener{
 	
 	public void recalcule () {
 		this.dessin.recalculeAll();
+	}
+
+	/**
+	 * Affiche le PopupMenu
+	 */
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// check is click by right button
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			MutableTreeNode nde = this.arbre.getTheNode();
+			if (nde == null) return;
+			if (nde == arbre.getRootNode()) return;
+			DesignTreeNode dtn = (DesignTreeNode) nde;
+			String[] lst = dtn.getActionList();
+			if (lst != null) {
+				// Pour chaque action on ajoute un menu
+				JPopupMenu popup = new JPopupMenu();
+				for (String str : lst) {
+					JMenuItem menuItem = new JMenuItem(str);
+				    menuItem.addActionListener(this);
+				    popup.add(menuItem);
+				}
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

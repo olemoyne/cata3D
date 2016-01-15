@@ -1,5 +1,7 @@
 package appli.arbre.nodes;
 
+import java.util.Enumeration;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Cata;
@@ -31,19 +33,29 @@ public class CataTreeNode {
 	}
 
 	
-	public static void getNodeForComponent(Composant cmp, DesignTreeNode sub) {
+	public static DesignTreeNode getNodeForComponent(Composant cmp, DesignTreeNode sub) {
 	    	// Selon le type de composant
 	    	if (cmp.getType() == Composant.PATCH_PLEIN) {
-		    	new PatchPleinTreeNode(sub, cmp.nom, (PatchPlein)cmp);
+		    	return new PatchPleinTreeNode(sub, cmp.nom, (PatchPlein)cmp);
 	    	}
 	    	if (cmp.getType() == Composant.PATCH_VIDE) {
-		    	new PatchVideTreeNode(sub, cmp.nom, (PatchVide)cmp);
+	    		return new PatchVideTreeNode(sub, cmp.nom, (PatchVide)cmp);
 	    	}
 	    	if (cmp.getType() == Composant.RECOPIE) {
-		    	new RecopieTreeNode(sub, cmp.nom, (Recopie)cmp);
+	    		return new RecopieTreeNode(sub, cmp.nom, (Recopie)cmp);
 	    	}
 	    	if (cmp.getType() == Composant.TUBE) {
-		    	new TubeTreeNode(sub, cmp.nom, (Recopie)cmp);
+	    		return new TubeTreeNode(sub, cmp.nom, (Recopie)cmp);
 	    	}
+	    	return null;
+	}
+
+
+	public static DesignTreeNode getDesignNode(DefaultMutableTreeNode top) {
+		for (Enumeration<?> e = top.children(); e.hasMoreElements();) {
+			DesignTreeNode dtn = (DesignTreeNode)e.nextElement();
+			if (dtn.toString().equals("Design")) return (DesignTreeNode)dtn;
+		}
+		return null;
 	}
 }

@@ -11,6 +11,8 @@ import java.io.Serializable;
 
 import javax.swing.tree.TreePath;
 
+import model.math.Decimal;
+
 
 public class Context implements Serializable {
 
@@ -21,6 +23,7 @@ public class Context implements Serializable {
 	
 	public String lastCataFile;
 	public TreePath lastTreePath;
+	public Decimal echelle;
 	
 	public Context() {
 		
