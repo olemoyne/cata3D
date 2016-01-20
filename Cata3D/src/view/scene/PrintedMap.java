@@ -87,10 +87,7 @@ public class PrintedMap extends PrintableObject {
 						setPoint(pt, gl, echelle);
 					gl.glEnd();
 				}
-			}
-			
+			}			
 		}
-			
 	}
-
 }

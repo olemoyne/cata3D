@@ -251,13 +251,13 @@ public abstract class SolideMaker {
 	}
 
 
-	private static ArrayList<Triangle> getSurface(MapDeVecteurs map, int nbPoints, boolean ordre) throws InvalidGeomAction {
+	private static ArrayList<Triangle> getSurface(MapDeVecteurs map, boolean ordre) throws InvalidGeomAction {
 		ArrayList<Triangle> facs = new ArrayList<Triangle>(); 
 
 		Vecteur[] pts = new Vecteur[3];
 		// Calcul des Triangles
-		for (int x = 0; x < nbPoints-1; x++) {
-			for (int y = 0; y < nbPoints-1; y++) {
+		for (int x = 0; x < map.xSize()-1; x++) {
+			for (int y = 0; y < map.ySize()-1; y++) {
 				if (ordre) {
 					pts[0]= map.getPoint(x, y);
 					pts[1]= map.getPoint(x, y+1);
@@ -311,29 +311,32 @@ public abstract class SolideMaker {
 	 * @return
 	 * @throws InvalidGeomAction 
 	 */
-	public static Solide fromMap(MapDeVecteurs map, int nbPoints) throws InvalidGeomAction {
+	public static Solide fromMap(MapDeVecteurs map) throws InvalidGeomAction {
+		
+		
+		
 		ArrayList<Triangle> facs = new ArrayList<Triangle>();
-		facs.addAll(getSurface(map, nbPoints, true));
+		facs.addAll(getSurface(map, true));
 
 		// Ajoute les points de liaison
 		Vecteur[] pts = new Vecteur[3];
 		pts[0]= map.getPoint(0,0);
-		pts[1]= map.getPoint(0,nbPoints-1);
-		pts[2]= map.getPoint(nbPoints-1, nbPoints-1);
+		pts[1]= map.getPoint(0,map.ySize()-1);
+		pts[2]= map.getPoint(map.xSize()-1, map.ySize()-1);
 		Triangle fac = Triangle.getTriangle(pts);
 		facs.add(fac);
-		pts[0]= map.getPoint(nbPoints-1, nbPoints-1);	
-		pts[1]= map.getPoint(nbPoints-1, 0);
+		pts[0]= map.getPoint(map.xSize()-1, map.ySize()-1);	
+		pts[1]= map.getPoint(map.xSize()-1, 0);
 		pts[2]= map.getPoint(0, 0);
 		fac = Triangle.getTriangle(pts);
 		facs.add(fac);
 
 		// Creation des deux Triangles de fin de tube (x = 0 et x = nbPoints)
-		Vecteur[] debut= new Vecteur[nbPoints];
-		Vecteur[] fin= new Vecteur[nbPoints];
-		for (int y = 0; y < nbPoints; y++) {
-			debut[y]= map.getPoint(nbPoints - y - 1, 0);
-			fin[y]= map.getPoint(y, nbPoints-1);
+		Vecteur[] debut= new Vecteur[map.ySize()];
+		Vecteur[] fin= new Vecteur[map.ySize()];
+		for (int x = 0; x < map.xSize(); x++) {
+			debut[x]= map.getPoint(map.xSize() - x - 1, 0);
+			fin[x]= map.getPoint(x, map.ySize()-1);
 		}
 		facs.addAll(SolideMaker.splitFacette(debut));
 		facs.addAll(SolideMaker.splitFacette(fin));
@@ -353,15 +356,15 @@ public abstract class SolideMaker {
 	 * @return
 	 * @throws InvalidGeomAction 
 	 */
-	public static Solide fromMap(MapDeVecteurs map, int nbPoints, Decimal epaisseur) throws InvalidGeomAction {
+	public static Solide fromMap(MapDeVecteurs map, Decimal epaisseur) throws InvalidGeomAction {
 		ArrayList<Triangle> facs = new ArrayList<Triangle>(); 
-		facs.addAll(getSurface(map, nbPoints, true));
+		facs.addAll(getSurface(map, true));
 
 		// Creation des Triangles décalées
-		MapDeVecteurs mapDecalee = new MapDeVecteurs(nbPoints, nbPoints);
+		MapDeVecteurs mapDecalee = new MapDeVecteurs(map.xSize(), map.ySize());
 		// Gestion du décalage sur chaque point de la MAP
-		for (int x = 0; x <= nbPoints-1; x++) {
-			for (int y = 0; y <= nbPoints-1; y++) {
+		for (int x = 0; x <= map.xSize()-1; x++) {
+			for (int y = 0; y <= map.ySize()-1; y++) {
 				Vecteur v = map.getPoint(x, y);
 				// Projection sur la droite
 				Vecteur proj = new Vecteur(0, 0, v.getZ());
@@ -371,33 +374,33 @@ public abstract class SolideMaker {
 				else mapDecalee.setPoint(x, y, d);
 			}
 		}
-		facs.addAll(getSurface(mapDecalee, nbPoints, false));
+		facs.addAll(getSurface(mapDecalee, false));
 
 		// Creation des Triangles de fin et début de tube (x = 0 et x = nbPoints)
-		Vecteur[] debut= new Vecteur[nbPoints*2];
-		Vecteur[] fin= new Vecteur[nbPoints*2];
-		for (int y = 0; y < nbPoints; y++) {
+		Vecteur[] debut= new Vecteur[map.ySize()*2];
+		Vecteur[] fin= new Vecteur[map.ySize()*2];
+		for (int y = 0; y < map.ySize(); y++) {
 			debut[y]= map.getPoint(0, y);
-			fin[y]= map.getPoint(nbPoints-1, y);
+			fin[y]= map.getPoint(map.ySize()-1, y);
 		}
-		for (int y = 0; y < nbPoints; y++) {
-			debut[2*nbPoints - y - 1]= mapDecalee.getPoint(0, y);
-			fin[2*nbPoints - y - 1]= mapDecalee.getPoint(nbPoints-1, y);
+		for (int y = 0; y < map.ySize(); y++) {
+			debut[2*map.ySize() - y - 1]= mapDecalee.getPoint(0, y);
+			fin[2*map.ySize() - y - 1]= mapDecalee.getPoint(map.xSize()-1, y);
 		}
 		
 		facs.addAll(SolideMaker.splitFacette(debut));
 		facs.addAll(SolideMaker.splitFacette(fin));
 
 		// Creation des Triangles de fin et début de tube (x = 0 et x = nbPoints)
-		debut= new Vecteur[nbPoints*2];
-		fin= new Vecteur[nbPoints*2];
-		for (int x = 0; x < nbPoints; x++) {
+		debut= new Vecteur[map.xSize()*2];
+		fin= new Vecteur[map.xSize()*2];
+		for (int x = 0; x < map.xSize(); x++) {
 			debut[x]= map.getPoint(x, 0);
-			fin[x]= map.getPoint(x, nbPoints-1);
+			fin[x]= map.getPoint(x, map.ySize()-1);
 		}
-		for (int x = 0; x < nbPoints; x++) {
-			debut[2*nbPoints - x - 1]= mapDecalee.getPoint(x, 0);
-			fin[2*nbPoints - x - 1]= mapDecalee.getPoint(x, nbPoints-1);
+		for (int x = 0; x < map.xSize(); x++) {
+			debut[2*map.xSize() - x - 1]= mapDecalee.getPoint(x, 0);
+			fin[2*map.xSize() - x - 1]= mapDecalee.getPoint(x, map.ySize()-1);
 		}
 		
 		facs.addAll(SolideMaker.splitFacette(debut));
@@ -411,7 +414,7 @@ public abstract class SolideMaker {
 	public static Solide getPatch(int nb) throws InvalidGeomAction {
 		Patch patch = new Patch();
 		MapDeVecteurs map = patch.getMap(nb);
-		Solide pol = SolideMaker.fromMap(map, nb);
+		Solide pol = SolideMaker.fromMap(map);
 		return pol;
 	}
 

@@ -24,6 +24,8 @@ public class Context implements Serializable {
 	public String lastCataFile;
 	public TreePath lastTreePath;
 	public Decimal echelle;
+
+	public String filePath;
 	
 	public Context() {
 		

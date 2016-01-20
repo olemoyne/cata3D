@@ -19,12 +19,15 @@ import javax.swing.tree.MutableTreeNode;
 import model.Cata;
 import model.composants.Composant;
 import model.math.Decimal;
+import model.math.InvalidGeomAction;
 import view.scene.PrintableScene;
 import appli.arbre.ArbreDesign;
 import appli.arbre.DialogComponant;
+import appli.arbre.DialogFileName;
 import appli.arbre.nodes.CataTreeNode;
 import appli.arbre.nodes.ComposantTreeNode;
 import appli.arbre.nodes.DesignTreeNode;
+import appli.arbre.nodes.PatchTreeNode;
 import appli.values.CataValuesException;
 import appli.values.TableValues;
 
@@ -43,12 +46,16 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 	private ActiveView vue; 
 	
 	private Logger log;
+	
+	private String filePath;
 
 	public Controleur (JPanel fond, Logger lg) {
 		log = lg;
 
 		log.writeLog("Reading the application context ");
 		Context ctx = Context.readFromfile();
+		if (ctx.filePath != null) this.filePath = ctx.filePath;
+		else this.filePath = "C:/";
 
         JPanel bas = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		  // Message d'erreur
@@ -192,6 +199,26 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 				}
 			}
 		}
+		/** Génération du composant sous la forme d'un fichier **/
+		if ("Fichier STL".equals(e.getActionCommand())) {
+			MutableTreeNode node = arbre.getTheNode();
+			if (node != null) {
+				PatchTreeNode nde = (PatchTreeNode) node;
+				/** définition du nom de fichier à produire **/
+				JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this.arbre);
+				DialogFileName dial = new DialogFileName (topFrame, this.filePath, "Fichier d'export STL du composant"); 
+				// Si OK : génération du fichier
+				if (dial.isOk) {
+					this.filePath = dial.path;
+					try {
+						nde.generateSTLFile (dial.filename);
+					} catch (InvalidGeomAction e1) {
+						e1.printStackTrace();
+						this.message.logError("Bp de sérialisation : "+e1.getLocalizedMessage());
+					}
+				}
+			}
+		}
 	}
 
 	public void saveContext() {
@@ -199,6 +226,7 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 		ctx.lastCataFile = mngr.getFile();
 		ctx.lastTreePath = arbre.getPath();
 		ctx.echelle = this.vue.getEchelle();
+		ctx.filePath = this.filePath;
 		System.out.println("Actual path = "+ctx.lastTreePath);
 		Context.saveTofile(ctx);
 	}
