@@ -1,5 +1,7 @@
 package appli.arbre;
 
+import java.awt.Point;
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
@@ -18,7 +20,8 @@ public class DialogFileName extends JFileChooser {
 	 */
 	public DialogFileName(JFrame frm, String path, String desc) {
 		super(path);
-		this.setLocation(frm.getMousePosition());
+		Point pt = frm.getMousePosition();
+		if (pt != null) this.setLocation(pt);
 		this.setDialogTitle(desc);
 		isOk = false;
 		

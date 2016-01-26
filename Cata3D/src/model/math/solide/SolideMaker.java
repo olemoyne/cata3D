@@ -2,6 +2,7 @@ package model.math.solide;
 
 import java.util.ArrayList;
 
+import model.math.Axis;
 import model.math.Decimal;
 import model.math.Droite3D;
 import model.math.InvalidGeomAction;
@@ -250,57 +251,39 @@ public abstract class SolideMaker {
 		return new Solide(facs);
 	}
 
-
-	private static ArrayList<Triangle> getSurface(MapDeVecteurs map, boolean ordre) throws InvalidGeomAction {
-		ArrayList<Triangle> facs = new ArrayList<Triangle>(); 
-
+	private static void getSurface(MapDeVecteurs map, ArrayList<Triangle> facs , boolean ordre) throws InvalidGeomAction {
 		Vecteur[] pts = new Vecteur[3];
 		// Calcul des Triangles
-		for (int x = 0; x < map.xSize()-1; x++) {
-			for (int y = 0; y < map.ySize()-1; y++) {
-				if (ordre) {
-					pts[0]= map.getPoint(x, y);
-					pts[1]= map.getPoint(x, y+1);
-					pts[2]= map.getPoint(x+1, y+1);
-					try {
-						Triangle fac = Triangle.getTriangle(pts);
-						facs.add(fac);
-					} catch (InvalidGeomAction e) {
-						System.err.println(e.getLocalizedMessage());
-					}
-					 
-					pts[0]= map.getPoint(x+1, y+1);
-					pts[1]= map.getPoint(x+1, y);
-					pts[2]= map.getPoint(x, y);
-					try {
-						Triangle fac = Triangle.getTriangle(pts);
-						facs.add(fac);
-					} catch (InvalidGeomAction e) {
-						System.err.println(e.getLocalizedMessage());
-					}
-				} else {
-					pts[0]= map.getPoint(x, y);
-					pts[1]= map.getPoint(x+1, y);
-					pts[2]= map.getPoint(x+1, y+1);
-					try {
-						Triangle fac = Triangle.getTriangle(pts);
-						facs.add(fac);
-					} catch (InvalidGeomAction e) {
-						System.err.println(e.getLocalizedMessage());
-					}
-					pts[0]= map.getPoint(x+1, y+1);
-					pts[1]= map.getPoint(x, y+1);					
-					pts[2]= map.getPoint(x, y);
-					try {
-						Triangle fac = Triangle.getTriangle(pts);
-						facs.add(fac);
-					} catch (InvalidGeomAction e) {
-						System.err.println(e.getLocalizedMessage());
+		try {
+			for (int x = 0; x < map.xSize()-1; x++) {
+				for (int y = 0; y < map.ySize()-1; y++) {
+					if (ordre) {
+						pts[0]= map.getPoint(x, y);
+						pts[1]= map.getPoint(x, y+1);
+						pts[2]= map.getPoint(x+1, y+1);
+						facs.add(Triangle.getTriangle(pts));
+						 
+						pts[0]= map.getPoint(x+1, y+1);
+						pts[1]= map.getPoint(x+1, y);
+						pts[2]= map.getPoint(x, y);
+						facs.add(Triangle.getTriangle(pts));
+					} else {
+						pts[0]= map.getPoint(x, y);
+						pts[1]= map.getPoint(x+1, y);
+						pts[2]= map.getPoint(x+1, y+1);
+						facs.add(Triangle.getTriangle(pts));
+
+						pts[0]= map.getPoint(x+1, y+1);
+						pts[1]= map.getPoint(x, y+1);					
+						pts[2]= map.getPoint(x, y);
+						facs.add(Triangle.getTriangle(pts));
 					}
 				}
 			}
+		} catch (InvalidGeomAction e) {
+			System.err.println(e.getLocalizedMessage());
 		}
-		return facs;
+		return;
 	}
 	
 	/**
@@ -312,39 +295,63 @@ public abstract class SolideMaker {
 	 * @throws InvalidGeomAction 
 	 */
 	public static Solide fromMap(MapDeVecteurs map) throws InvalidGeomAction {
-		
-		
-		
+	
 		ArrayList<Triangle> facs = new ArrayList<Triangle>();
-		facs.addAll(getSurface(map, true));
-
-		// Ajoute les points de liaison
-		Vecteur[] pts = new Vecteur[3];
-		pts[0]= map.getPoint(0,0);
-		pts[1]= map.getPoint(0,map.ySize()-1);
-		pts[2]= map.getPoint(map.xSize()-1, map.ySize()-1);
-		Triangle fac = Triangle.getTriangle(pts);
-		facs.add(fac);
-		pts[0]= map.getPoint(map.xSize()-1, map.ySize()-1);	
-		pts[1]= map.getPoint(map.xSize()-1, 0);
-		pts[2]= map.getPoint(0, 0);
-		fac = Triangle.getTriangle(pts);
-		facs.add(fac);
-
-		// Creation des deux Triangles de fin de tube (x = 0 et x = nbPoints)
-		Vecteur[] debut= new Vecteur[map.ySize()];
-		Vecteur[] fin= new Vecteur[map.ySize()];
-		for (int x = 0; x < map.xSize(); x++) {
-			debut[x]= map.getPoint(map.xSize() - x - 1, 0);
-			fin[x]= map.getPoint(x, map.ySize()-1);
-		}
-		facs.addAll(SolideMaker.splitFacette(debut));
-		facs.addAll(SolideMaker.splitFacette(fin));
+		getSurface(map, facs, true);
 		
+		getProjection (map, facs, 0, -1, Axis.XAxis);
+		getProjection (map, facs, -1, 0, Axis.XAxis);
+		getProjection (map, facs, -1, map.ySize()-1, Axis.XAxis);
+
 		return new Solide(facs);
 	}
 
 	
+
+
+	/**
+	 * Creation de triangles entre des points d'une ligne ou colonne et de leur projection 
+	 * 
+	 * @param map
+	 * @param facs
+	 * @param i
+	 * @param j
+	 * @param xaxis
+	 */
+	private static void getProjection(MapDeVecteurs map,
+			ArrayList<Triangle> facs, int i, int j, int axis) {
+		Vecteur[] pts = new Vecteur[3];
+		try {
+			if (i != -1) { // X est constant
+				for (int y = 1; y < map.ySize(); y++) { // Y flottant
+					pts[0] = map.getPoint(i, y-1);
+					pts[1] = map.getPoint(i, y);
+					pts[2] = map.getPoint(i, y-1).set(axis, 0);
+					facs.add(Triangle.getTriangle(pts));
+					pts[1] = map.getPoint(i, y);
+					pts[2] = map.getPoint(i, y-1).set(axis, 0);
+					pts[0] = map.getPoint(i, y).set(axis, 0);
+					facs.add(Triangle.getTriangle(pts));
+				}
+			}
+			if (j != -1) { // Y est constant
+				for (int x = 1; x < map.xSize(); x++) { // X flottant
+					pts[0] = map.getPoint(x-1, j);
+					pts[1] = map.getPoint(x, j);
+					pts[2] = map.getPoint(x-1, j).set(axis, 0);
+					facs.add(Triangle.getTriangle(pts));
+					pts[1] = map.getPoint(x, j);
+					pts[2] = map.getPoint(x-1, j).set(axis, 0);
+					pts[0] = map.getPoint(x, j).set(axis, 0);
+					facs.add(Triangle.getTriangle(pts));
+				}
+			}
+		} catch (InvalidGeomAction e) {
+			System.err.println(e.getLocalizedMessage());
+		}		
+	}
+
+
 	/**
 	 * Creation d'un Solide de type skin à partir d'un maillage de points
 	 * 
@@ -358,7 +365,7 @@ public abstract class SolideMaker {
 	 */
 	public static Solide fromMap(MapDeVecteurs map, Decimal epaisseur) throws InvalidGeomAction {
 		ArrayList<Triangle> facs = new ArrayList<Triangle>(); 
-		facs.addAll(getSurface(map, true));
+		getSurface(map, facs, true);
 
 		// Creation des Triangles décalées
 		MapDeVecteurs mapDecalee = new MapDeVecteurs(map.xSize(), map.ySize());
@@ -374,7 +381,7 @@ public abstract class SolideMaker {
 				else mapDecalee.setPoint(x, y, d);
 			}
 		}
-		facs.addAll(getSurface(mapDecalee, false));
+		getSurface(mapDecalee, facs, false);
 
 		// Creation des Triangles de fin et début de tube (x = 0 et x = nbPoints)
 		Vecteur[] debut= new Vecteur[map.ySize()*2];

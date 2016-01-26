@@ -9,7 +9,6 @@ import model.math.Vecteur;
 
 import com.jogamp.opengl.GL2;
 /**
- * TODO : nettoyage de la coque
  *  
  * @author lemoyne
  *
