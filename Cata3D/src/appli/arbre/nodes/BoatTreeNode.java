@@ -53,7 +53,7 @@ public class BoatTreeNode extends DesignTreeNode {
 		
 		// Affiche chaque composant
 		for (Composant cmp : this.bateau.composants) {
-			for (PrintableObject obj : cmp.getSceneObjects()) {
+			for (PrintableObject obj : cmp.getSceneObjects(cmp.position.getTransformation(null))) {
 				ret.add(obj);
 			}
 		}
@@ -64,6 +64,10 @@ public class BoatTreeNode extends DesignTreeNode {
 	public String[] getActionList() {
 		String[] strs =  {"Ajoute composant", "Supprime composant"};
 		return strs;
+	}
+
+	public int getNodeLevel() {
+		return LEVEL_CATA_DESIGN;
 	}
 
 }

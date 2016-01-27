@@ -1,5 +1,7 @@
 package model.math.transfo;
 
+import java.io.Serializable;
+
 import model.math.Vecteur;
 
 /**
@@ -8,8 +10,12 @@ import model.math.Vecteur;
  * @author olemoyne
  *
  */
-public class Translation extends Transformation {
+public class Translation extends Transformation implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 890800828121902482L;
 	public Vecteur trans;
 	
 	/**

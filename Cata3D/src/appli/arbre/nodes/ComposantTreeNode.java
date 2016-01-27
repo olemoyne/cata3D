@@ -29,7 +29,7 @@ public class ComposantTreeNode extends DesignTreeNode {
 		ArrayList<TreeNodeProperty> ret = new ArrayList<TreeNodeProperty>();
 		ret.add(new TreeNodeProperty ("Nom", composant.nom, true, ObjectUpdater.STRING) );
 		ret.add(new TreeNodeProperty ("Description", composant.description, true, ObjectUpdater.STRING) );
-		ret.add(new TreeNodeProperty ("Position", composant.position, true, ObjectUpdater.VECTEUR) );
+		ret.add(new TreeNodeProperty ("Position", composant.position.position, true, ObjectUpdater.VECTEUR) );
 		ret.add(new TreeNodeProperty ("Poids total", composant.gravite, false, ObjectUpdater.POIDS) );
 		return ret;
 	}
@@ -38,12 +38,16 @@ public class ComposantTreeNode extends DesignTreeNode {
 	public void updateValue (String fld, Object value) {
 		if (fld.equals("Nom")) composant.nom = (String)value;
 		if (fld.equals("Description")) composant.description = (String)value;
-		if (fld.equals("Position")) composant.position= (Vecteur)value;
+		if (fld.equals("Position")) composant.position.position= (Vecteur)value;
 	}
 	
 	public String[] getActionList() {
 		String[] strs =  {"Ajoute composant", "Supprime composant"};
 		return strs;
+	}
+
+	public int getNodeLevel() {
+		return LEVEL_COMPOSANT;
 	}
 
 }

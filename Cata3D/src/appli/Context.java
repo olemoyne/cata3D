@@ -9,8 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import javax.swing.tree.TreePath;
-
 import model.math.Decimal;
 
 
@@ -22,7 +20,6 @@ public class Context implements Serializable {
 	private static final long serialVersionUID = 6098160960455857365L;
 	
 	public String lastCataFile;
-	public TreePath lastTreePath;
 	public Decimal echelle;
 
 	public String filePath;
@@ -53,7 +50,7 @@ public class Context implements Serializable {
 
 	public static Context readFromfile () {
 		File fle = new File ("./context.data");
-		if (!fle.exists()) return null;
+		if (!fle.exists()) return new Context();
 			
 		try {
 			FileInputStream fis = new FileInputStream(fle);
@@ -64,12 +61,16 @@ public class Context implements Serializable {
 		    
 		    return ctx;
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 			return null;
 		} catch (IOException e) {
+			e.printStackTrace();
 			return null;
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 			return null;
 		} catch (ClassCastException e) {
+			e.printStackTrace();
 			return null;
 		}		
 	}

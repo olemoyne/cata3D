@@ -87,11 +87,9 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 		if ((ctx != null)&&(ctx.lastCataFile != null)) {
 			mngr.setFile (ctx.lastCataFile);
 			try {
-				dessin = mngr.getCataFromFile();
+				dessin = mngr.getCataFromFile(ctx.lastCataFile);
 				arbre.setBoatTree(dessin);
 				
-				if (ctx.lastTreePath != null)
-					arbre.gotToPath(ctx.lastTreePath);
 			} catch (CataAppliException e) {
 				log.writeLog("Last boat file not found "+ctx.lastCataFile);
 			} 
@@ -146,11 +144,19 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 	public void actionPerformed(ActionEvent e) {
 		if ("Ouvre".equals(e.getActionCommand())) {
 			try {
-				// Ouvre un nouveau fichier
-				this.dessin = mngr.getCataFromFile();
-				this.arbre.setBoatTree(dessin);
-				// Affiche le catamaran
-				showNodeDetails();
+				/** définition du nom de fichier à produire **/
+				JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this.arbre);
+				DialogFileName dial = new DialogFileName (topFrame, this.mngr.getFile(), "Ouvre un fichier de modélisation"); 
+				// Si OK : génération du fichier
+				if (dial.isOk) {
+					this.filePath = dial.path;
+					
+					// Ouvre un nouveau fichier
+					this.dessin = mngr.getCataFromFile(dial.filename);
+					this.arbre.setBoatTree(dessin);
+					// Affiche le catamaran
+					showNodeDetails();
+				}
 			} catch (CataAppliException e1) {
 				e1.printStackTrace();
 				this.message.logError(e1.getLocalizedMessage());
@@ -191,7 +197,7 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 			MutableTreeNode node = arbre.getTheNode();
 			if (node != null) {
 				DesignTreeNode nde = (DesignTreeNode) node;
-				if (nde.getLevel() == DesignTreeNode.LEVEL_COMPOSANT) {
+				if (nde.getNodeLevel() == DesignTreeNode.LEVEL_COMPOSANT) {
 					ComposantTreeNode cnd = (ComposantTreeNode) node;
 					this.dessin.composants.remove(cnd.getComposant());
 					arbre.removeNode(nde);
@@ -224,10 +230,8 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 	public void saveContext() {
 		Context ctx = new Context();
 		ctx.lastCataFile = mngr.getFile();
-		ctx.lastTreePath = arbre.getPath();
 		ctx.echelle = this.vue.getEchelle();
 		ctx.filePath = this.filePath;
-		System.out.println("Actual path = "+ctx.lastTreePath);
 		Context.saveTofile(ctx);
 	}
 

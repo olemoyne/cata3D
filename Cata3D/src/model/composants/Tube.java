@@ -49,7 +49,8 @@ public class Tube extends Composant {
     public void recalcule () {
     	mapAffichage = createMap();
 		Decimal pds = new Decimal(Math.PI).multiply(diametre.square().minus(diametre.minus(Decimal.DEUX.multiply(epaisseur)).square())).multiply(densite);
-		Vecteur ctr = this.position.add(direction.multiply(longueur.divide(Decimal.DEUX).divide(direction.getNorme())));
+		// TODO : Revoir la position du poids
+		Vecteur ctr = this.position.position.add(direction.multiply(longueur.divide(Decimal.DEUX).divide(direction.getNorme())));
 		this.gravite = new Poids ("Centre de gravité", ctr, pds);
 		super.recalcule();
     }

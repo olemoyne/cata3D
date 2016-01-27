@@ -7,7 +7,7 @@ import view.scene.PrintableObject;
 import model.Cata;
 import model.Poids;
 import model.math.MapDeVecteurs;
-import model.math.Vecteur;
+import model.math.transfo.Transformation;
 
 
 /**
@@ -44,8 +44,8 @@ public class Composant implements Serializable{
 	public ArrayList<Poids> poids;
 
 	/** Position dans le bateau **/
-	public Vecteur position;
-
+	public Position position;
+	
 	/** Centre de gravité du composant **/
 	public Poids gravite;
 	
@@ -60,7 +60,7 @@ public class Composant implements Serializable{
 		boat = bato;
 		description = "Description";
 		poids = new ArrayList<Poids> ();
-		position = new Vecteur();
+		position = new Position();
 	}
 	
 	public Composant () {
@@ -68,7 +68,7 @@ public class Composant implements Serializable{
 		boat = null;
 		description = "Description";
 		poids = new ArrayList<Poids> ();
-		position = new Vecteur();
+		position = new Position();
 	}
 	
 	
@@ -96,7 +96,8 @@ public class Composant implements Serializable{
 		return -1;
 	}
 
-	public ArrayList<PrintableObject> getSceneObjects() {
+	public ArrayList<PrintableObject> getSceneObjects(Transformation trans) {
 		return new ArrayList<PrintableObject>();
 	}
+	
 }

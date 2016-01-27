@@ -1,5 +1,7 @@
 package model.math.transfo;
 
+import java.io.Serializable;
+
 import model.math.Axis;
 import model.math.Vecteur;
 
@@ -9,8 +11,12 @@ import model.math.Vecteur;
  * @author olemoyne
  *
  */
-public class Reflexion extends Transformation {
+public class Reflexion extends Transformation implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 416690175014402643L;
 	/**
 	 * Axe de rotation
 	 */

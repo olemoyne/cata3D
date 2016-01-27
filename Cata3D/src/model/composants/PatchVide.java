@@ -57,6 +57,8 @@ public class PatchVide extends PatchComposant {
      */
     public void recalcule () {
      	super.recalcule();
+     	if (epaisseurDeBardage == null) epaisseurDeBardage = new Decimal(0.001d);
+     	if (densiteBardage == null) densiteBardage = new Decimal(0.6d);
 		Poids pdsCoque = CalculCoque.calculePoidsCoque(mapAffichage, epaisseurDeBardage.multiply(densiteBardage));
 		ArrayList<Poids> lst = new ArrayList<Poids>();
 		lst.add(pdsCoque); // Ajoute le poids du bardage

@@ -7,8 +7,9 @@ import view.scene.PrintableObject;
 import view.scene.PrintedForce;
 import view.scene.PrintedMap;
 import model.Cata;
+import model.Poids;
 import model.calcul.CalculCoque;
-import model.math.transfo.Translation;
+import model.math.transfo.Transformation;
 import model.patch.Patch;
 
 public class PatchComposant extends Composant {
@@ -63,14 +64,13 @@ public class PatchComposant extends Composant {
 		super.recalcule();
     }
 
-	public ArrayList<PrintableObject> getSceneObjects() {
+	public ArrayList<PrintableObject> getSceneObjects(Transformation trans) {
 		ArrayList<PrintableObject> ret = new ArrayList<PrintableObject>();
 
-		Translation trsl = new Translation(position, null); 
-		
 		//** D�caler le desssin **/
-		ret.add(new PrintedMap (mapAffichage.transforme(trsl), "Coque", false, Color.darkGray));
-		ret.add(new PrintedForce(gravite.transforme(trsl), Color.RED));
+		ret.add(new PrintedMap (mapAffichage.transforme(trans), "Coque", false, Color.darkGray));
+		Poids pds = new Poids (gravite.nom, trans.transforme(gravite.position), gravite.force);
+		ret.add(new PrintedForce(pds, Color.RED));
 
 		return ret; 
 	}

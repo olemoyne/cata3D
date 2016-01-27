@@ -1,5 +1,7 @@
 package model.math.transfo;
 
+import java.io.Serializable;
+
 import model.math.Vecteur;
 
 
@@ -9,8 +11,12 @@ import model.math.Vecteur;
  * @author olemoyne
  *
  */
-public abstract class Transformation {
+public abstract class Transformation implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6429020222059152387L;
 	/**
 	 * Cas d'une transformation imbriquée
 	 */

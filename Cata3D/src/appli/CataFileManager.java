@@ -81,8 +81,8 @@ public class CataFileManager extends JPanel {
 	 * 
 	 * @return
 	 */
-	public Cata getCataFromFile () throws CataAppliException{
-		String str = this.editeur.getText();
+	public Cata getCataFromFile (String str) throws CataAppliException{
+//		String str = this.editeur.getText();
 		if (str == null) throw new CataAppliException("Empty file name");
 		
 		File fle = new File (str);
@@ -96,6 +96,7 @@ public class CataFileManager extends JPanel {
 		    bato.recalculeAll();
 		    ois.close();
 		    
+		    this.editeur.setText(str);
 		    return bato;
 		} catch (FileNotFoundException e) {
 			throw new CataAppliException(e);

@@ -47,6 +47,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 
 	
 	public Decimal() {
+		val = "0";
 	}
 
 	/**

@@ -100,5 +100,9 @@ public class PatchPropertyTreeNode extends DesignTreeNode{
 		return ret;
 	}
 	
+	public int getNodeLevel() {
+		return LEVEL_COMPOSANT_DESIGN;
+	}
+
 
 }

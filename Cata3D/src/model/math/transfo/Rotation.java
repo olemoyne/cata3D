@@ -2,6 +2,7 @@ package model.math.transfo;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 
 import model.math.Axis;
 import model.math.Decimal;
@@ -13,8 +14,13 @@ import model.math.Vecteur;
  * @author olemoyne
  *
  */
-public class Rotation extends Transformation {
+public class Rotation extends Transformation implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8274275565953910235L;
+
 	/**
 	 * Axe de rotation
 	 */

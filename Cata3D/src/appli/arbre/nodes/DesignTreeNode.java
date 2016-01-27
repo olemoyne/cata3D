@@ -68,4 +68,8 @@ public class DesignTreeNode extends DefaultMutableTreeNode {
 		return null;
 	}
 
+	
+	public int getNodeLevel() {
+		return LEVEL_CATA;
+	}
 }

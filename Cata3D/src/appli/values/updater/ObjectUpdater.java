@@ -23,6 +23,7 @@ public class ObjectUpdater extends JPanel {
 	public static final String INTEGER = "Integer";
 	public static final String GABARIT = "Gabarit";
 	public static final String POUTRE = "Poutre";
+	public static final String OPTION = "Option";
 
 	public ObjectUpdater () {
 		super();
@@ -34,6 +35,11 @@ public class ObjectUpdater extends JPanel {
 	
 	public Object getData() {
 		return null;
+	}
+
+	public void setOptions(Object[] opts) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

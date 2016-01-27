@@ -113,8 +113,10 @@ public class ArbreDesign extends JPanel {
 
 	public void removeNode (DesignTreeNode fils) {
 		DesignTreeNode up = (DesignTreeNode)fils.getParent();
+//		up.remove(fils);
 		this.treeModel.removeNodeFromParent(fils);
 		arbre.scrollPathToVisible(new TreePath(up.getPath()));
+		treeModel.nodeChanged(up);
 	}
 
 	
@@ -142,6 +144,11 @@ public class ArbreDesign extends JPanel {
 
 	public DesignTreeNode getDesignNode() {
 		return CataTreeNode.getDesignNode(top);
+	}
+
+	public void refresh(Cata dessin) {
+		this.treeModel.reload();
+		
 	}
 	
 }

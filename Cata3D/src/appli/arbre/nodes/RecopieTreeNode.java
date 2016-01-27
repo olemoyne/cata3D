@@ -8,9 +8,7 @@ import model.composants.Composant;
 import model.composants.Recopie;
 import model.math.Axis;
 import model.math.Decimal;
-import model.math.Vecteur;
 import model.math.transfo.Rotation;
-import model.math.transfo.Translation;
 
 public class RecopieTreeNode extends ComposantTreeNode {
 
@@ -31,16 +29,38 @@ public class RecopieTreeNode extends ComposantTreeNode {
 		Recopie pc = (Recopie)composant;
 		
 		ArrayList<TreeNodeProperty> ret = super.getProperties();
-		ret.add(new TreeNodeProperty ("Source de recopie", pc.autre, true, ObjectUpdater.STRING) );
-		ret.add(new TreeNodeProperty ("Position", pc.decalage.trans, true, ObjectUpdater.VECTEUR) );
+		String[] str = new String[pc.boat.composants.size()];
+		for (int p= 0; p < pc.boat.composants.size(); p++) {
+			str[p] = pc.boat.composants.get(p).nom;
+		}
 		
-		String axe = "Axe X";
-		if (pc.pivot.axis == Axis.YAxis) axe = "Axe Y";
-		if (pc.pivot.axis == Axis.ZAxis) axe = "Axe Z";
-		ret.add(new TreeNodeProperty ("Axe de rotation", axe, true, ObjectUpdater.VECTEUR) );
-				
-		ret.add(new TreeNodeProperty ("Angle de rotation", pc.pivot.angle, true, ObjectUpdater.DECIMAL) );
+		if (pc.autre == null) {
+			TreeNodeProperty prp = new TreeNodeProperty ("Source de recopie", "Non défini", true, ObjectUpdater.OPTION);
+			prp.setOptions(str);
+			ret.add(prp);
+		} else {
+			TreeNodeProperty prp = new TreeNodeProperty ("Source de recopie", pc.autre.nom, true, ObjectUpdater.OPTION);
+			prp.setOptions(str);
+			ret.add(prp);
+		}
+		String[] axes = {"Axes X", "Axes Y", "Axes Z"};
+		if (pc.pivot != null) {
+			String axe = "Axe X";
+			if (pc.pivot.axis == Axis.YAxis) axe = "Axe Y";
+			if (pc.pivot.axis == Axis.ZAxis) axe = "Axe Z";
+			TreeNodeProperty prp = new TreeNodeProperty ("Axe de rotation", axe, true, ObjectUpdater.OPTION) ;
+			prp.setOptions(axes);
+			ret.add(prp);
 					
+			ret.add(new TreeNodeProperty ("Angle de rotation", pc.pivot.angle, true, ObjectUpdater.DECIMAL) );
+		} else {
+			TreeNodeProperty prp = new TreeNodeProperty ("Axe de rotation", "Axe Z", true, ObjectUpdater.OPTION) ;
+			prp.setOptions(axes);
+			ret.add(prp);
+			
+			ret.add(new TreeNodeProperty ("Angle de rotation", new Decimal (), true, ObjectUpdater.DECIMAL) );
+			
+		}
 		return ret;
 	}
 
@@ -53,12 +73,7 @@ public class RecopieTreeNode extends ComposantTreeNode {
 		if (fld.equals("Source de recopie")) {
 			String a = (String)value;
 			// Recherche le composant
-			for (Composant c : pv.source.composants) if (c.nom.equals(a)) pv.autre = c;
-		}
-
-		// set la position de de la recopie
-		if (fld.equals("Position")) {			
-			pv.decalage = new Translation((Vecteur)value, null);
+			for (Composant c : pv.boat.composants) if (c.nom.equals(a)) pv.autre = c;
 		}
 
 		if (fld.equals("Axe de rotation")) {
@@ -67,8 +82,11 @@ public class RecopieTreeNode extends ComposantTreeNode {
 			if (v.equals("Axe X")) axe = Axis.XAxis;
 			if (v.equals("Axe Y")) axe = Axis.YAxis;
 			if (v.equals("Axe Z")) axe = Axis.ZAxis;
-				
-			pv.pivot  = new Rotation(axe, pv.pivot.angle, null); 
+			
+			if (pv.pivot != null)
+				pv.pivot  = new Rotation(axe, pv.pivot.angle, null);
+			else 
+				pv.pivot  = new Rotation(axe, Decimal.ZERO, null);
 		}
 
 		if (fld.equals("Angle de rotation")) {

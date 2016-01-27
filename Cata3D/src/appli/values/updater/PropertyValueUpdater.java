@@ -37,6 +37,9 @@ public class PropertyValueUpdater {
 
 		o = new DecimalUpdater();
 		panels.put(ObjectUpdater.DECIMAL, o);
+
+		o = new OptionUpdater();
+		panels.put(ObjectUpdater.OPTION, o);
 	}
 	
 	
@@ -47,6 +50,8 @@ public class PropertyValueUpdater {
 		if (prop == null) return false;
 		
 		ObjectUpdater pnl = this.panels.get(prop.editeurType);
+		Object[] opts = prop.getOptions();
+		if (opts != null) pnl.setOptions(opts);
 		if (pnl != null) pnl.setProperty(prop.value);
 		else return true;
 
