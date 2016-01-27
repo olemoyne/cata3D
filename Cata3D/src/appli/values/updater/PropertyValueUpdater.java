@@ -40,6 +40,9 @@ public class PropertyValueUpdater {
 
 		o = new OptionUpdater();
 		panels.put(ObjectUpdater.OPTION, o);
+
+		o = new PositionUpdater();
+		panels.put(ObjectUpdater.POSITION, o);
 	}
 	
 	

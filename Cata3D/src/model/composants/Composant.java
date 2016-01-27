@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import view.scene.PrintableObject;
 import model.Cata;
 import model.Poids;
+import model.Position;
 import model.math.MapDeVecteurs;
 import model.math.transfo.Transformation;
 

@@ -24,6 +24,7 @@ public class ObjectUpdater extends JPanel {
 	public static final String GABARIT = "Gabarit";
 	public static final String POUTRE = "Poutre";
 	public static final String OPTION = "Option";
+	public static final String POSITION = "Position";
 
 	public ObjectUpdater () {
 		super();

@@ -4,11 +4,13 @@ import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 
-import model.composants.Position;
+import model.Position;
+import model.math.Decimal;
+import model.math.Vecteur;
 
 
 /** 
- * Permet de mettre à jour un vecteur
+ * Permet de mettre ï¿½ jour un vecteur
  * 
  * @author olemoyne
  *
@@ -63,8 +65,9 @@ public class PositionUpdater extends ObjectUpdater {
 	}
 	
 	public Object getData() {
-		// Gestion de la position
-		return (String) fld.getValue();
+		Vecteur pos = new Vecteur ((Decimal)posX.getValue(), (Decimal)posY.getValue(), (Decimal)posZ.getValue());
+		Vecteur rot = new Vecteur ((Decimal)rotX.getValue(), (Decimal)rotY.getValue(), (Decimal)rotZ.getValue());
+		return new Position(pos, rot);
 	}
 	
 }

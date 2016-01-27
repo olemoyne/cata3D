@@ -66,11 +66,21 @@ public class PatchComposant extends Composant {
 
 	public ArrayList<PrintableObject> getSceneObjects(Transformation trans) {
 		ArrayList<PrintableObject> ret = new ArrayList<PrintableObject>();
-
-		//** D�caler le desssin **/
-		ret.add(new PrintedMap (mapAffichage.transforme(trans), "Coque", false, Color.darkGray));
-		Poids pds = new Poids (gravite.nom, trans.transforme(gravite.position), gravite.force);
-		ret.add(new PrintedForce(pds, Color.RED));
+		if (trans != null) {
+			//** D�caler le desssin **/
+			ret.add(new PrintedMap (mapAffichage.transforme(trans), "Coque", false, Color.darkGray));
+			if (gravite != null) {
+				Poids pds = new Poids (gravite.nom, trans.transforme(gravite.position), gravite.force);
+				ret.add(new PrintedForce(pds, Color.RED));
+			}
+		} else {
+			ret.add(new PrintedMap (mapAffichage, "Coque", false, Color.darkGray));
+			if (gravite != null) {
+				Poids pds = new Poids (gravite.nom, gravite.position, gravite.force);
+				ret.add(new PrintedForce(pds, Color.RED));
+			}
+			
+		}
 
 		return ret; 
 	}

@@ -1,4 +1,4 @@
-package model.composants;
+package model;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import model.math.transfo.Transformation;
 import model.math.transfo.Translation;
 
 /*****
- * Gestion de la position d'un composant à partir de l'origine de l'espace
+ * Gestion de la position d'un composant ï¿½ partir de l'origine de l'espace
  * 
  * @author olemoyne
  *
@@ -28,13 +28,18 @@ public class Position implements Serializable{
 
 
 	/**
-	 * Par défaut, pas de transformation 
+	 * Par dï¿½faut, pas de transformation 
 	 */
 	public Position () {
 		position = new Vecteur();
 		rotation = new Vecteur ();
 	}
 	
+	public Position(Vecteur pos, Vecteur rot) {
+		this.position = pos;
+		this.rotation = rot;
+	}
+
 	/** Retourne la transformation induite par la position du composant **/
 	public Transformation getTransformation (Transformation trans) {
 		Transformation  trs = trans;
@@ -51,4 +56,12 @@ public class Position implements Serializable{
 		return trs;
 	}
 
+	public String toString () {
+		StringBuilder sb = new StringBuilder();
+		sb.append(position.toString());
+		sb.append("-");
+		sb.append(rotation.toString());
+		return sb.toString();
+	}
+	
 }

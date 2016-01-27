@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import appli.arbre.TreeNodeProperty;
 import appli.values.updater.ObjectUpdater;
+import model.Position;
 import model.composants.Composant;
-import model.math.Vecteur;
 
 public class ComposantTreeNode extends DesignTreeNode {
 
@@ -29,7 +29,7 @@ public class ComposantTreeNode extends DesignTreeNode {
 		ArrayList<TreeNodeProperty> ret = new ArrayList<TreeNodeProperty>();
 		ret.add(new TreeNodeProperty ("Nom", composant.nom, true, ObjectUpdater.STRING) );
 		ret.add(new TreeNodeProperty ("Description", composant.description, true, ObjectUpdater.STRING) );
-		ret.add(new TreeNodeProperty ("Position", composant.position.position, true, ObjectUpdater.VECTEUR) );
+		ret.add(new TreeNodeProperty ("Position", composant.position, true, ObjectUpdater.POSITION) );
 		ret.add(new TreeNodeProperty ("Poids total", composant.gravite, false, ObjectUpdater.POIDS) );
 		return ret;
 	}
@@ -38,7 +38,7 @@ public class ComposantTreeNode extends DesignTreeNode {
 	public void updateValue (String fld, Object value) {
 		if (fld.equals("Nom")) composant.nom = (String)value;
 		if (fld.equals("Description")) composant.description = (String)value;
-		if (fld.equals("Position")) composant.position.position= (Vecteur)value;
+		if (fld.equals("Position")) composant.position= (Position)value;
 	}
 	
 	public String[] getActionList() {

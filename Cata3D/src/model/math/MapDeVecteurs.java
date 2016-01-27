@@ -99,6 +99,7 @@ public class MapDeVecteurs implements Serializable {
 	}
 
 	public MapDeVecteurs transforme(Transformation ref) {
+		if (ref == null) return this;
 		MapDeVecteurs ret = new MapDeVecteurs (this.xSize, this.ySize);
 		for (int pos = 0; pos < this.xSize; pos ++) {
 			for (int ypos = 0; ypos < this.ySize; ypos ++) {

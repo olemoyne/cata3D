@@ -49,19 +49,19 @@ public class Patch implements Serializable {
 	 */
 	public MapDeVecteurs getMap(int nbPoints) {
 		if (x+y == 0) return new MapDeVecteurs(0, 0);
-		// D�termine compbien de sous �l�ments sont n�cessaires
+		// Détermine combien de sous éléments sont nécessaires
 		int nbX = (y-1)/3;
 		int nbY = (x-1)/3;
 		
-		// Agr�gation totale
+		// Agrégation totale
 		MapDeVecteurs map = new MapDeVecteurs(nbY*(nbPoints), nbX*(nbPoints));
 		
 		for (int posX = 0; posX < nbX; posX++) {
 			// Parcours toutes les zones par les X
 			for (int posY = 0; posY < nbY; posY++) {
-				// R�cup�re la MAP asssoci�e
+				// Récupère la MAP asssociée
 				Vecteur[][] subMap = this.getSubMap(posY*3, posX*3, nbPoints);
-				// Ajout la MAP dans la MAP g�n�rale
+				// Ajout la MAP dans la MAP générale
 				int maxy = nbPoints;
 //				if (posY == nbY-1) maxy ++;
 				int maxx = nbPoints;
