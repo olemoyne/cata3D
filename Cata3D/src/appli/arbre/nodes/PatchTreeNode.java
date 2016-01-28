@@ -40,6 +40,7 @@ public class PatchTreeNode extends ComposantTreeNode {
 		
 		ArrayList<TreeNodeProperty> ret = super.getProperties();
 		ret.add(new TreeNodeProperty ("PrÃ©cision", p.precision, true, ObjectUpdater.INTEGER) );
+		ret.add(new TreeNodeProperty ("Symértie", p.reflexive, true, ObjectUpdater.BOOLEAN) );
 		return ret;
 	}
 	
@@ -86,7 +87,7 @@ public class PatchTreeNode extends ComposantTreeNode {
 		// Génération d'un solide
 		Solide sol = SolideMaker.fromMap(pv.mapAffichage);
 		STLFile f = new STLFile(1);
-		f.createBinaryFile(filename, sol, pv.nom, Decimal.UN);
+		f.createBinaryFile(filename, sol, pv.nom, Decimal.CENT);
 	}
 
 

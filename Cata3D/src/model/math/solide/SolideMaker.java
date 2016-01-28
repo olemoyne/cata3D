@@ -420,7 +420,7 @@ public abstract class SolideMaker {
 
 	public static Solide getPatch(int nb) throws InvalidGeomAction {
 		Patch patch = new Patch();
-		MapDeVecteurs map = patch.getMap(nb);
+		MapDeVecteurs map = patch.getMap(nb, true);
 		Solide pol = SolideMaker.fromMap(map);
 		return pol;
 	}

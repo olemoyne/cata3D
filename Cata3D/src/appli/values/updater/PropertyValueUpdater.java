@@ -43,6 +43,10 @@ public class PropertyValueUpdater {
 
 		o = new PositionUpdater();
 		panels.put(ObjectUpdater.POSITION, o);
+
+		o = new BooleanUpdater();
+		panels.put(ObjectUpdater.BOOLEAN, o);
+
 	}
 	
 	

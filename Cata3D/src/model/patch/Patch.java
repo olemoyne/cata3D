@@ -47,8 +47,9 @@ public class Patch implements Serializable {
 	 * @param precisionDAffichage
 	 * @return
 	 */
-	public MapDeVecteurs getMap(int nbPoints) {
+	public MapDeVecteurs getMap(int nbPoints, boolean sym) {
 		if (x+y == 0) return new MapDeVecteurs(0, 0);
+		if (x*y == 0)  return new MapDeVecteurs(0, 0);
 		// Détermine combien de sous éléments sont nécessaires
 		int nbX = (y-1)/3;
 		int nbY = (x-1)/3;
@@ -96,11 +97,17 @@ public class Patch implements Serializable {
 			Plan3D pl = new Plan3D(a, b, c);
 			
 			Area aire = temp.intersectionHorizontale(pl);
-			for (int x = 0; x < temp.xSize(); x++) {
-				if (x < aire.points.size())
-					ret.setPoint(x, nb, aire.points.get(x));
-				else
-					ret.setPoint(x, nb, aire.points.get(aire.points.size()-1));
+			if (aire.points.size() != 0) {
+				for (int x = 0; x < temp.xSize(); x++) {
+					if (x < aire.points.size())
+						ret.setPoint(x, nb, aire.points.get(x));
+					else
+						ret.setPoint(x, nb, aire.points.get(aire.points.size()-1));
+				}
+			} else {
+				for (int x = 0; x < temp.xSize(); x++) {
+					ret.setPoint(x, nb, new Vecteur());
+				}				
 			}
 		}
 		
@@ -235,7 +242,7 @@ public class Patch implements Serializable {
 		patch.points[3][2] = new Vecteur("0.001;-0.02;0.004");
 		patch.points[3][3] = new Vecteur("0.001;-0.04;0.004");
 
-		System.out.println(patch.getMap(10).toString());
+		System.out.println(patch.getMap(10, true).toString());
 	}
 
     public String toString() {

@@ -38,6 +38,12 @@ public class Poids implements Serializable {
 	}
 
 	
+	public Poids(Poids pds) {
+		nom = pds.nom;
+		position = new Vecteur(pds.position);
+		force = pds.force;
+	}
+
 	/** 
 	 * Version String du poids
 	 **/

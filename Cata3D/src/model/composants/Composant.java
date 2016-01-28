@@ -45,7 +45,7 @@ public class Composant implements Serializable{
 	public ArrayList<Poids> poids;
 
 	/** Position dans le bateau **/
-	public Position position;
+	public Position situation;
 	
 	/** Centre de gravité du composant **/
 	public Poids gravite;
@@ -61,7 +61,7 @@ public class Composant implements Serializable{
 		boat = bato;
 		description = "Description";
 		poids = new ArrayList<Poids> ();
-		position = new Position();
+		situation = new Position();
 	}
 	
 	public Composant () {
@@ -69,7 +69,7 @@ public class Composant implements Serializable{
 		boat = null;
 		description = "Description";
 		poids = new ArrayList<Poids> ();
-		position = new Position();
+		situation = new Position();
 	}
 	
 	

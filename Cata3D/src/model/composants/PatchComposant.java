@@ -25,11 +25,13 @@ public class PatchComposant extends Composant {
 	/** Patch permettant de stocker les données et calculer la forme **/
 	public Patch patch;	
 	public int precision;
+	public Boolean reflexive;
 	
 	public PatchComposant() {
 		super(); // Creation des données liées au patch
 		patch = new Patch();	
 		precision = 20;
+		reflexive = Boolean.TRUE;
 	}
 	
 	
@@ -37,6 +39,7 @@ public class PatchComposant extends Composant {
 		super(bato); // Creation des données liées au patch
 		patch = new Patch();	
 		precision = 20;
+		reflexive = Boolean.TRUE;
 	}
 	
 	/**
@@ -46,6 +49,8 @@ public class PatchComposant extends Composant {
 	 * @param x 
 	 */
 	public void setPatch(int x, int y) {
+		if (reflexive == null) reflexive = Boolean.TRUE;
+
 		patch.recalcule(x, y);
 		recalcule();
 	}
@@ -58,8 +63,9 @@ public class PatchComposant extends Composant {
      *     
      */
     public void recalcule () {
+		if (reflexive == null) reflexive = Boolean.TRUE;
     	if (precision <= 0) precision = 20;
-    	mapAffichage = CalculCoque.createCoque(patch, precision);
+    	mapAffichage = CalculCoque.createCoque(patch, precision, this.reflexive);
 //		this.gravite = CalculVolume.getPoussee(mapAffichage);
 		super.recalcule();
     }
