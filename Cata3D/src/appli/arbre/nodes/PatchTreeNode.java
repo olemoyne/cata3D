@@ -40,7 +40,7 @@ public class PatchTreeNode extends ComposantTreeNode {
 		
 		ArrayList<TreeNodeProperty> ret = super.getProperties();
 		ret.add(new TreeNodeProperty ("PrÃ©cision", p.precision, true, ObjectUpdater.INTEGER) );
-		ret.add(new TreeNodeProperty ("Symértie", p.reflexive, true, ObjectUpdater.BOOLEAN) );
+		ret.add(new TreeNodeProperty ("Symétrie", p.reflexive, true, ObjectUpdater.BOOLEAN) );
 		return ret;
 	}
 	
@@ -55,6 +55,11 @@ public class PatchTreeNode extends ComposantTreeNode {
 		if (fld.equals("PrÃ©cision")) {
 			Decimal dec = (Decimal)value;
 			pv.precision = (int)Math.round(dec.doubleValue());
+		}
+		// Gestion de la symétrie
+		if (fld.equals("Symétrie")) {
+			Boolean dec = (Boolean)value;
+			pv.reflexive = dec; 
 		}
 	}
 

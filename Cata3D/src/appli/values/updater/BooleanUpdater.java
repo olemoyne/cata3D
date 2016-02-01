@@ -26,12 +26,12 @@ public class BooleanUpdater extends ObjectUpdater {
 	}
 	
 	public void setProperty (Object val) {
-		String v = (String)val;
+		Boolean v = (Boolean)val;
 		fld.setField(v);
 	}
 	
 	public Object getData() {
-		return (String) fld.getValue();
+		return (Boolean) fld.getValue();
 	}
 	
 }

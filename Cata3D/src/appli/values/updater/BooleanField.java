@@ -29,13 +29,13 @@ public class BooleanField extends JPanel {
 
 	}
 
-	public Object getValue() {
+	public Boolean getValue() {
 		String init = (String)val.getSelectedItem();
 		if (init.equals("OUI")) return Boolean.TRUE;
 		return Boolean.FALSE;
 	}
 
-	public void setField (Object value) {
+	public void setField (Boolean value) {
 		val.setSelectedItem("OUI");
 		if ((value != null)&&(!value.equals(Boolean.TRUE)))
 			val.setSelectedItem("OUI");

@@ -32,13 +32,15 @@ public class CalculCoque {
 	public static MapDeVecteurs createCoque(Patch patch, int precision, boolean sym) {
 		// Récupère la demiCoque
 		MapDeVecteurs map = patch.getMap(precision, sym);
+		if (!sym) {
+			return map;
+		}
 		// Duplique la coque en créant un mirroir
 		Reflexion ref = new Reflexion (Axis.XAxis, null);		
 		MapDeVecteurs half = map.transforme(ref);
 		
 		MapDeVecteurs coque = map.addMap(half); 
-		
-		return coque;
+		return coque;		
 	}
 
 
