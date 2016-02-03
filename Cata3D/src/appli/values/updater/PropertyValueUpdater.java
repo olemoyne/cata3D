@@ -47,6 +47,9 @@ public class PropertyValueUpdater {
 		o = new BooleanUpdater();
 		panels.put(ObjectUpdater.BOOLEAN, o);
 
+		o = new ApparenceUpdater();
+		panels.put(ObjectUpdater.APPARENCE, o);
+
 	}
 	
 	

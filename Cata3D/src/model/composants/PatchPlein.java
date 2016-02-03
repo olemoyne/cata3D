@@ -1,6 +1,9 @@
 package model.composants;
 
+import java.util.ArrayList;
+
 import model.Cata;
+import model.Poids;
 import model.calcul.CalculVolume;
 import model.math.Decimal;
 
@@ -46,9 +49,14 @@ public class PatchPlein extends PatchComposant {
     public void recalcule () {
      	super.recalcule();
      	if (mapAffichage != null) {
-			this.gravite = CalculVolume.getPoussee(mapAffichage);
 			if (densite == null) densite = new Decimal(1f);
-			this.gravite.force = this.gravite.force.multiply(densite); 
+
+			Poids pdsCoque = CalculVolume.getVolumeSymetrique(mapAffichage, "Poids", densite.multiply(Decimal.MILLE));
+//			pdsCoque = new Poids(pdsCoque.nom, pdsCoque.position, pdsCoque.force.multiply(densite));
+    		ArrayList<Poids> lst = new ArrayList<Poids>();
+    		lst.add(pdsCoque); // Ajoute le poids du bardage
+    		lst.addAll(this.poids); // Ajoute les poids d�finis
+    		this.gravite= CalculVolume.getCentreGravite("Poids total", lst);
      	}
    }
 

@@ -111,8 +111,8 @@ public class CalculVolume {
 			for (int x = 0; x < map.xSize(); x ++) 
 				lst.add(map.getPoint(x, y));
 				// Centre sde poussée
-			centresSurf.add(CalculSurface.getCentreSurface (lst, Axis.YAxis));
-			surfaces.add(CalculSurface.getSurface(lst, Axis.YAxis));
+			centresSurf.add(CalculSurface.getCentreSurface (lst, Axis.ZAxis));
+			surfaces.add(CalculSurface.getSurface(lst, Axis.ZAxis));
 		}
 
 		// Calcule le volume et le centre de poussée de chaque bloc
@@ -136,6 +136,38 @@ public class CalculVolume {
 	}
 
 	
+	/** 
+	 * Calcule le volume induit par une forme symétrique
+	 *  
+	 * @param v
+	 * @return
+	 */
+	public static Poids getVolumeSymetrique (MapDeVecteurs v, String nom, Decimal densite) {
+		ArrayList<Poids> liste= new ArrayList<Poids>();
+
+		for (int x = 1; x < v.xSize(); x ++) {
+			for (int y = 1; y < v.ySize(); y ++) {
+				Decimal surf = Vecteur.calculeSurface(v.getPoint(x-1, y-1), v.getPoint(x, y-1), v.getPoint(x, y));
+				surf = surf.add(Vecteur.calculeSurface(v.getPoint(x-1, y-1), v.getPoint(x, y), v.getPoint(x-1, y)));
+				Decimal h = v.getPoint(x-1, y-1).getDecX();
+				h = h.add(v.getPoint(x-1, y).getDecX());
+				h = h.add(v.getPoint(x, y).getDecX());
+				h = h.add(v.getPoint(x, y-1).getDecX());
+				h = h.divide(Decimal.QUATRE).abs();
+				Decimal vol = h.multiply(surf).multiply(densite);
+				Vecteur c = v.getPoint(x-1, y-1);
+				c = c.add(v.getPoint(x-1, y));
+				c = c.add(v.getPoint(x, y-1));
+				c = c.add(v.getPoint(x, y));
+				c = c.multiply(Decimal.QUATRE.inverse());
+//				c = c.set(Axis.XAxis, 0);
+				
+				liste.add(new Poids ("pds", c, vol));
+			}
+		}
+		return CalculVolume.getCentreGravite(nom, liste);
+	}
+	
 	
 	/**
 	 * Calcule le centre de gravité
@@ -152,12 +184,16 @@ public class CalculVolume {
 		
 		// Parcours les poids
 		for (Poids p : pds) {
-			centre = centre.add(p.position.multiply(p.force));
 			poidsTotal = poidsTotal.add(p.force);
 		}
 		if (poidsTotal.isZero()) return new Poids (n, centre, poidsTotal); 
 
-		return new Poids (n, centre.multiply(poidsTotal.inverse()), poidsTotal);
+		for (Poids p : pds) {
+			Decimal coef = p.force.divide(poidsTotal);
+			centre = centre.add(p.position.multiply(coef));
+		}
+
+		return new Poids (n, centre, poidsTotal);
 	}
 
 

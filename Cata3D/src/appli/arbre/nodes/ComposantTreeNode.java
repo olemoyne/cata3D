@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import appli.arbre.TreeNodeProperty;
 import appli.values.updater.ObjectUpdater;
+import model.Apparence;
 import model.Position;
 import model.composants.Composant;
 
@@ -31,6 +32,7 @@ public class ComposantTreeNode extends DesignTreeNode {
 		ret.add(new TreeNodeProperty ("Description", composant.description, true, ObjectUpdater.STRING) );
 		if (composant.situation == null) composant.situation = new Position(); 
 		ret.add(new TreeNodeProperty ("Position", composant.situation, true, ObjectUpdater.POSITION) );
+		ret.add(new TreeNodeProperty ("Apparence", composant.getApparence(), true, ObjectUpdater.APPARENCE) );
 		ret.add(new TreeNodeProperty ("Poids total", composant.gravite, false, ObjectUpdater.POIDS) );
 		return ret;
 	}
@@ -40,6 +42,7 @@ public class ComposantTreeNode extends DesignTreeNode {
 		if (fld.equals("Nom")) composant.nom = (String)value;
 		if (fld.equals("Description")) composant.description = (String)value;
 		if (fld.equals("Position")) composant.situation= (Position)value;
+		if (fld.equals("Apparence")) composant.apparence= (Apparence)value;
 	}
 	
 	public String[] getActionList() {

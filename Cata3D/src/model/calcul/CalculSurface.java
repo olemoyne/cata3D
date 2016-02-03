@@ -53,7 +53,7 @@ public class CalculSurface {
 		// yg = 1/(6*A) * somme[I=0 --> n-1] (Yi + Yi+1)*(XiYi+1 - YiXi+1)
 		
 		Decimal A = getSurface(lst, ax);
-		if (A.isZero()) return new Vecteur();
+		if (A.compareTo(new Decimal(0.0001)) <= 0) return new Vecteur();
 		
 		Decimal totX = Decimal.ZERO;
 		Decimal totY = Decimal.ZERO;

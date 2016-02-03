@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import view.scene.PrintableObject;
+import model.Apparence;
 import model.Cata;
 import model.Poids;
 import model.Position;
@@ -53,6 +54,9 @@ public class Composant implements Serializable{
 	/** Lien vers le bateau du composant **/
 	public Cata boat;
 	
+	/** Apparence du composant (couleur, remplissage) **/
+	public Apparence apparence;
+	
 	/**
 	 * Constructeur --> intialisation des listes
 	 */
@@ -62,6 +66,7 @@ public class Composant implements Serializable{
 		description = "Description";
 		poids = new ArrayList<Poids> ();
 		situation = new Position();
+		apparence = new Apparence();
 	}
 	
 	public Composant () {
@@ -70,8 +75,14 @@ public class Composant implements Serializable{
 		description = "Description";
 		poids = new ArrayList<Poids> ();
 		situation = new Position();
+		apparence = new Apparence();
 	}
 	
+	
+	public Apparence getApparence () {
+		if (apparence == null) apparence = new Apparence();
+		return apparence;
+	}
 	
 	/**
 	 * Génère une description
