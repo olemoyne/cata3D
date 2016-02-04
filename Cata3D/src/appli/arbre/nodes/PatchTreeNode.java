@@ -12,9 +12,9 @@ import view.scene.PrintedMap;
 import model.composants.PatchComposant;
 import model.math.Decimal;
 import model.math.InvalidGeomAction;
+import model.math.solide.MapConversion;
 import model.math.solide.STLFile;
 import model.math.solide.Solide;
-import model.math.solide.SolideMaker;
 
 public class PatchTreeNode extends ComposantTreeNode {
 
@@ -90,7 +90,7 @@ public class PatchTreeNode extends ComposantTreeNode {
 	public void generateSTLFile(String filename) throws InvalidGeomAction {
 		PatchComposant pv = (PatchComposant)composant;
 		// Génération d'un solide
-		Solide sol = SolideMaker.fromMap(pv.mapAffichage);
+		Solide sol = MapConversion.getSolide(pv.mapAffichage, pv.reflexive);
 		STLFile f = new STLFile(1);
 		f.createBinaryFile(filename, sol, pv.nom, Decimal.CENT);
 	}

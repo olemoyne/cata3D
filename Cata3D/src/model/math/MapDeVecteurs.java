@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import model.Area;
+import model.calcul.CalculSurface;
 import model.math.transfo.Transformation;
 
 
@@ -33,7 +34,7 @@ public class MapDeVecteurs implements Serializable {
 	Vecteur[][] data;
 	
 	public MapDeVecteurs () {
-		
+		data = new Vecteur[0][0];
 	}
 		
 	public MapDeVecteurs (int x, int y) {
@@ -251,5 +252,43 @@ public class MapDeVecteurs implements Serializable {
 		}
 
         return sb.toString();
+    }
+    
+    /**
+     * détermine le centre géométrique de la map 
+     * 
+     * @return
+     */
+    public Vecteur getCentre () {
+    	ArrayList<Vecteur> pts = new ArrayList<Vecteur>();
+		for (int y = 0 ; y < this.ySize; y++) {					
+			for (int x = 0 ; x < xSize; x ++) {
+				pts.add(getPoint(x, y));
+			}
+		}
+
+		return CalculSurface.getCentreGeometrique(pts);
+    }
+    
+    /**
+     * Construit une MAP redimentionnée de X 
+     * 
+     * @param ep
+     * @return
+     */
+    public MapDeVecteurs rezise (Decimal ep) {
+    	Vecteur ctr = this.getCentre();
+    	MapDeVecteurs ret = new MapDeVecteurs(this.xSize, this.ySize);
+
+		for (int y = 0 ; y < this.ySize; y++) {					
+			for (int x = 0 ; x < xSize; x ++) {
+				Vecteur v = getPoint(x, y);
+				Vecteur p = v.minus(ctr);
+				Decimal d = p.getNorme();
+				Decimal r = d.divide(d.add(ep));
+				ret.setPoint(x, y, p.multiply(r).add(ctr));
+			}
+		}
+		return ret;
     }
 }

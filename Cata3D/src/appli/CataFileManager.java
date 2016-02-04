@@ -75,13 +75,20 @@ public class CataFileManager extends JPanel {
 		return this.editeur.getText();
 	}
 
+	public Cata getCataFromFile (String str) throws CataAppliException{
+		Cata cat = getCataFile(str);
+		this.editeur.setText(str);
+		return cat;
+	}
+	
+	
 	
 	/**
 	 * Extrait le Catamaran du fichier 
 	 * 
 	 * @return
 	 */
-	public Cata getCataFromFile (String str) throws CataAppliException{
+	public static Cata getCataFile (String str) throws CataAppliException{
 //		String str = this.editeur.getText();
 		if (str == null) throw new CataAppliException("Empty file name");
 		
@@ -96,7 +103,6 @@ public class CataFileManager extends JPanel {
 		    bato.recalculeAll();
 		    ois.close();
 		    
-		    this.editeur.setText(str);
 		    return bato;
 		} catch (FileNotFoundException e) {
 			throw new CataAppliException(e);
