@@ -124,10 +124,11 @@ public class MapConversion {
 				if (comp.nom.equals("Safran")) {
 					PatchComposant pv = (PatchComposant) comp;
 					Solide sol = MapConversion.getSolide(pv.mapAffichage, pv.reflexive);
-					STLFile f = new STLFile(1);
-					f.createBinaryFile("D:/dev/GIT/Cata3D/Cata3D/data/safranBloc.stl", sol, pv.nom, Decimal.CENT);
-					sol = MapConversion.getSolideVide(pv.mapAffichage, new Decimal (0.002d), pv.reflexive);
-					f.createBinaryFile("D:/dev/GIT/Cata3D/Cata3D/data/safranVide.stl", sol, pv.nom, Decimal.CENT);
+					STLFile f = new STLFile(3);
+					
+					f.createBinaryFile("D:/dev/GIT/Cata3D/Cata3D/data/safranBloc.stl", sol, pv.nom, Decimal.DIX.inverse());
+					sol = MapConversion.getSolideVide(pv.mapAffichage, new Decimal (0.0004d), pv.reflexive);
+					f.createBinaryFile("D:/dev/GIT/Cata3D/Cata3D/data/safranVide.stl", sol, pv.nom, Decimal.DIX.inverse());
 				}
 			}
 		} catch (CataAppliException e) {

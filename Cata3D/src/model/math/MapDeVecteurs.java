@@ -286,7 +286,10 @@ public class MapDeVecteurs implements Serializable {
 				Vecteur p = v.minus(ctr);
 				Decimal d = p.getNorme();
 				Decimal r = d.divide(d.add(ep));
-				ret.setPoint(x, y, p.multiply(r).add(ctr));
+				Decimal dx = p.getDecX().multiply(r).add(ctr.getDecX());
+				Decimal dy = p.getDecY().multiply(r).add(ctr.getDecY());
+				Decimal dz = p.getDecZ().multiply(r).add(ctr.getDecZ());
+				ret.setPoint(x, y, new Vecteur (dx, dy, dz));
 			}
 		}
 		return ret;
