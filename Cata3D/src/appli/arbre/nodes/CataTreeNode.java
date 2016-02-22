@@ -21,6 +21,7 @@ public class CataTreeNode {
 	/** Retourne une liste de noeuds correspondant au bateau **/
 	public static DefaultMutableTreeNode getNodes(Cata boat, DefaultMutableTreeNode top) {
 		BoatTreeNode  sub = new BoatTreeNode( top, boat, "Design");
+		new StudyTreeNode( top, boat, "Etude hydrostatique");
 		    
 		/**
 		 *  Ajoute les compostants de construction
