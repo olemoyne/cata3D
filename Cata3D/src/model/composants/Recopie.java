@@ -45,14 +45,9 @@ public class Recopie extends Composant {
     	if (autre.mapAffichage == null) { autre.recalcule();}
     	
     	if (situation == null) situation = new Position();
-    	Transformation trans = this.situation.getTransformation(null);
     	
-    	mapAffichage = autre.mapAffichage.transforme(trans);
+    	mapAffichage = autre.mapAffichage;
 		this.gravite = new Poids(autre.gravite);
-		if (gravite != null) {
-			if (trans != null) 
-				gravite.position = trans.getPoint(gravite.position);
-		}
 		super.recalcule();
     }
 

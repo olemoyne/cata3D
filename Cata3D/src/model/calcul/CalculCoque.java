@@ -12,6 +12,7 @@ import model.math.MapDeVecteurs;
 import model.math.Plan3D;
 import model.math.Vecteur;
 import model.math.transfo.Reflexion;
+import model.math.transfo.Transformation;
 import model.patch.Patch;
 
 /**
@@ -46,9 +47,11 @@ public class CalculCoque {
 
 	public static void calculeCarene (Cata bateau) {
 		Plan3D surface = bateau.mer.getPlan();
+		Transformation mer = bateau.mer.getTransformation();
 		bateau.mer.carenes.clear();
         for (Composant cmp : bateau.composants) {
-        	MapDeVecteurs mdv = cmp.mapAffichage.transforme(bateau.mer.getTransformation());
+        	Transformation trs = cmp.situation.getTransformation(mer);
+        	MapDeVecteurs mdv = cmp.mapAffichage.transforme(trs);
         	MapDeVecteurs crn = mdv.truncate(surface);
         	bateau.mer.carenes.add(crn);
         }
@@ -89,15 +92,18 @@ public class CalculCoque {
 	 */
 	public static void calculeFlottaison(Cata cata) {
 		ArrayList<Poids> poussees = new ArrayList<Poids>(); 
+		// Les carènes intègrent bien la position des composants et du bateau lui-même
         for (MapDeVecteurs cmp : cata.mer.carenes) {
         	poussees.add(CalculVolume.getPoussee(cmp));
         }
         cata.mer.pousseeArchimede = CalculVolume.getCentreGravite("Poussée", poussees);
         
+        // Intégration du repositionnement du poids des composants
+        Transformation mer = cata.mer.getTransformation();
 		ArrayList<Poids> pds = new ArrayList<Poids>();
         for (Composant cmp : cata.composants) {
-    		pds.addAll(cmp.poids);
-        	pds.add(cmp.gravite);
+            Transformation trans = cmp.situation.getTransformation(mer);
+        	pds.add(cmp.gravite.transforme(trans));
         }
 		
 		cata.mer.poidsTotal = CalculVolume.getCentreGravite("Poids total ", pds);

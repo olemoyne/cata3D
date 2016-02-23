@@ -14,6 +14,7 @@ import model.Cata;
 import model.composants.Composant;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
+import model.math.transfo.Transformation;
 
 /**
  * Permet de gérer les calculs de stabilité et de dérive sur la coque
@@ -81,9 +82,12 @@ public class StudyTreeNode extends DesignTreeNode {
 
 		if (bateau == null) return ret;
 		
+		// Calcule la position de la mer 
+		Transformation mer = bateau.mer.getTransformation();
+		
 		// Affiche chaque composant
 		for (Composant cmp : this.bateau.composants) {
-			for (PrintableObject obj : cmp.getSceneObjects(cmp.situation.getTransformation(null))) {
+			for (PrintableObject obj : cmp.getSceneObjects(cmp.situation.getTransformation(mer))) {
 				ret.add(obj);
 			}
 		}

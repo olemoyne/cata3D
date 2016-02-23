@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import model.math.Decimal;
 import model.math.Vecteur;
-import model.math.transfo.Translation;
+import model.math.transfo.Transformation;
 
 /** 
  * Poids appliqué à la coque
@@ -79,8 +79,8 @@ public class Poids implements Serializable {
 		force = Decimal.parse(reste);
 	}
 
-	public Poids transforme(Translation trsl) {
-		Poids ret = new Poids (this.nom, trsl.getPoint(position), force);
+	public Poids transforme(Transformation trans) {
+		Poids ret = new Poids (this.nom, trans.getPoint(position), force);
 		return ret;
 	}
 	

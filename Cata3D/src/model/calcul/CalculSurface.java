@@ -63,7 +63,7 @@ public class CalculSurface {
 			Point2D.Double  vplusun = lst.get(i+1).get2D(ax);
 			Decimal x = new Decimal(v.x+vplusun.x);
 			Decimal y = new Decimal(v.y+vplusun.y);
-			Decimal sub = new Decimal((v.x*vplusun.y) - (v.y*vplusun.y));
+			Decimal sub = new Decimal((v.x*vplusun.y) - (v.y*vplusun.x));
 			totX = totX.add(sub.multiply(x));
 			totY = totY.add(sub.multiply(y));
 		}
@@ -71,7 +71,7 @@ public class CalculSurface {
 		Decimal delta = new Decimal(6).multiply(A);
 		if (ax == Axis.XAxis) return new Vecteur (Decimal.ZERO, totX.divide(delta), totY.divide(delta));
 		if (ax == Axis.YAxis) return new Vecteur (totX.divide(delta), Decimal.ZERO, totY.divide(delta));
-		if (ax == Axis.ZAxis) return new Vecteur (Decimal.ZERO, totX.divide(delta), totY.divide(delta));
+		if (ax == Axis.ZAxis) return new Vecteur (totX.divide(delta), totY.divide(delta), Decimal.ZERO);
 		return null;
 	}
 
