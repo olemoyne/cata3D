@@ -40,7 +40,7 @@ public class CalculSurface {
 			total = total.add(new Decimal(dble));
 		}
 		
-		return total.abs().divide(Decimal.DEUX);		
+		return total.divide(Decimal.DEUX);		
 	}
 
 
@@ -53,10 +53,14 @@ public class CalculSurface {
 		// yg = 1/(6*A) * somme[I=0 --> n-1] (Yi + Yi+1)*(XiYi+1 - YiXi+1)
 		
 		Decimal A = getSurface(lst, ax);
-		if (A.compareTo(new Decimal(0.0001)) <= 0) return new Vecteur();
+		Decimal abs = A.abs();
+		if (abs.compareTo(new Decimal(0.000001)) <= 0) return new Vecteur();
 		
 		Decimal totX = Decimal.ZERO;
 		Decimal totY = Decimal.ZERO;
+		
+		Decimal totZ = Decimal.ZERO;
+		
 
 		for (int i = 0; i < lst.size()-1; i++) {
 			Point2D.Double v = lst.get(i).get2D(ax);
@@ -66,12 +70,16 @@ public class CalculSurface {
 			Decimal sub = new Decimal((v.x*vplusun.y) - (v.y*vplusun.x));
 			totX = totX.add(sub.multiply(x));
 			totY = totY.add(sub.multiply(y));
+			totZ = totZ.add(lst.get(i).getDec(ax));
 		}
 		
+		totZ = totZ.add(lst.get(lst.size()-1).getDec(ax));
+		totZ = totZ.divide(new Decimal(lst.size()));
+		
 		Decimal delta = new Decimal(6).multiply(A);
-		if (ax == Axis.XAxis) return new Vecteur (Decimal.ZERO, totX.divide(delta), totY.divide(delta));
-		if (ax == Axis.YAxis) return new Vecteur (totX.divide(delta), Decimal.ZERO, totY.divide(delta));
-		if (ax == Axis.ZAxis) return new Vecteur (totX.divide(delta), totY.divide(delta), Decimal.ZERO);
+		if (ax == Axis.XAxis) return new Vecteur (totZ, totX.divide(delta), totY.divide(delta));
+		if (ax == Axis.YAxis) return new Vecteur (totX.divide(delta), totZ, totY.divide(delta));
+		if (ax == Axis.ZAxis) return new Vecteur (totX.divide(delta), totY.divide(delta), totZ);
 		return null;
 	}
 

@@ -112,22 +112,29 @@ public class CalculVolume {
 				lst.add(map.getPoint(x, y));
 				// Centre sde poussée
 			centresSurf.add(CalculSurface.getCentreSurface (lst, Axis.ZAxis));
-			surfaces.add(CalculSurface.getSurface(lst, Axis.ZAxis));
+			surfaces.add(CalculSurface.getSurface(lst, Axis.ZAxis).abs());
 		}
 
+		
 		// Calcule le volume et le centre de poussée de chaque bloc
 		ArrayList<Poids> poussees = new ArrayList<Poids>();
 		for (int y = 1; y < map.ySize(); y ++) {
 			// Centre de poussée 
-			Vecteur ctr = centresSurf.get(y-1).multiply(surfaces.get(y-1)).add(centresSurf.get(y).multiply(surfaces.get(y))) ;
+			Decimal dx = centresSurf.get(y-1).getDecX().multiply(surfaces.get(y-1)).add(centresSurf.get(y).getDecX().multiply(surfaces.get(y)));
+			Decimal dy = centresSurf.get(y-1).getDecY().multiply(surfaces.get(y-1)).add(centresSurf.get(y).getDecY().multiply(surfaces.get(y)));
+			Decimal dz = centresSurf.get(y-1).getDecZ().multiply(surfaces.get(y-1)).add(centresSurf.get(y).getDecZ().multiply(surfaces.get(y)));
+			
 			Decimal surf = surfaces.get(y-1).add(surfaces.get(y));
-			if (!surf.isZero())
-				ctr = ctr.multiply(surf.inverse());
+			if (!surf.isZero()) {
+				dx = dx.divide(surf);
+				dy = dy.divide(surf);
+				dz = dz.divide(surf);
+			}
 			
 			Decimal dist = centresSurf.get(y).getDecZ().minus(centresSurf.get(y-1).getDecZ());
 			Decimal vol = ((surfaces.get(y-1).add(surfaces.get(y))).multiply(Decimal.DEMI)).multiply(dist);
 			
-			poussees.add(new Poids("", ctr, vol));			
+			poussees.add(new Poids("", new Vecteur(dx, dy, dz), vol));			
 		}
 		
 		Poids p = getCentreGravite("Poussée ", poussees);

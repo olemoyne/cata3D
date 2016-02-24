@@ -333,7 +333,14 @@ public class Vecteur implements Serializable{
 		if (axis == Axis.ZAxis) return z;
 		return -1;
 	}
-	
+
+	public Decimal getDec(int axis) {
+		if (axis == Axis.XAxis) return new Decimal(x).divide(METER);
+		if (axis == Axis.YAxis) return new Decimal(y).divide(METER);
+		if (axis == Axis.ZAxis) return new Decimal(z).divide(METER);
+		return null;
+	}
+
 	/**
 	 * Calcule le centre de trois points
 	 *  
