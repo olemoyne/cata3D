@@ -168,11 +168,13 @@ public class TableValues extends JPanel implements ActionListener, ListSelection
 		boolean ok = fields.showEditionScreen(prop, topFrame);
 		if (ok) {
 			// modifie la valeur
-			model.getNode().updateValue(prop.nom, prop.value);
-			model.refreshData();
-//			model.setValueAt(fields.getValue(), 1, selectedRow);
-			control.recalcule();
-	    	control.showDessin(model.getNode());
+			if (prop.value != null) {
+				model.getNode().updateValue(prop.nom, prop.value);
+				model.refreshData();
+	//			model.setValueAt(fields.getValue(), 1, selectedRow);
+				control.recalcule();
+		    	control.showDessin(model.getNode());
+			}
 		}
 	}
 
