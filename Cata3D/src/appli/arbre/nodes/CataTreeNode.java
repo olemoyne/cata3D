@@ -9,6 +9,7 @@ import model.composants.Composant;
 import model.composants.PatchPlein;
 import model.composants.PatchVide;
 import model.composants.Recopie;
+import model.composants.Tube;
 
 /**
  * Dans cette classe se concentre tout le paramétrage 
@@ -46,7 +47,7 @@ public class CataTreeNode {
 	    		return new RecopieTreeNode(sub, cmp.nom, (Recopie)cmp);
 	    	}
 	    	if (cmp.getType() == Composant.TUBE) {
-	    		return new TubeTreeNode(sub, cmp.nom, (Recopie)cmp);
+	    		return new TubeTreeNode(sub, cmp.nom, (Tube)cmp);
 	    	}
 	    	return null;
 	}

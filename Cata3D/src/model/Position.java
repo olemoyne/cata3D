@@ -43,15 +43,15 @@ public class Position implements Serializable{
 	/** Retourne la transformation induite par la position du composant **/
 	public Transformation getTransformation (Transformation trans) {
 		Transformation  trs = trans;
-		if (position != null) {
-			if (!position.equals(new Vecteur(0, 0, 0))) {
-				trs = new Translation (position, trans);
-			}
-		}
 		if (rotation != null) {
 			if (rotation.getX() != 0) trs = new Rotation (Axis.XAxis, rotation.getDecX(), trs);
 			if (rotation.getY() != 0) trs = new Rotation (Axis.YAxis, rotation.getDecY(), trs);
 			if (rotation.getZ() != 0) trs = new Rotation (Axis.ZAxis, rotation.getDecZ(), trs);
+		}
+		if (position != null) {
+			if (!position.equals(new Vecteur(0, 0, 0))) {
+				trs = new Translation (position, trs);
+			}
 		}
 		return trs;
 	}

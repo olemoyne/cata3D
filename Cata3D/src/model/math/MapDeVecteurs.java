@@ -130,26 +130,32 @@ public class MapDeVecteurs implements Serializable {
 				Vecteur v = surface.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
 				if ((v != null)&&(inter == null)) inter = v;
 			}
-
-			boolean auDessus = true;
-			if (surface.donneCote(getPoint(0, ypos)) > 0) auDessus = false; 
-			
-			if (auDessus)
-				ret.setPoint(0, ypos, inter);
-			else 
-				ret.setPoint(0, ypos, this.getPoint(ypos, 0));
+			// pas d'intersection du tout
+			if (inter == null) {
+				for (int xpos = 0; xpos < this.xSize; xpos ++) 
+					ret.setPoint(xpos, ypos, new Vecteur ());
+			} else {
+	
+				boolean auDessus = true;
+				if (surface.donneCote(getPoint(0, ypos)) > 0) auDessus = false; 
 				
-			for (int xpos = 1; xpos < this.xSize; xpos ++) {
-				Vecteur v = surface.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
-				if ((v != null)&&(!v.equals(this.getPoint(xpos-1, ypos)))) {
-					auDessus = !auDessus;
-					inter = v;
-				}
 				if (auDessus)
-					ret.setPoint(xpos, ypos, inter);
+					ret.setPoint(0, ypos, inter);
 				else 
-					ret.setPoint(xpos, ypos, this.getPoint(xpos, ypos));
-			}									
+					ret.setPoint(0, ypos, this.getPoint(ypos, 0));
+					
+				for (int xpos = 1; xpos < this.xSize; xpos ++) {
+					Vecteur v = surface.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
+					if ((v != null)&&(!v.equals(this.getPoint(xpos-1, ypos)))) {
+						auDessus = !auDessus;
+						inter = v;
+					}
+					if (auDessus)
+						ret.setPoint(xpos, ypos, inter);
+					else 
+						ret.setPoint(xpos, ypos, this.getPoint(xpos, ypos));
+				}									
+			}
 		}	
 		
 		return ret;

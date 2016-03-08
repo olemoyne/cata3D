@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 import appli.arbre.TreeNodeProperty;
 import appli.values.updater.ObjectUpdater;
-import model.composants.Recopie;
 import model.composants.Tube;
 import model.math.Decimal;
-import model.math.Vecteur;
 
 public class TubeTreeNode extends ComposantTreeNode {
 
@@ -17,7 +15,7 @@ public class TubeTreeNode extends ComposantTreeNode {
 	private static final long serialVersionUID = -7587228627542488036L;
 
 
-	public TubeTreeNode(DesignTreeNode up, String name, Recopie cmp) {
+	public TubeTreeNode(DesignTreeNode up, String name, Tube cmp) {
 		super(up, "Tube : "+name, cmp);
 	}
 
@@ -30,7 +28,6 @@ public class TubeTreeNode extends ComposantTreeNode {
 		ArrayList<TreeNodeProperty> ret = super.getProperties();
 		ret.add(new TreeNodeProperty ("Densité", pc.densite, true, ObjectUpdater.DECIMAL) );
 		ret.add(new TreeNodeProperty ("Diamètre", pc.diametre, true, ObjectUpdater.DECIMAL) );
-		ret.add(new TreeNodeProperty ("Direction", pc.direction, true, ObjectUpdater.VECTEUR) );
 		ret.add(new TreeNodeProperty ("Epaisseur", pc.epaisseur, true, ObjectUpdater.DECIMAL) );
 		ret.add(new TreeNodeProperty ("Longueur", pc.longueur, true, ObjectUpdater.DECIMAL) );
 		
@@ -49,10 +46,6 @@ public class TubeTreeNode extends ComposantTreeNode {
 
 		if (fld.equals("Diamètre")) {
 			pv.diametre = (Decimal)value;
-		}
-
-		if (fld.equals("Direction")) {
-			pv.direction = (Vecteur)value;
 		}
 
 		if (fld.equals("Epaisseur")) {
