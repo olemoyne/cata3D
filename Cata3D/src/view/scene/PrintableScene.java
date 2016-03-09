@@ -14,9 +14,16 @@ public class PrintableScene {
 		allObjects = new ArrayList<PrintableObject> ();
 	}
 	
-	public void printScene(GL2 gl, Decimal echelle) {
+	/**
+	 * Affichage de la scène avec l'échelle et le mode de visualisation.
+	 *   Si mode != perspective --> affichage en ploygone systématique
+	 * @param gl
+	 * @param echelle
+	 * @param mode
+	 */
+	public void printScene(GL2 gl, Decimal echelle, int mode) {
 		for (PrintableObject obj : allObjects) {
-			if (obj.toBePrinted) obj.drawObject(gl, echelle);
+			if (obj.toBePrinted) obj.drawObject(gl, echelle, mode);
 		}
 	}
 

@@ -19,7 +19,7 @@ public class PrintedPoint extends PrintableObject {
 	}
 	
 	@Override
-	public void drawObject(GL2 gl, Decimal echelle) {
+	public void drawObject(GL2 gl, Decimal echelle, int mode) {
 	    gl.glPushMatrix();       //equivalent to 'save current position'
 
         float r = color.getRed()/(float)256;

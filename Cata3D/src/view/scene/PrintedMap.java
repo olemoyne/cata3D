@@ -33,12 +33,12 @@ public class PrintedMap extends PrintableObject {
 	}
 	
 	@Override
-	public void drawObject(GL2 gl, Decimal echelle) {
+	public void drawObject(GL2 gl, Decimal echelle, int mode) {
 
 		if (map == null) return;
 		setColor (gl, null);
 		
-		if (!fillup) {
+		if ((!fillup)&&(mode == 0)) {
 			Vecteur pt = null;
 			// Trace tous les trais verticaux
 			for (int y = 0; y < map.ySize(); y ++) {

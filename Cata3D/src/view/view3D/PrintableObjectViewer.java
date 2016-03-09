@@ -32,12 +32,17 @@ public class PrintableObjectViewer extends View3D implements ListSelectionListen
 	//** Gestion de l'Ã©chelle **/
 	private JButton echelle;
 	
+	private ModeSelectionPanel mode;
+	
 	public PrintableObjectViewer(PrintableViewUpdate viewMgr) {
 		super(viewMgr);
 		view = viewMgr;
 		
 		JPanel pnl = new JPanel ();
 		pnl.setLayout(new BorderLayout());
+		
+		mode = new ModeSelectionPanel(this);
+		pnl.add(mode, BorderLayout.NORTH);
 		
 		objectListTable = new JList<PrintableObject>();
 		objectListTable.setBackground(Color.black);
@@ -95,7 +100,27 @@ public class PrintableObjectViewer extends View3D implements ListSelectionListen
 				this.echelle.setText(this.view.echelle.toString());
 				super.display();
 			}
+			return;
+		}
+		
+		System.out.println("Recieved "+e.getActionCommand()); 
+		
+		if ("Mode perspective".equals(e.getActionCommand())) {
+			this.view.setMode(PrintableViewUpdate.PERSPECTIVE_MODE);
+			super.display();
+			return;
+		}
 
+		if ("Mode orthonormé".equals(e.getActionCommand())) {
+			this.view.setMode(PrintableViewUpdate.ORTHO_MODE);
+			super.display();
+			return;
+		}
+
+		if ("Mode découpe".equals(e.getActionCommand())) {
+			this.view.setMode(PrintableViewUpdate.COUPE_MODE);
+			super.display();
+			return;
 		}
 
 	}

@@ -78,8 +78,6 @@ public class ViewUpdate implements GLEventListener{
 	 * @param gl
 	 */
     public void drawInside(GL2 gl) {
-    	gl.glEnable(GL.GL_BLEND);        
-	
 		this.drawAxis(gl);
 		
 	}

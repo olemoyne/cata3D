@@ -29,12 +29,12 @@ public class PrintedArea extends PrintableObject {
 	}
 	
 	@Override
-	public void drawObject(GL2 gl, Decimal echelle) {
+	public void drawObject(GL2 gl, Decimal echelle, int mode) {
 
 		if (zone == null) return;
 		setColor (gl, null);
 		
-		if (!fillup) gl.glBegin(GL2.GL_LINE_STRIP);
+		if ((!fillup)&&(mode == 0)) gl.glBegin(GL2.GL_LINE_STRIP);
 		else gl.glBegin(GL2.GL_POLYGON);
 		
 		for (Vecteur pt : zone.points) {

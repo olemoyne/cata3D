@@ -30,8 +30,8 @@ public class PrintedBlock extends PrintableObject {
 	}
 
 	
-	public void drawCarre(GL2 gl, Vecteur a, Vecteur b, Vecteur c, Vecteur d, Decimal echelle) {
-		if (!fillup) gl.glBegin(GL2.GL_LINE_STRIP);
+	public void drawCarre(GL2 gl, Vecteur a, Vecteur b, Vecteur c, Vecteur d, Decimal echelle, int mode) {
+		if ((!fillup)&&(mode == 0)) gl.glBegin(GL2.GL_LINE_STRIP);
 		else gl.glBegin(GL2.GL_POLYGON);		
 		setPoint(a, gl, echelle);
 		setPoint(b, gl, echelle);
@@ -43,36 +43,36 @@ public class PrintedBlock extends PrintableObject {
 	}
 	
 	@Override
-	public void drawObject(GL2 gl, Decimal echelle) {
+	public void drawObject(GL2 gl, Decimal echelle, int mode) {
 
 		setColor (gl, null);
 		drawCarre(gl, deb, new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()),
 				new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()), 
-				new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()), echelle);
+				new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()), echelle, mode);
 
 		drawCarre(gl, new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()),
 				new Vecteur(fin.getDecX(), deb.getDecY(), fin.getDecZ()),
 				new Vecteur(fin.getDecX(), fin.getDecY(), fin.getDecZ()), 
-				new Vecteur(deb.getDecX(), fin.getDecY(), fin.getDecZ()), echelle);
+				new Vecteur(deb.getDecX(), fin.getDecY(), fin.getDecZ()), echelle, mode);
 
 		drawCarre(gl, deb, new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()), 
 				new Vecteur(deb.getDecX(), fin.getDecY(), fin.getDecZ()),
-				new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()), echelle);
+				new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()), echelle, mode);
 
 		drawCarre(gl, new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()), 
 				new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()), 
 				new Vecteur(fin.getDecX(), fin.getDecY(), fin.getDecZ()),
-				new Vecteur(fin.getDecX(), deb.getDecY(), fin.getDecZ()), echelle);
+				new Vecteur(fin.getDecX(), deb.getDecY(), fin.getDecZ()), echelle, mode);
 
 		drawCarre(gl, new Vecteur(deb.getDecX(), deb.getDecY(), deb.getDecZ()), 
 				new Vecteur(deb.getDecX(), deb.getDecY(), fin.getDecZ()), 
 				new Vecteur(fin.getDecX(), deb.getDecY(), fin.getDecZ()),
-				new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()), echelle);
+				new Vecteur(fin.getDecX(), deb.getDecY(), deb.getDecZ()), echelle, mode);
 
 		drawCarre(gl, new Vecteur(deb.getDecX(), fin.getDecY(), deb.getDecZ()),
 				new Vecteur(deb.getDecX(), fin.getDecY(), fin.getDecZ()),
 				new Vecteur(fin.getDecX(), fin.getDecY(), fin.getDecZ()),
-				new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()), echelle);
+				new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()), echelle, mode);
 
 	}
 

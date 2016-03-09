@@ -22,7 +22,7 @@ public abstract class PrintableObject {
 		toBePrinted = true;
 	}
 	
-	public abstract void drawObject (GL2 gl, Decimal echelle) ;
+	public abstract void drawObject (GL2 gl, Decimal echelle, int mode) ;
 	
 	// Ajoute un vecteur en appliquant l'echelle
 	public void setPoint(Vecteur a, GL2 gl, Decimal echelle) {
