@@ -1,4 +1,4 @@
-package view.view3D;
+package view.view3D.GL3;
 
 
 import java.awt.BorderLayout;
@@ -10,9 +10,7 @@ import javax.swing.JPanel;
 
 import view.scene.PrintableScene;
 import view.scene.PrintedBlock;
-import model.math.Decimal;
 import model.math.Vecteur;
-import appli.ActiveView;
  
 public class ViewTest extends JFrame { 
 	
@@ -40,14 +38,16 @@ public class ViewTest extends JFrame {
         JPanel fond = new JPanel();
         fond.setLayout(new BorderLayout());
 
-        ActiveView vue = new ActiveView(fond, new Decimal(1));
+		SceneViewUpdate upd = new SceneViewUpdate("0.025");
+        View3D viewer3D = new View3D(upd);
+		fond.add(viewer3D, BorderLayout.CENTER);
         
         /**Ajoute la scene qui va bien **/
         PrintableScene scene = new PrintableScene();
         scene.add(new PrintedBlock(new Vecteur("0;0;0"), new Vecteur("2;2;2"), "bloc1", false, Color.red));
         scene.add(new PrintedBlock(new Vecteur("1;1;1"), new Vecteur("3;3;3"), "bloc2", false, Color.blue));
         
-        vue.setScene(scene);
+        upd.setScene(scene);
         
 		setContentPane(fond);
 		

@@ -34,5 +34,5 @@ public class PrintableScene {
 	public boolean is3DScene() {
 		return true;
 	}
-	
+
 }

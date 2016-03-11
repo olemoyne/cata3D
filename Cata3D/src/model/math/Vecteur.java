@@ -36,6 +36,14 @@ public class Vecteur implements Serializable{
 	public Decimal getDecX() { return new Decimal(x).divide(METER);}
 	public Decimal getDecY() { return new Decimal(y).divide(METER);}
 	public Decimal getDecZ() { return new Decimal(z).divide(METER);}
+	
+	public float[] getFloats() {
+		float[] flts = new float[3];
+		flts[0] = new Decimal(x).divide(METER).floatValue();
+		flts[1] = new Decimal(y).divide(METER).floatValue();
+		flts[2] = new Decimal(z).divide(METER).floatValue();
+		return flts;
+	}
 
 	public Vecteur() {
 		x = 0;

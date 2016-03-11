@@ -1,7 +1,8 @@
-package view.view3D;
+package view.view3D.GL3;
 
 import java.awt.Color;
 
+import view.view3D.PositionCamera;
 import model.math.Decimal;
 import model.math.Vecteur;
 
@@ -73,14 +74,6 @@ public class ViewUpdate implements GLEventListener{
       gl.glEnable(GL2.GL_LIGHT0);
       gl.glEnable(GL2.GL_LIGHTING);
 
-
-/**
-      // Set material properties.
-      float[] rgba = {1f, 1f, 1f};
-      gl.glMaterialfv(GL.GL_FRONT, GL2.GL_AMBIENT, rgba, 0);
-      gl.glMaterialfv(GL.GL_FRONT, GL2.GL_DIFFUSE, rgba, 0);
-      gl.glMaterialf(GL.GL_FRONT, GL2.GL_SHININESS, 0.5f);
-**/		        
     }
 
 // Pas de transparence	

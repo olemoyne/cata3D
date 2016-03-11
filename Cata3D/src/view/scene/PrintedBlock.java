@@ -3,6 +3,7 @@ package view.scene;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import view.view3D.GL3.SceneObject;
 import model.math.Decimal;
 import model.math.Vecteur;
 
@@ -75,5 +76,12 @@ public class PrintedBlock extends PrintableObject {
 				new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()), echelle, mode);
 
 	}
+
+	
+	@Override
+	public void getSceneObjects(ArrayList<SceneObject> lst) {
+		this.getCube(deb, fin, lst);
+	}
+
 
 }

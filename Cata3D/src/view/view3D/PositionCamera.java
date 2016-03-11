@@ -1,5 +1,7 @@
 package view.view3D;
 
+import view.view3D.GL3.Matrix;
+
 import com.jogamp.opengl.glu.GLU;
 
 import model.math.Decimal;
@@ -102,6 +104,48 @@ public class PositionCamera {
 		sb.append (" Direction = ");
 		sb.append(direction.toString());
 		return sb.toString();
+	}
+
+	public Matrix getMatrix() {
+
+		Matrix viewMatrix = new Matrix();
+		
+		Matrix up = new Matrix(getHaut().getFloats());
+		Matrix dir = new Matrix(getDirection().minus(getPosition()).getFloats());
+		
+		dir.normalize();
+
+		Matrix right = dir.crossProduct(up);
+		right.normalize();
+
+		up = right.crossProduct(dir);
+		up.normalize();
+
+		viewMatrix.data[0] = right.data[0];
+		viewMatrix.data[4] = right.data[1];
+		viewMatrix.data[8] = right.data[2];
+		viewMatrix.data[12] = 0.0f;
+
+		viewMatrix.data[1] = up.data[0];
+		viewMatrix.data[5] = up.data[1];
+		viewMatrix.data[9] = up.data[2];
+		viewMatrix.data[13] = 0.0f;
+
+		viewMatrix.data[2] = -dir.data[0];
+		viewMatrix.data[6] = -dir.data[1];
+		viewMatrix.data[10] = -dir.data[2];
+		viewMatrix.data[14] = 0.0f;
+
+		viewMatrix.data[3] = 0.0f;
+		viewMatrix.data[7] = 0.0f;
+		viewMatrix.data[11] = 0.0f;
+		viewMatrix.data[15] = 1.0f;
+
+		float[] pos = getPosition().getFloats();
+		Matrix aux = Matrix.setTranslationMatrix(-pos[0], -pos[1], -pos[2]);
+
+		viewMatrix = viewMatrix.multMatrix(aux);
+		return viewMatrix;
 	}
 
 }

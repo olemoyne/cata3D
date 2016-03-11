@@ -3,11 +3,14 @@ package view.scene;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import view.view3D.GL3.SceneObject;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.util.texture.Texture;
 /**
  *  
  * @author lemoyne
@@ -36,9 +39,9 @@ public class PrintedMap extends PrintableObject {
 	public void drawObject(GL2 gl, Decimal echelle, int mode) {
 
 		if (map == null) return;
-		setColor (gl, null);
 		
 		if ((!fillup)&&(mode == 0)) {
+			setColor (gl, null);
 			Vecteur pt = null;
 			// Trace tous les trais verticaux
 			for (int y = 0; y < map.ySize(); y ++) {
@@ -63,20 +66,27 @@ public class PrintedMap extends PrintableObject {
 				gl.glEnd();
 			}
 		} else {
-			Vecteur pt= null;
-			ArrayList<Vecteur>lst = new ArrayList<Vecteur>();
+			// Gestion de la texture 
+			Texture texture = this.getUniformTexture(gl, color);
+			
+			gl.glDisable(GL2.GL_TEXTURE_2D);
+			
+	        texture.enable(gl);
+	        texture.bind(gl);
+	        
+			Vecteur[] lst = new Vecteur[4];
 			// Trace tous les carrr�s
 			for (int x = 1; x < map.xSize(); x ++) {
 				for (int y = 1; y < map.ySize(); y ++) {
-					lst.clear();
-					lst.add(map.getPoint(x-1,  y-1));
-					lst.add(map.getPoint(x,  y-1));
-					lst.add(map.getPoint(x,  y));
-					lst.add(map.getPoint(x-1,  y));
+					lst[0] = map.getPoint(x-1,  y-1);
+					lst[1] = map.getPoint(x,  y-1);
+					lst[2] = map.getPoint(x,  y);
+					lst[3] = map.getPoint(x-1,  y);
 					
-					setColor (gl, lst);
+					this.drawPolygon(gl, lst, echelle, color, false);
+/**					setColor (gl, lst);
 			        gl.glBegin(GL2.GL_POLYGON);
-						pt = map.getPoint(x-1,  y-1);
+						Vecteur pt = map.getPoint(x-1,  y-1);
 						setPoint(pt, gl, echelle);
 						pt = map.getPoint(x,  y-1);
 						setPoint(pt, gl, echelle);
@@ -85,8 +95,28 @@ public class PrintedMap extends PrintableObject {
 						pt = map.getPoint(x-1,  y);
 						setPoint(pt, gl, echelle);
 					gl.glEnd();
-				}
+**/				}
 			}			
 		}
+	}
+	
+	public Color getColor (Vecteur [] pts) {
+		return this.color;
+	}
+
+	@Override
+	public void getSceneObjects(ArrayList<SceneObject> lst) {
+		if (map == null) return;
+		Vecteur[] arr = new Vecteur[4];
+		// Trace tous les carrr�s
+		for (int x = 1; x < map.xSize(); x ++) {
+			for (int y = 1; y < map.ySize(); y ++) {
+				arr[0] = map.getPoint(x-1,  y-1);
+				arr[1] = map.getPoint(x,  y-1);
+				arr[2] = map.getPoint(x,  y);
+				arr[3] = map.getPoint(x-1,  y);
+				lst.add(new SceneObject(arr, GL3.GL_LINE_STRIP, this.getColor(arr)));	
+			}
+		}			
 	}
 }
