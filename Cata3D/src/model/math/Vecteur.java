@@ -315,14 +315,25 @@ public class Vecteur implements Serializable{
 		return new Vecteur(-x, -y, -z);
 	}
 
+	public Vecteur normalize () {
+		Decimal n = this.getNorme().inverse();
+		return this.multiply(n);
+	}
+
+	
+	public static Vecteur getNormale (Vecteur v1, Vecteur v2) {
+		Vecteur n = v1.produitVectoriel(v2);
+		return n.normalize();
+	}
 	
 	public static void main (String[] args) {
 		Vecteur a = new Vecteur ("0;0;0");
-		Vecteur b = new Vecteur ("1;0;0");
-		Vecteur c = new Vecteur ("1;1;0");
-		
-		Decimal dec = Vecteur.calculeSurface(a, b, c);
-		System.out.println("Surface = "+dec);
+		Vecteur b = new Vecteur ("2;0;0");
+		Vecteur c = new Vecteur ("2;2;0");
+
+		// Calcul de la normale de deux vecteurs
+		Vecteur n = getNormale(a.minus(b), c.minus(b));
+		System.out.println("Norme = "+n.toString());
 	}
 	
 	

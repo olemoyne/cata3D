@@ -12,7 +12,7 @@ import view.scene.PrintableScene;
 import view.scene.PrintedBlock;
 import model.math.Vecteur;
  
-public class ViewTest extends JFrame { 
+public class ViewTest3GL extends JFrame { 
 	
 	/**
 	 * 
@@ -20,7 +20,7 @@ public class ViewTest extends JFrame {
 	private static final long serialVersionUID = -1121422051200727396L;
 
 
-	public ViewTest() {
+	public ViewTest3GL() {
 		super();
 	}
 
@@ -58,7 +58,7 @@ public class ViewTest extends JFrame {
 	
    public static void main( String[] args ) {
 	   
-		ViewTest ddWindow = new ViewTest();
+		ViewTest3GL ddWindow = new ViewTest3GL();
 		ddWindow.createAndShowGUI();
    } //end of main 
 	

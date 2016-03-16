@@ -20,7 +20,7 @@ import view.scene.PrintableScene;
 public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<PrintableObject> {
 
 	private PrintableScene scene;
-	
+	private boolean updated;
 	private int mode;
 	
 	public static int PERSPECTIVE_MODE = 0;
@@ -32,16 +32,19 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 		super(inc);
 		echelle = ech;
 		mode = 0;
+		updated = true;
 	}
 	
 	protected void setScene (PrintableScene scn) {
 		scene = scn;
+		updated = true;
 	}
 
 	
 	
 	protected void setMode (int md) {
 		mode = md;
+		updated = true;
 		// Si mode = ORTHO Ajoute les lumières 
 	}
 
@@ -52,39 +55,20 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 	 */
 	public void display(GLAutoDrawable drawable) {
          GL2 gl = drawable.getGL().getGL2();
-  		if (mode == PERSPECTIVE_MODE) {
-  			// Nettoie les buffers
-          gl.glClear(GL.GL_COLOR_BUFFER_BIT|GL.GL_DEPTH_BUFFER_BIT);  		
-			// positionne la caméra
-          changeCameraPosition(gl);
-
-          drawInside(gl);
-		}
-		if (mode == ORTHO_MODE) {
-  			// Nettoie les buffers
-	          gl.glClear(GL.GL_COLOR_BUFFER_BIT|GL.GL_DEPTH_BUFFER_BIT);
+         changeCameraPosition(gl);
+        if (updated ) {
+            gl.glClear(GL.GL_COLOR_BUFFER_BIT|GL.GL_DEPTH_BUFFER_BIT); 
+	  		if (mode == PERSPECTIVE_MODE) {
+	  			// Nettoie les buffers
 				// positionne la caméra
-		      changeCameraPosition(gl);
-
-
-//		        http://malgouyres.org/cours/data/jogl.pdf
-		        
-/*	            GLU glu=new GLU();
-
-		        // Draw sphere (possible styles: FILL, LINE, POINT).
-		        gl.glColor3f(0.3f, 0.5f, 1f);
-		        GLUquadric earth = glu.gluNewQuadric();
-		        glu.gluQuadricDrawStyle(earth, GLU.GLU_FILL);
-		        glu.gluQuadricNormals(earth, GLU.GLU_FLAT);
-		        glu.gluQuadricOrientation(earth, GLU.GLU_OUTSIDE);
-		        final float radius = 1f;
-		        final int slices = 16;
-		        final int stacks = 16;
-		        glu.gluSphere(earth, radius, slices, stacks);
-		        glu.gluDeleteQuadric(earth);
-*/	          drawInside(gl);
-		      
-		}
+	          drawInside(gl);
+			}
+			if (mode == ORTHO_MODE) {
+	  			// Nettoie les buffers
+		          gl.glClear(GL.GL_COLOR_BUFFER_BIT|GL.GL_DEPTH_BUFFER_BIT);
+		          drawInside(gl);		      
+			}
+        }
     }
 
 	

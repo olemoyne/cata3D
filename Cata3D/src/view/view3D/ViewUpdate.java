@@ -10,7 +10,6 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.glu.GLU;
-import com.jogamp.opengl.glu.GLUquadric;
 
 
 /**
@@ -55,33 +54,28 @@ public class ViewUpdate implements GLEventListener{
       gl.glHint( GL2.GL_LINE_SMOOTH_HINT, GL2.GL_NICEST );
 
       // Gestion de la lumière
-      float SHINE_ALL_DIRECTIONS = 1;
-      float[] lightPos = {-100, 100, 100, SHINE_ALL_DIRECTIONS};
-      float[] lightColorAmbient = {0.6f, 0.6f, 0.6f, 1f};
-      float[] lightColorDiffuse = {1f, 1f, 1f, 1f};
-
-      // Set light parameters.
-      gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, lightPos, 0);
-      gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, lightColorAmbient, 0);
-      gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, lightColorDiffuse, 0);
-
-      float local_view[] = { 0.1f };
-      gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, lightColorAmbient, 0);
-      gl.glLightModelfv(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, local_view, 0);
-
-      // Enable lighting in GL.
-      gl.glEnable(GL2.GL_LIGHT0);
+      float pos[] = { 5.0f, 5.0f, 0.0f, 0.0f };
+      float ambiant[] = { 0.5f, 0.5f, 0.5f, 0.7f };
+      gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, pos, 0);
+      gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambiant, 0);
+      
+      gl.glEnable(GL2.GL_CULL_FACE);
       gl.glEnable(GL2.GL_LIGHTING);
+      gl.glEnable(GL2.GL_LIGHT0);
+      gl.glEnable(GL2.GL_DEPTH_TEST);
 
-
-/**
-      // Set material properties.
-      float[] rgba = {1f, 1f, 1f};
-      gl.glMaterialfv(GL.GL_FRONT, GL2.GL_AMBIENT, rgba, 0);
-      gl.glMaterialfv(GL.GL_FRONT, GL2.GL_DIFFUSE, rgba, 0);
-      gl.glMaterialf(GL.GL_FRONT, GL2.GL_SHININESS, 0.5f);
-**/		        
     }
+	
+	public float[] getColor(Color color) {
+        float[] rgba = new  float[4];
+		rgba[0] = color.getRed()/(float)256;
+        rgba[1] = color.getGreen()/(float)256;
+        rgba[2] = color.getBlue()/(float)256;
+        rgba[3] = 0.7f;
+		
+        return rgba; 
+	}
+
 
 // Pas de transparence	
     private void drawAxis (GL2 gl) {
@@ -89,20 +83,26 @@ public class ViewUpdate implements GLEventListener{
         gl.glEnable(GL.GL_BLEND);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE);
         
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, getColor(Color.red), 0);
+	    gl.glShadeModel(GL2.GL_SMOOTH);
+
         gl.glBegin(GL.GL_LINES);
-        gl.glColor4d(1, 0, 0, 0.8);
-        gl.glVertex3f(0, 0, 0);
+        gl.glVertex3f(-8f, 0, 0);
         gl.glVertex3f(8f, 0, 0);
-
-        gl.glColor4d(0, 1, 0, 0.8);
-        gl.glVertex3f(0, 0, 0);
-        gl.glVertex3f(0, 8f, 0);
-
-        gl.glColor4d(0, 0, 1, 0.8);
-        gl.glVertex3f(0, 0, 0);
-        gl.glVertex3f(0, 0.0f, 8f);
-
         gl.glEnd();
+
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, getColor(Color.green), 0);
+        gl.glBegin(GL.GL_LINES);
+        gl.glVertex3f(0, -8f, 0);
+        gl.glVertex3f(0, 8f, 0);
+        gl.glEnd();
+
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, getColor(Color.blue), 0);
+        gl.glBegin(GL.GL_LINES);
+        gl.glVertex3f(0, 0, -8f);
+        gl.glVertex3f(0, 0.0f, 8f);
+        gl.glEnd();
+        
         gl.glDisable(GL.GL_BLEND);
 
     }
@@ -208,53 +208,6 @@ public class ViewUpdate implements GLEventListener{
 		gl.glVertex3f(a.getDecX().multiply(echelle).floatValue(), a.getDecY().multiply(echelle).floatValue(), a.getDecZ().multiply(echelle).floatValue());
 	}
 
-	/**
-	 * Affichage d'un point
-	 * 
-	 * @param o
-	 * @param col
-	 * @param gl
-	 */
-	public void printPoint (Vecteur v, Color col, GL2 gl) {
-	    gl.glPushMatrix();       //equivalent to 'save current position'
-
-	    float r = col.getRed()/(float)256;
-		float g = col.getGreen()/(float)256;
-		float b = col.getBlue()/(float)256;
-		
-		gl.glColor3f(r, g, b);
-
-		GLU glu = new GLU();
-	    GLUquadric quadric = glu.gluNewQuadric();    //In Jogl
-	    glu.gluQuadricTexture(quadric, true);
-        gl.glTranslatef(v.getDecX().multiply(echelle).floatValue(), v.getDecY().multiply(echelle).floatValue(), v.getDecZ().multiply(echelle).floatValue());
-        glu.gluSphere(quadric, 0.005f, 2, 2);
-	    gl.glPopMatrix();        //equivalent to 'load the last position saved'
-	}
-
-
-	/**
-	 * Affiche une Arrete 
-	 * 
-	 * @param arr
-	 * @param col
-	 * @param gl
-	 */
-	public void printSegment (Vecteur a, Vecteur b, Color col, GL2 gl) {
-        gl.glBegin(GL.GL_LINE_STRIP);
-
-        float r = col.getRed()/(float)256;
-		float g = col.getGreen()/(float)256;
-		float bl = col.getBlue()/(float)256;
-		
-		gl.glColor3f(r, g, bl);
-
-		setPoint(a, gl);
-		setPoint(b, gl);
-		
-        gl.glEnd();
-	}
-	
 
 	@Override
 	public void dispose(GLAutoDrawable drawable) {

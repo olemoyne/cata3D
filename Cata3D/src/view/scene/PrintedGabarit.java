@@ -3,8 +3,6 @@ package view.scene;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import view.view3D.GL3.SceneObject;
-
 import com.jogamp.opengl.GL2;
 
 import model.Area;
@@ -70,12 +68,4 @@ public class PrintedGabarit extends PrintableObject {
 	public String toString() {
 		return name;
 	}
-
-
-	@Override
-	public void getSceneObjects(ArrayList<SceneObject> lst) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

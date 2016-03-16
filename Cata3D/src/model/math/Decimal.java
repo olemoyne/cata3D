@@ -241,6 +241,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	public Decimal inverse() {
+		if (this.isZero()) return Decimal.ZERO;
 		return Decimal.UN.divide(this);
 	}
 

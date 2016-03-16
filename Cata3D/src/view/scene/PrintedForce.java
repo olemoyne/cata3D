@@ -1,16 +1,12 @@
 package view.scene;
 
 import java.awt.Color;
-import java.util.ArrayList;
-
-import view.view3D.GL3.SceneObject;
 import model.Poids;
 import model.math.Decimal;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 
@@ -49,12 +45,12 @@ public class PrintedForce extends PrintableObject {
         gl.glEnd();
 	}
 
-	@Override
+/**	@Override
 	public void getSceneObjects(ArrayList<SceneObject> lst) {
 		Vecteur len = new Vecteur (new Decimal(0.01), new Decimal(0.01), new Decimal(0.01));
 		Vecteur deb = pds.position.minus(len);
 		Vecteur fin = pds.position.add(len);
-		this.getCube(deb, fin, lst);
+		PrintedBlock.getCube(deb, fin, lst);
 		// Ajout la flèche
 		Vecteur[] arr = new Vecteur[2];
 		arr[0] = pds.position;
@@ -62,5 +58,5 @@ public class PrintedForce extends PrintableObject {
 		SceneObject fleche = new SceneObject(arr, GL3.GL_LINE_STRIP, this.color);
 		lst.add(fleche);
 	}
-
+**/
 }

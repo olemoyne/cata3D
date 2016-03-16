@@ -3,13 +3,11 @@ package view.scene;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import view.view3D.GL3.SceneObject;
 import model.Area;
 import model.math.Decimal;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GL3;
 
 public class PrintedArea extends PrintableObject {
 
@@ -48,15 +46,4 @@ public class PrintedArea extends PrintableObject {
 		gl.glEnd();
 			
 	}
-
-	@Override
-	public void getSceneObjects(ArrayList<SceneObject> lst) {
-		
-		// liste des points
-		Vecteur[] arr = this.zone.points.toArray(new Vecteur[this.zone.points.size()]);
-		SceneObject obj = new SceneObject(arr, GL3.GL_LINE_STRIP, this.color);
-		
-		lst.add(obj);
-	}
-
 }

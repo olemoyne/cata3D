@@ -1,9 +1,6 @@
 package view.scene;
 
 import java.awt.Color;
-import java.util.ArrayList;
-
-import view.view3D.GL3.SceneObject;
 import model.math.Decimal;
 import model.math.Vecteur;
 
@@ -39,14 +36,6 @@ public class PrintedPoint extends PrintableObject {
         glu.gluSphere(quadric, 0.01f, 5, 5);
 	    gl.glPopMatrix();        //equivalent to 'load the last position saved'
 			
-	}
-
-	@Override
-	public void getSceneObjects(ArrayList<SceneObject> lst) {
-		Vecteur len = new Vecteur (new Decimal(0.01), new Decimal(0.01), new Decimal(0.01));
-		Vecteur deb = this.point.minus(len);
-		Vecteur fin = this.point.add(len);
-		this.getCube(deb, fin, lst);
 	}
 
 }
