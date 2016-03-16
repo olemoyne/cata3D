@@ -53,7 +53,7 @@ public class BoatTreeNode extends DesignTreeNode {
 		
 		// Affiche chaque composant
 		for (Composant cmp : this.bateau.composants) {
-			for (PrintableObject obj : cmp.getSceneObjects(cmp.situation.getTransformation(null))) {
+			for (PrintableObject obj : cmp.getSceneObjects(cmp.situation)) {
 				ret.add(obj);
 			}
 		}

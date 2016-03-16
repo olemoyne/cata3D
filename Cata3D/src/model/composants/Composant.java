@@ -9,7 +9,6 @@ import model.Cata;
 import model.Poids;
 import model.Position;
 import model.math.MapDeVecteurs;
-import model.math.transfo.Transformation;
 
 
 /**
@@ -108,7 +107,7 @@ public class Composant implements Serializable{
 		return -1;
 	}
 
-	public ArrayList<PrintableObject> getSceneObjects(Transformation trans) {
+	public ArrayList<PrintableObject> getSceneObjects(Position trans) {
 		return new ArrayList<PrintableObject>();
 	}
 	

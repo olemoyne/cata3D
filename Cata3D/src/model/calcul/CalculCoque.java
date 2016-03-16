@@ -45,12 +45,14 @@ public class CalculCoque {
 	}
 
 
+	/** 
+	 * Calcul des carènes de tous les composants 
+	 * **/
 	public static void calculeCarene (Cata bateau) {
 		Plan3D surface = bateau.mer.getPlan();
-		Transformation mer = bateau.mer.getTransformation();
 		bateau.mer.carenes.clear();
         for (Composant cmp : bateau.composants) {
-        	Transformation trs = cmp.situation.getTransformation(mer);
+        	Transformation trs = cmp.situation.getTransformation(null);
         	MapDeVecteurs mdv = cmp.mapAffichage.transforme(trs);
         	MapDeVecteurs crn = mdv.truncate(surface);
         	bateau.mer.carenes.add(crn);

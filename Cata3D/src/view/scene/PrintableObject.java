@@ -2,51 +2,57 @@ package view.scene;
 
 import java.awt.Color;
 
-import view.view3D.GL3.SceneObject;
-
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GL3;
 
+import model.Position;
 import model.math.Decimal;
 import model.math.Vecteur;
 
 public abstract class PrintableObject {
 	
 	public Color color;
-	
 	public String name;
-	
 	public boolean toBePrinted;
 	
+	public Position position;
 	
-	public PrintableObject (String n, Color c) {
+	
+	public PrintableObject (String n, Color c, Position pos) {
 		name = n;
 		color = c;
 		toBePrinted = true;
+		position = pos;
+	}
+	
+	public void setPosition (Position pos) {
+		position = pos;
 	}
 
 
 	// Affichage des objects en mode OpenGL 2
-	public abstract void drawObject (GL2 gl, Decimal echelle, int mode) ;
-
-	// Ajoute un vecteur en appliquant l'echelle
-	public void setPoint(Vecteur a, GL2 gl, Decimal echelle) {
-		Vecteur p = a.multiply(echelle);
-		gl.glVertex3fv(p.getFloats(), 0);
-	}
-
-	protected SceneObject getCarre(Vecteur v1, Vecteur v2, Vecteur v3, Vecteur v4) {
-		// Calcul de la normale
-		
-		// liste des points
-		Vecteur[] arr = new Vecteur[4];
-		arr[0] = v1; arr[1] = v2; arr[2] = v3; arr[3] = v4;  
-		SceneObject obj = new SceneObject(arr, GL3.GL_TRIANGLE_STRIP, this.color);
-		
-		return obj;
-	}
+	public abstract void drawObject (GL2 gl, int mode) ;
 	
+	
+	public void drawScene(GL2 gl, int mode) {
+		if (toBePrinted) {
+			// Positionne la matrice
+		    gl.glPushMatrix();       //equivalent to 'save current position'
+		    if (position != null) {
+		    	// Translation
+			    Vecteur pos = position.position;
+			    if (pos == null) pos = new Vecteur();
+		        gl.glTranslatef(pos.getDecX().floatValue(), pos.getDecY().floatValue(), pos.getDecZ().floatValue());
+		    	// Rotation 
+		    	if (!position.rotation.isZero()) {
+		    		pos = position.rotation; 
+		    		Decimal a = position.angle; if (a==null) a = Decimal.ZERO;
+			        gl.glRotatef(a.floatValue(), pos.getDecX().floatValue(), pos.getDecY().floatValue(), pos.getDecZ().floatValue());
+		    	}
+		    }
 
-
-
+			drawObject(gl, mode);
+		    
+		    gl.glPopMatrix();        //equivalent to 'load the last position saved'
+		}
+	}
 }

@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import view.scene.PrintableScene;
 import view.scene.PrintedMap;
+import model.Position;
 import model.calcul.CalculCoque;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
@@ -53,7 +54,7 @@ public class ViewTest extends JFrame {
         
         Patch ptch = Patch.getPatch();
         MapDeVecteurs mdv = CalculCoque.createCoque(ptch, 10, true);
-        scene.add(new PrintedMap(mdv, "", true, Color.blue));
+        scene.add(new PrintedMap(mdv, "", true, Color.blue, new Position()));
         
         upd.setScene(scene);
         

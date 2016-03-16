@@ -30,7 +30,7 @@ public class PrintedGabarit extends PrintableObject {
 	 * Construit les éléments du gabarit à afficher 
 	 * **/
 	public PrintedGabarit(Gabarit gab, PatchVide coque, Plan3D pl, String n, Color c) {
-		super(n, c);
+		super(n, c, null);
 		
 		name = gab.toString();
 		
@@ -61,7 +61,7 @@ public class PrintedGabarit extends PrintableObject {
 	 * Pas d'implementation en 3D
 	 */
 	@Override
-	public void drawObject(GL2 gl, Decimal e, int mode) {
+	public void drawObject(GL2 gl, int mode) {
 	}
 	
 	

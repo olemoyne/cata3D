@@ -73,7 +73,13 @@ public class Flottaison implements Serializable {
 	 * @return
 	 */
 	public Plan3D getPlan() {
-		// plan Y= 0
-		return new Plan3D(new Vecteur(1, 0, 0), new Vecteur(0, 0, 0), new Vecteur(0, 0, 1));		
+		// plan Y= 0 --> transformé
+		Transformation trs = this.getTransformation();
+		Plan3D pl = new Plan3D(
+				trs.getPoint(new Vecteur(1, 0, 0)), 
+				trs.getPoint(new Vecteur(0, 0, 0)),
+				trs.getPoint(new Vecteur(0, 0, 1))  );
+		
+		return pl;
 	}
 }

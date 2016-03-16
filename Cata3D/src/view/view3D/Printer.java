@@ -2,9 +2,12 @@ package view.view3D;
 
 import java.awt.Color;
 
+import model.math.Decimal;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.GLUquadric;
 
 public class Printer {
 	
@@ -35,8 +38,6 @@ public class Printer {
 		// Calcul de la normale
 		Vecteur n = Vecteur.getNormale(a.minus(b), c.minus(b)).negat();
 	    gl.glNormal3fv(n.getFloats(), 0);
-	    
-	    System.out.println("Normale = "+n.toString());
 	    
 		setPoint(a, gl);
 		setPoint(b, gl);
@@ -134,6 +135,42 @@ public class Printer {
 				new Vecteur(fin.getDecX(), fin.getDecY(), deb.getDecZ()));
 		
 		gl.glEnd();
+	}
+
+
+	public static void drawPoint(GL2 gl, Vecteur point, Color color) {
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, getColor(color, GL2.GL_DIFFUSE), 0);
+	    gl.glShadeModel(GL2.GL_SMOOTH);
+
+		GLU glu = new GLU();
+	    GLUquadric quadric = glu.gluNewQuadric();    //In Jogl
+	    glu.gluQuadricTexture(quadric, true);
+//        gl.glTranslatef(point.getDecX().floatValue(), point.getDecY().floatValue(), point.getDecZ().floatValue());
+        glu.gluSphere(quadric, 0.005f, 5, 5);
+	}
+
+
+	public static void drawLine(GL2 gl, Vecteur b, Vecteur e, Color color) {
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, getColor(color, GL2.GL_DIFFUSE), 0);
+	    gl.glShadeModel(GL2.GL_SMOOTH);
+
+	    gl.glBegin(GL2.GL_LINES);
+	    	setPoint(b, gl);
+	    	setPoint(e, gl);
+	    gl.glEnd();
+		
+	}
+
+
+	public static void drawCylindre(GL2 gl, Decimal rayon, Decimal hauteur, Color color) {
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, getColor(color, GL2.GL_DIFFUSE), 0);
+	    gl.glShadeModel(GL2.GL_SMOOTH);
+
+		GLU glu = new GLU();
+	    GLUquadric quadric = glu.gluNewQuadric();    //In Jogl
+	    glu.gluQuadricTexture(quadric, true);
+//        gl.glTranslatef(point.getDecX().floatValue(), point.getDecY().floatValue(), point.getDecZ().floatValue());
+        glu.gluCylinder(quadric, rayon.doubleValue(), rayon.doubleValue(), hauteur.doubleValue(), 10, 20);
 	}
 	
 

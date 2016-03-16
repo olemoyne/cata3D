@@ -2,6 +2,8 @@ package appli.arbre.nodes;
 
 import java.util.ArrayList;
 
+import view.scene.PrintableObject;
+import view.scene.PrintableScene;
 import appli.arbre.TreeNodeProperty;
 import appli.values.updater.ObjectUpdater;
 import model.composants.Composant;
@@ -55,5 +57,27 @@ public class RecopieTreeNode extends ComposantTreeNode {
 			for (Composant c : pv.boat.composants) if (c.nom.equals(a)) pv.autre = c;
 		}
 	}
+	
+	/** 
+	 * Permet d'afficher la scene correspondant à la vue définie
+	 * 
+	 */
+	public PrintableScene getScene () {
+		PrintableScene ret = super.getScene(); 
+
+		Recopie pv = (Recopie)composant;
+
+		if (pv.autre != null) {
+			// Affiche l'autre
+			for (PrintableObject o : pv.autre.getSceneObjects(pv.situation)) {
+				ret.add(o);
+			}
+		}
+
+		return ret;
+	}
+
+	
+	
 	
 }

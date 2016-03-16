@@ -18,6 +18,7 @@ import model.math.Vecteur;
 public class PositionUpdater extends ObjectUpdater {
 
 	DecimalField posX, posY, posZ;
+	DecimalField angle;
 	DecimalField rotX, rotY, rotZ;
 
 	/**
@@ -27,26 +28,35 @@ public class PositionUpdater extends ObjectUpdater {
 
 	public PositionUpdater () {
 		super();	
-		setLayout(new GridLayout(4, 2));
+		setLayout(new GridLayout(5, 2));
 		JLabel l = new JLabel("Position");
 		add(l);
+		
 		l = new JLabel("Rotation");
 		add(l);
-		
+
+
 		posX = new DecimalField("X : ", "m");
 		add(posX);
-		rotX = new DecimalField("X : ", "deg.");
+		rotX = new DecimalField("X : ", "");
 		add(rotX);
 
 		posY = new DecimalField("Y : ", "m");
 		add(posY);
-		rotY = new DecimalField("Y : ", "deg.");
+		rotY = new DecimalField("Y : ", "");
 		add(rotY);
 
 		posZ = new DecimalField("Z : ", "m");
 		add(posZ);
-		rotZ = new DecimalField("Z : ", "deg.");
+		rotZ = new DecimalField("Z : ", "");
 		add(rotZ);
+
+		l = new JLabel("");
+		add(l);
+		
+		angle = new DecimalField("Angle : ", "Deg.");
+		add(angle);
+		
 	}
 	
 	public void setOptions(Object[] opts) {
@@ -54,6 +64,10 @@ public class PositionUpdater extends ObjectUpdater {
 	
 	public void setProperty (Object val) {
 		Position v = (Position)val;
+
+		Decimal d = v.angle;
+		if (d == null) d = Decimal.ZERO;
+		angle.setField(d);
 
 		posX.setField(v.position.getDecX());
 		posY.setField(v.position.getDecY());
@@ -67,7 +81,8 @@ public class PositionUpdater extends ObjectUpdater {
 	public Object getData() {
 		Vecteur pos = new Vecteur ((Decimal)posX.getValue(), (Decimal)posY.getValue(), (Decimal)posZ.getValue());
 		Vecteur rot = new Vecteur ((Decimal)rotX.getValue(), (Decimal)rotY.getValue(), (Decimal)rotZ.getValue());
-		return new Position(pos, rot);
+		Decimal a = (Decimal)angle.getValue();
+		return new Position(pos, a, rot);
 	}
 	
 }

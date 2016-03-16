@@ -3,6 +3,7 @@ package view.scene;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import model.Position;
 import model.calcul.CalculSurface;
 import model.math.Axis;
 import model.math.MapDeVecteurs;
@@ -12,8 +13,8 @@ import com.jogamp.opengl.GL2;
 
 public class PrintedFluidityMap extends PrintedMap {
 
-	public PrintedFluidityMap (String nom, MapDeVecteurs mp) {
-		super(mp, nom, true, Color.blue);
+	public PrintedFluidityMap (String nom, MapDeVecteurs mp, Position pos) {
+		super(mp, nom, true, Color.blue, pos);
 	}
 	
 	public void setColor(GL2 gl, ArrayList<Vecteur> pts) {

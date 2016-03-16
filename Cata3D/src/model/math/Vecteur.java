@@ -51,6 +51,10 @@ public class Vecteur implements Serializable{
 		z = 0;
 	}
 
+	public boolean isZero () {
+		return (x + y + z == 0);
+	}
+	
 	/**
 	 *  Creation d'un vecteur en donnant des données 
 	 * @param x2

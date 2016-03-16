@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 
 import model.math.Axis;
+import model.math.Decimal;
 import model.math.Vecteur;
 import model.math.transfo.Rotation;
 import model.math.transfo.Transformation;
@@ -25,6 +26,8 @@ public class Position implements Serializable{
 	
 	/** Rotation dans chaque direction de l'espace **/
 	public Vecteur rotation;
+	
+	public Decimal angle ;
 
 
 	/**
@@ -33,11 +36,19 @@ public class Position implements Serializable{
 	public Position () {
 		position = new Vecteur();
 		rotation = new Vecteur ();
+		angle = Decimal.ZERO;
 	}
-	
-	public Position(Vecteur pos, Vecteur rot) {
+
+	public Position(Vecteur pos) {
+		this.position = pos;
+		rotation = new Vecteur ();
+		angle = Decimal.ZERO;
+	}
+
+	public Position(Vecteur pos, Decimal a, Vecteur rot) {
 		this.position = pos;
 		this.rotation = rot;
+		angle = a;
 	}
 
 	/** Retourne la transformation induite par la position du composant **/
@@ -59,6 +70,9 @@ public class Position implements Serializable{
 	public String toString () {
 		StringBuilder sb = new StringBuilder();
 		sb.append(position.toString());
+		sb.append("-");
+		Decimal a = angle; if (a == null) a = Decimal.ZERO;
+		sb.append(a.toString());
 		sb.append("-");
 		sb.append(rotation.toString());
 		return sb.toString();

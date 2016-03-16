@@ -7,7 +7,6 @@ import model.Cata;
 import model.Poids;
 import model.Position;
 import model.math.MapDeVecteurs;
-import model.math.transfo.Transformation;
 
 /**
  * Composant g√©n√©r√© √† partir d'un patch 
@@ -59,7 +58,7 @@ public class Recopie extends Composant {
 	/** 
 	 * GÈnËre la liste des objets correspondant au composant recopiÈ 
 	 * **/ 
-	public ArrayList<PrintableObject> getSceneObjects(Transformation trans) {
+	public ArrayList<PrintableObject> getSceneObjects(Position trans) {
 		if (autre == null) return new ArrayList<PrintableObject>();
 		return autre.getSceneObjects(trans);
 	}

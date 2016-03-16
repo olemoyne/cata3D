@@ -3,8 +3,8 @@ package view.scene;
 import java.awt.Color;
 
 import view.view3D.Printer;
+import model.Position;
 import model.math.Axis;
-import model.math.Decimal;
 import model.math.MapDeVecteurs;
 
 import com.jogamp.opengl.GL2;
@@ -19,17 +19,18 @@ public class PrintedMap extends PrintableObject {
 	private boolean fillup;
 	private boolean upperFace;
 	
-	public PrintedMap (MapDeVecteurs mp, String nom, boolean isFilled, Color col) {
-		super(nom, col);
+	public PrintedMap (MapDeVecteurs mp, String nom, boolean isFilled, Color col, Position pos) {
+		super(nom, col, pos);
 		map = mp;
 		fillup = isFilled;
 		upperFace = true;
+		position = pos;
 	}
 
 	
 	
 	@Override
-	public void drawObject(GL2 gl, Decimal echelle, int mode) {
+	public void drawObject(GL2 gl, int mode) {
 
 		if (map == null) return;
 

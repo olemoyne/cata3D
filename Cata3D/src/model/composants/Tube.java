@@ -4,11 +4,12 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import view.scene.PrintableObject;
+import view.scene.PrintedCylindre;
 import view.scene.PrintedForce;
-import view.scene.PrintedMap;
 import model.Apparence;
 import model.Cata;
 import model.Poids;
+import model.Position;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
 import model.math.Vecteur;
@@ -97,20 +98,19 @@ public class Tube extends Composant {
 		return map;
 	}
 	
-	public ArrayList<PrintableObject> getSceneObjects(Transformation trans) {
+	public ArrayList<PrintableObject> getSceneObjects(Position trans) {
 		ArrayList<PrintableObject> ret = new ArrayList<PrintableObject>();
 		Apparence app = this.getApparence();
-		if (trans != null) {
-			//** D�caler le desssin **/
-			ret.add(new PrintedMap (mapAffichage.transforme(trans), this.nom, !app.transparence, app.couleur));
+		if (trans == null) {
+			ret.add(new PrintedCylindre(this.diametre, this.longueur, this.nom, app.couleur, this.situation));
 			if (gravite != null) {
-				Poids pds = new Poids (gravite.nom, trans.transforme(gravite.position), gravite.force);
-				ret.add(new PrintedForce(pds, Color.RED));
+				ret.add(new PrintedForce(gravite, Color.RED));
 			}
 		} else {
-			ret.add(new PrintedMap (mapAffichage, this.nom, false, Color.darkGray));
+			ret.add(new PrintedCylindre(this.diametre, this.longueur, this.nom, app.couleur, trans));
 			if (gravite != null) {
-				Poids pds = new Poids (gravite.nom, gravite.position, gravite.force);
+				Transformation trs = trans.getTransformation(null);
+				Poids pds = new Poids (gravite.nom, trs.transforme(gravite.position), gravite.force);
 				ret.add(new PrintedForce(pds, Color.RED));
 			}			
 		}

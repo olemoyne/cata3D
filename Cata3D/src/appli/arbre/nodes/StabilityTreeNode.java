@@ -12,9 +12,9 @@ import view.scene.PrintedMap;
 import appli.arbre.TreeNodeProperty;
 import appli.values.updater.ObjectUpdater;
 import model.Cata;
+import model.Position;
 import model.composants.Composant;
 import model.math.MapDeVecteurs;
-import model.math.transfo.Transformation;
 
 public class StabilityTreeNode extends DesignTreeNode {
 
@@ -55,17 +55,17 @@ public class StabilityTreeNode extends DesignTreeNode {
 		if (bateau == null) return ret;
 		
 		// Calcule la position de la mer 
-		Transformation mer = bateau.mer.getTransformation();
+//		Transformation mer = bateau.mer.getTransformation();
 		
 		// Affiche chaque composant
 		for (Composant cmp : this.bateau.composants) {
-			for (PrintableObject obj : cmp.getSceneObjects(cmp.situation.getTransformation(mer))) {
+			for (PrintableObject obj : cmp.getSceneObjects(cmp.situation)) {
 				ret.add(obj);
 			}
 		}
 		// Affiche la carène des objects ...
 		for (MapDeVecteurs m : bateau.mer.carenes) {
-			ret.add(new PrintedMap(m, "Carène", true, Color.blue));
+			ret.add(new PrintedMap(m, "Carène", true, Color.blue, new Position()));
 		}
 		
 		// Affiche le poids total et la poussée résultante

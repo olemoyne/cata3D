@@ -10,6 +10,7 @@ import appli.arbre.TreeNodeProperty;
 import appli.values.CataValuesException;
 import appli.values.updater.ObjectUpdater;
 import model.Gabarit;
+import model.Position;
 import model.composants.PatchComposant;
 import model.composants.PatchVide;
 import model.math.Decimal;
@@ -60,11 +61,11 @@ public class GabaritsTreeNode extends DesignTreeNode {
 		PrintableScene ret = super.getScene(); 
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", false, Color.darkGray));					
+		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", false, Color.darkGray, new Position()));					
 
 		// Affiche les poids en rouge
 		for (Gabarit gab : comp.structure.gabarits) {
-			ret.add(new PrintedArea(gab.getArea(comp, Decimal.ZERO), gab.position.toString(), false, Color.GREEN));
+			ret.add(new PrintedArea(gab.getArea(comp, Decimal.ZERO), gab.position.toString(), false, Color.GREEN, new Position()));
 		}
 
 		return ret;

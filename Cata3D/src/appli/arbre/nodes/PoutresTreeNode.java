@@ -11,6 +11,7 @@ import appli.arbre.TreeNodeProperty;
 import appli.values.CataValuesException;
 import appli.values.updater.ObjectUpdater;
 import model.Gabarit;
+import model.Position;
 import model.Poutre;
 import model.composants.PatchComposant;
 import model.composants.PatchVide;
@@ -67,18 +68,18 @@ public class PoutresTreeNode extends DesignTreeNode {
 		PrintableScene ret = super.getScene(); 
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", false, Color.darkGray));					
+		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", false, Color.darkGray, new Position()));					
 
 		// Affiche les gabarits en rouge
 		for (Gabarit gab : comp.structure.gabarits) {
-			ret.add(new PrintedArea(gab.getArea(comp, Decimal.ZERO), gab.position.toString(), false, Color.GREEN));
+			ret.add(new PrintedArea(gab.getArea(comp, Decimal.ZERO), gab.position.toString(), false, Color.GREEN, new Position()));
 		}
 		
 		// Affiche les poutres en jaune
 
 		int pos = 0;
 		for (Poutre ptr : comp.structure.poutres) {
-			ret.add(new PrintedBlock(ptr.getStart(), ptr.getEnd(), Integer.toString(pos), false, Color.YELLOW));
+			ret.add(new PrintedBlock(ptr.getStart(), ptr.getEnd(), Integer.toString(pos), false, Color.YELLOW, new Position()));
 			pos ++;
 		}
 		

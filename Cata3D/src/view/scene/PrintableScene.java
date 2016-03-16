@@ -23,7 +23,7 @@ public class PrintableScene {
 	 */
 	public void printScene(GL2 gl, Decimal echelle, int mode) {
 		for (PrintableObject obj : allObjects) {
-			if (obj.toBePrinted) obj.drawObject(gl, echelle, mode);
+			obj.drawScene(gl, mode);
 		}
 	}
 

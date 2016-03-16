@@ -9,6 +9,7 @@ import appli.values.updater.ObjectUpdater;
 import view.scene.PrintableScene;
 import view.scene.PrintedForce;
 import view.scene.PrintedMap;
+import model.Position;
 import model.composants.PatchComposant;
 import model.math.Decimal;
 import model.math.InvalidGeomAction;
@@ -73,7 +74,7 @@ public class PatchTreeNode extends ComposantTreeNode {
 		PrintableScene ret = super.getScene(); 
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (composant.mapAffichage, "Coque", false, Color.darkGray));					
+		ret.add(new PrintedMap (composant.mapAffichage, "Coque", false, Color.darkGray, new Position()));					
 		
 		ret.add(new PrintedForce(this.composant.gravite, Color.RED));
 

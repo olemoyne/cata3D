@@ -9,6 +9,7 @@ import appli.arbre.TreeNodeProperty;
 import appli.values.CataValuesException;
 import appli.values.updater.ObjectUpdater;
 import model.Poids;
+import model.Position;
 import model.composants.Composant;
 import model.composants.PatchComposant;
 import view.scene.PrintableScene;
@@ -71,7 +72,7 @@ public class PoidsTreeNode extends DesignTreeNode {
 		PrintableScene ret = super.getScene(); 
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", false, Color.darkGray));					
+		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", false, Color.darkGray, new Position()));					
 
 		// Affiche les poids en rouge
 		for (Poids pds : comp.poids) {

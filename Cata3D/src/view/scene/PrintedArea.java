@@ -3,8 +3,9 @@ package view.scene;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import view.view3D.Printer;
 import model.Area;
-import model.math.Decimal;
+import model.Position;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL2;
@@ -14,8 +15,8 @@ public class PrintedArea extends PrintableObject {
 	private Area zone;
 	private boolean fillup;
 	
-	public PrintedArea (Area mp, String nom, boolean isFilled, Color col) {
-		super(nom, col);
+	public PrintedArea (Area mp, String nom, boolean isFilled, Color col, Position pos) {
+		super(nom, col, pos);
 		zone = mp;
 		fillup = isFilled;
 	}
@@ -29,19 +30,24 @@ public class PrintedArea extends PrintableObject {
 	}
 	
 	@Override
-	public void drawObject(GL2 gl, Decimal echelle, int mode) {
+	public void drawObject(GL2 gl, int mode) {
 
 		if (zone == null) return;
-		setColor (gl, null);
-		
+
+		float[] rgba = Printer.getColor(color, GL2.GL_DIFFUSE);
+		rgba[3] = 80f;
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, rgba, 0);
+	    gl.glShadeModel(GL2.GL_SMOOTH);
+
 		if ((!fillup)&&(mode == 0)) gl.glBegin(GL2.GL_LINE_STRIP);
 		else gl.glBegin(GL2.GL_POLYGON);
 		
-		for (Vecteur pt : zone.points) {
-			setPoint(pt, gl, echelle);
+		for (int i = zone.points.size()-1; i>= 0; i--) {
+			Vecteur pt = zone.points.get(i); 
+			Printer.setPoint(pt, gl);
 		}
 		Vecteur pt = zone.points.get(0);
-		setPoint(pt, gl, echelle);
+		Printer.setPoint(pt, gl);
 
 		gl.glEnd();
 			
