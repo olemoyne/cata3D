@@ -21,8 +21,11 @@ public class Area implements Serializable {
 	private static final long serialVersionUID = -4445241224165587862L;
 	public ArrayList<Vecteur> points;
 	
+	public Position situation;
+	
 	public Area () {
 		points = new ArrayList<Vecteur>();
+		situation = new Position();
 	}
 
 	/**

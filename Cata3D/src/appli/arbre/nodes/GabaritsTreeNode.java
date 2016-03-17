@@ -65,7 +65,7 @@ public class GabaritsTreeNode extends DesignTreeNode {
 
 		// Affiche les poids en rouge
 		for (Gabarit gab : comp.structure.gabarits) {
-			ret.add(new PrintedArea(gab.getArea(comp, Decimal.ZERO), gab.position.toString(), false, Color.GREEN, new Position()));
+			ret.add(new PrintedArea(gab.getArea(comp, Decimal.ZERO), gab.position.toString(), false, false, Color.GREEN, new Position()));
 		}
 
 		return ret;

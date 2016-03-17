@@ -341,13 +341,20 @@ public class Vecteur implements Serializable{
 	}
 	
 	
-	public Vecteur set(int axis, long pos) {
-		
+	public Vecteur set(int axis, long pos) {		
 		if (axis == Axis.XAxis) return new Vecteur (pos, y, z);
 		if (axis == Axis.YAxis) return new Vecteur (x, pos, z);
 		if (axis == Axis.ZAxis) return new Vecteur (x, y, pos);
 		return null;
 	}
+	
+	public Vecteur setDec(int axis, Decimal v) {
+		if (axis == Axis.XAxis) return new Vecteur (Math.round(v.doubleValue()*Vecteur.LMETER), y, z);
+		if (axis == Axis.YAxis) return new Vecteur (x, Math.round(v.doubleValue()*Vecteur.LMETER), z);
+		if (axis == Axis.ZAxis) return new Vecteur (x, y, Math.round(v.doubleValue()*Vecteur.LMETER));
+		return null;
+	}
+
 	
 	
 	public long get(int axis) {

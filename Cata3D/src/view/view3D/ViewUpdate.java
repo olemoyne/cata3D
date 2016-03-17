@@ -2,7 +2,6 @@ package view.view3D;
 
 import java.awt.Color;
 
-import model.math.Decimal;
 import model.math.Vecteur;
 
 import com.jogamp.opengl.GL;
@@ -24,7 +23,7 @@ public class ViewUpdate implements GLEventListener{
     
     protected int precision;
     
-    protected Decimal echelle;
+    protected int axisId;
     
     /**
      * Initialisation de la vue 3D
@@ -32,7 +31,6 @@ public class ViewUpdate implements GLEventListener{
 	public ViewUpdate(String inc) {
 		camera = new PositionCamera(inc);
 		precision = 2;
-		echelle = Decimal.UN;
 	}
 
 	/** 
@@ -41,8 +39,7 @@ public class ViewUpdate implements GLEventListener{
 	public void init(GLAutoDrawable drawable) {
       // Positionne les éléments valables dans toutes les vues 3D 
       GL2 gl = drawable.getGL().getGL2();
-      gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //erasing color
-      gl.glColor3f(0.0f, 0.0f, 0.0f); // drawing color
+      gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f); //erasing color
       gl.glViewport(-400, -400, 800, 800);
       // Gestion de la profondeur --> less_or_equals affiche les elements qui sont devant
       gl.glEnable( GL2.GL_DEPTH_TEST );
@@ -64,6 +61,9 @@ public class ViewUpdate implements GLEventListener{
       gl.glEnable(GL2.GL_LIGHT0);
       gl.glEnable(GL2.GL_DEPTH_TEST);
 
+      this.initDrawing(gl);
+      
+      gl.setSwapInterval(1);
     }
 	
 	public float[] getColor(Color color) {
@@ -76,12 +76,18 @@ public class ViewUpdate implements GLEventListener{
         return rgba; 
 	}
 
+    protected void drawAxis (GL2 gl) {
+    	gl.glCallList(axisId);
+    }
+
+    public void initDrawing(GL2 gl) {
+    	this.initAxis(gl);
+    }
 
 // Pas de transparence	
-    private void drawAxis (GL2 gl) {
-        // Mode de gestion de la tranparence (ALPHA) --> Les axes sont tranparents à 80% 
-        gl.glEnable(GL.GL_BLEND);
-        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE);
+    protected void initAxis (GL2 gl) {
+        axisId = gl.glGenLists(1);
+        gl.glNewList(axisId, GL2.GL_COMPILE);
         
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, getColor(Color.red), 0);
 	    gl.glShadeModel(GL2.GL_SMOOTH);
@@ -102,8 +108,8 @@ public class ViewUpdate implements GLEventListener{
         gl.glVertex3f(0, 0, -8f);
         gl.glVertex3f(0, 0.0f, 8f);
         gl.glEnd();
-        
-        gl.glDisable(GL.GL_BLEND);
+
+        gl.glEndList();
 
     }
 
@@ -114,7 +120,7 @@ public class ViewUpdate implements GLEventListener{
 	 */
     public void drawInside(GL2 gl) {
     	// Passe en mode de calcul de type model
-        gl.glMatrixMode(GL2.GL_MODELVIEW);          
+        gl.glMatrixMode(GL2.GL_MODELVIEW);  
 		this.drawAxis(gl);
 	}
 
@@ -203,11 +209,11 @@ public class ViewUpdate implements GLEventListener{
 		camera.reset();
 	}
 	
-	// Ajoute un vecteur en appliquant l'echelle
+/**	// Ajoute un vecteur en appliquant l'echelle
 	public void setPoint(Vecteur a, GL2 gl) {
 		gl.glVertex3f(a.getDecX().multiply(echelle).floatValue(), a.getDecY().multiply(echelle).floatValue(), a.getDecZ().multiply(echelle).floatValue());
 	}
-
+**/
 
 	@Override
 	public void dispose(GLAutoDrawable drawable) {

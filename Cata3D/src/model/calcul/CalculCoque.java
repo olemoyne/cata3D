@@ -55,7 +55,7 @@ public class CalculCoque {
         	Transformation trs = cmp.situation.getTransformation(null);
         	MapDeVecteurs mdv = cmp.mapAffichage.transforme(trs);
         	MapDeVecteurs crn = mdv.truncate(surface);
-        	bateau.mer.carenes.add(crn);
+        	if (crn != null) bateau.mer.carenes.add(crn);
         }
 	}
 	

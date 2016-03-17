@@ -54,7 +54,7 @@ public class PrintableObjectViewer extends View3D implements ListSelectionListen
 
 		if (objectListTable != null) pnl.add(new JScrollPane(objectListTable), BorderLayout.CENTER);
 		// Ajoute un bouton de gestion de l'�chelle
-		echelle = new JButton(view.echelle.toString());
+		echelle = new JButton(view.getEchelle().toString());
 		echelle.setForeground(Color.black);
 		echelle.setToolTipText("Ajuste l'échelle");
 		echelle.setActionCommand("echelle");
@@ -94,10 +94,10 @@ public class PrintableObjectViewer extends View3D implements ListSelectionListen
 			// Ouvre le dialogue de mise à jour de l'échelle
 			// Si OK : ajoute un composant sur le bateau
 			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-			DialogEchelle dialg = new DialogEchelle(topFrame, view.echelle); 
+			DialogEchelle dialg = new DialogEchelle(topFrame, view.getEchelle()); 
 			if (dialg.isOk) {
-				this.view.echelle = dialg.echelle;
-				this.echelle.setText(this.view.echelle.toString());
+				view.setEchelle(dialg.echelle);
+				this.echelle.setText(view.getEchelle().toString());
 				super.display();
 			}
 			return;
@@ -126,7 +126,7 @@ public class PrintableObjectViewer extends View3D implements ListSelectionListen
 	}
 
 	public Decimal getEchelle() {
-		return view.echelle;
+		return view.getEchelle();
 	}
 	
 }

@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Cata;
-import model.composants.Composant;
-import view.scene.PrintableObject;
+import model.CataScene;
 import view.scene.PrintableScene;
 import appli.arbre.TreeNodeProperty;
 import appli.values.updater.ObjectUpdater;
@@ -47,17 +46,7 @@ public class BoatTreeNode extends DesignTreeNode {
 	 * 
 	 */
 	public PrintableScene getScene () {
-		PrintableScene ret = new PrintableScene();
-
-		if (bateau == null) return ret;
-		
-		// Affiche chaque composant
-		for (Composant cmp : this.bateau.composants) {
-			for (PrintableObject obj : cmp.getSceneObjects(cmp.situation)) {
-				ret.add(obj);
-			}
-		}
-		return ret;
+		return CataScene.getStandardScene(bateau);
 	}
 
 

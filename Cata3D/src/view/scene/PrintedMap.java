@@ -5,6 +5,7 @@ import java.awt.Color;
 import view.view3D.Printer;
 import model.Position;
 import model.math.Axis;
+import model.math.Decimal;
 import model.math.MapDeVecteurs;
 
 import com.jogamp.opengl.GL2;
@@ -17,13 +18,11 @@ public class PrintedMap extends PrintableObject {
 
 	private MapDeVecteurs map;
 	private boolean fillup;
-	private boolean upperFace;
 	
 	public PrintedMap (MapDeVecteurs mp, String nom, boolean isFilled, Color col, Position pos) {
 		super(nom, col, pos);
 		map = mp;
 		fillup = isFilled;
-		upperFace = true;
 		position = pos;
 	}
 
@@ -33,6 +32,8 @@ public class PrintedMap extends PrintableObject {
 	public void drawObject(GL2 gl, int mode) {
 
 		if (map == null) return;
+		
+		Decimal centre = map.getCenter().getDecX();
 
 		if ((!fillup)&&(mode == 0)) {
 					
@@ -54,15 +55,16 @@ public class PrintedMap extends PrintableObject {
 				int y = map.ySize()-1;
 				Printer.drawCarre(
 						gl, map.getPoint(x-1,  y),
-						map.getPoint(x-1,  y).set(Axis.XAxis, 0),
-						map.getPoint(x,  y).set(Axis.XAxis, 0),
+						map.getPoint(x-1,  y).setDec(Axis.XAxis, centre),
+						map.getPoint(x,  y).setDec(Axis.XAxis, centre),
 						map.getPoint(x,  y));
 				Printer.drawCarre(
 						gl, map.getPoint(x-1,  0),
 						map.getPoint(x,  0), 
-						map.getPoint(x,  0).set(Axis.XAxis, 0),
-						map.getPoint(x-1,  0).set(Axis.XAxis, 0));
+						map.getPoint(x,  0).setDec(Axis.XAxis, centre),
+						map.getPoint(x-1,  0).setDec(Axis.XAxis, centre));
 			}		
+			// Dessus de la forme
 			int x = map.xSize()-1;
 			for (int y = 1; y < map.ySize(); y ++) {
 				Printer.drawCarre(
@@ -91,14 +93,14 @@ public class PrintedMap extends PrintableObject {
 				int y = map.ySize()-1;
 				Printer.drawLineCarre(
 						gl, map.getPoint(x-1,  y),
-						map.getPoint(x-1,  y).set(Axis.XAxis, 0),
-						map.getPoint(x,  y).set(Axis.XAxis, 0),
+						map.getPoint(x-1,  y).setDec(Axis.XAxis, centre),
+						map.getPoint(x,  y).setDec(Axis.XAxis, centre),
 						map.getPoint(x,  y));
 				Printer.drawLineCarre(
 						gl, map.getPoint(x-1,  0),
 						map.getPoint(x,  0), 
-						map.getPoint(x,  0).set(Axis.XAxis, 0),
-						map.getPoint(x-1,  0).set(Axis.XAxis, 0));
+						map.getPoint(x,  0).setDec(Axis.XAxis, centre),
+						map.getPoint(x-1,  0).setDec(Axis.XAxis, centre));
 			}		
 			int x = map.xSize()-1;
 			for (int y = 1; y < map.ySize(); y ++) {

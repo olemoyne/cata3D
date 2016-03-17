@@ -22,7 +22,9 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 	private PrintableScene scene;
 	private boolean updated;
 	private int mode;
-	
+
+	private Decimal echelle;
+    	
 	public static int PERSPECTIVE_MODE = 0;
 	public static int ORTHO_MODE = 1;
 	public static int COUPE_MODE = 2;
@@ -40,6 +42,10 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 		updated = true;
 	}
 
+	protected void setEchelle (Decimal ech) {
+		echelle = ech;
+		updated = true;
+	}
 	
 	
 	protected void setMode (int md) {
@@ -48,27 +54,38 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 		// Si mode = ORTHO Ajoute les lumières 
 	}
 
+    public void initDrawing(GL2 gl) {
+    	// Positionne l'échelle 
+		gl.glMatrixMode(GL2.GL_MODELVIEW);
+        gl.glLoadIdentity();
+        gl.glScalef(echelle.floatValue(), echelle.floatValue(), echelle.floatValue());
+
+        this.initAxis(gl);
+    	this.initScene(gl);
+    }
+
+	private void initScene(GL2 gl) {
+		if (scene == null) return ;    	     
+        scene.printScene(gl, echelle, mode);
+	}
+
 	/**
 	 *  Affichage du CANVAS
 	 *   
 	 * @param gl
 	 */
 	public void display(GLAutoDrawable drawable) {
+
          GL2 gl = drawable.getGL().getGL2();
+         /// Vide l'écran
+         gl.glClear(GL.GL_COLOR_BUFFER_BIT|GL.GL_DEPTH_BUFFER_BIT);
          changeCameraPosition(gl);
         if (updated ) {
-            gl.glClear(GL.GL_COLOR_BUFFER_BIT|GL.GL_DEPTH_BUFFER_BIT); 
-	  		if (mode == PERSPECTIVE_MODE) {
-	  			// Nettoie les buffers
-				// positionne la caméra
-	          drawInside(gl);
-			}
-			if (mode == ORTHO_MODE) {
-	  			// Nettoie les buffers
-		          gl.glClear(GL.GL_COLOR_BUFFER_BIT|GL.GL_DEPTH_BUFFER_BIT);
-		          drawInside(gl);		      
-			}
+        	initDrawing(gl);
+        	updated = false;
         }
+    	gl.glCallList(axisId);
+    	if (scene != null) scene.showScene(gl);
     }
 
 	
@@ -79,11 +96,8 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 	 */
     public void drawInside(GL2 gl) {
     	// Affiche les axes
-    	super.drawInside(gl);
-		
-    	if (scene == null) return ;
-    	
-    	scene.printScene(gl, echelle, mode);
+    	gl.glCallList(axisId);
+    	if (scene != null) scene.showScene(gl);
 	}
 
 	/** 
@@ -102,6 +116,10 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 		if (value.toBePrinted) lab.setFont(new Font("Arial", Font.BOLD, 12));
 		else lab.setFont(new Font("Arial", Font.PLAIN, 12));
 		return lab;
+	}
+
+	public Decimal getEchelle() {
+		return echelle;
 	}
 
 }

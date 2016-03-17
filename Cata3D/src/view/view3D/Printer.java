@@ -37,6 +37,12 @@ public class Printer {
 	public static void drawCarre(GL2 gl, Vecteur a, Vecteur b, Vecteur c, Vecteur d) {
 		// Calcul de la normale
 		Vecteur n = Vecteur.getNormale(a.minus(b), c.minus(b)).negat();
+		if (n.isZero()) {
+			if (a.equals(b))
+				n = Vecteur.getNormale(b.minus(c), d.minus(c)).negat();
+			if (b.equals(c))
+				n = Vecteur.getNormale(c.minus(d), a.minus(d)).negat();
+		}
 	    gl.glNormal3fv(n.getFloats(), 0);
 	    
 		setPoint(a, gl);

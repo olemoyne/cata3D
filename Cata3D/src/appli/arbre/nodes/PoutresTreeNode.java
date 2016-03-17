@@ -72,7 +72,7 @@ public class PoutresTreeNode extends DesignTreeNode {
 
 		// Affiche les gabarits en rouge
 		for (Gabarit gab : comp.structure.gabarits) {
-			ret.add(new PrintedArea(gab.getArea(comp, Decimal.ZERO), gab.position.toString(), false, Color.GREEN, new Position()));
+			ret.add(new PrintedArea(gab.getArea(comp, Decimal.ZERO), gab.position.toString(), false, true, Color.GREEN, new Position()));
 		}
 		
 		// Affiche les poutres en jaune

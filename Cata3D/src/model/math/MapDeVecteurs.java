@@ -33,14 +33,18 @@ public class MapDeVecteurs implements Serializable {
 	
 	Vecteur[][] data;
 	
+	Vecteur centre;
+	
 	public MapDeVecteurs () {
 		data = new Vecteur[0][0];
+		centre = new Vecteur();
 	}
 		
 	public MapDeVecteurs (int x, int y) {
 		data = new Vecteur[x][y];
 		xSize = x;
 		ySize = y;
+		centre = new Vecteur();
 	}
 	
 	public MapDeVecteurs(MapDeVecteurs map) {
@@ -54,9 +58,14 @@ public class MapDeVecteurs implements Serializable {
 				data[x][y] = new Vecteur(map.getPoint(x, y));
 			}
 		}
+		centre = new Vecteur(map.centre);
+
 	}
 
-
+	public Vecteur getCenter() {
+		return centre;
+	}
+	
 	public Vecteur getPoint(int i, int y) {
 		return data[i][y];
 	}
@@ -106,7 +115,8 @@ public class MapDeVecteurs implements Serializable {
 			for (int ypos = 0; ypos < this.ySize; ypos ++) {
 				ret.setPoint(pos, ypos, ref.transforme(getPoint(pos, ypos)));
 			}
-		}	
+		}
+		ret.centre = ref.transforme(centre);
 		return ret;
 	}
 
@@ -119,46 +129,64 @@ public class MapDeVecteurs implements Serializable {
 		// Recopie les ï¿½lï¿½ments de la map
 		MapDeVecteurs ret = new MapDeVecteurs(this);
 		
+		ArrayList<Integer> toRemove = new ArrayList<Integer>(); 
+		
 		//Parcours tous les points verticaux. Attention les points entre et sortent de l'eau
 		for (int ypos = 0; ypos < this.ySize; ypos ++) {
-			// calcule la position de la mer pour une tranche
 			
 			// calcul l'intersection avec le plan
 			Vecteur inter = null;
+			boolean nullValues = false;
+			boolean notNullValues = false;
 			// Recherche la premiï¿½re intersection
-			for (int xpos = 1; xpos < this.xSize; xpos ++) {
-				Vecteur v = surface.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
-				if ((v != null)&&(inter == null)) inter = v;
-			}
-			// pas d'intersection du tout
-			if (inter == null) {
-				for (int xpos = 0; xpos < this.xSize; xpos ++) 
-					ret.setPoint(xpos, ypos, new Vecteur ());
-			} else {
-	
-				boolean auDessus = true;
-				if (surface.donneCote(getPoint(0, ypos)) > 0) auDessus = false; 
-				
-				if (auDessus)
-					ret.setPoint(0, ypos, inter);
-				else 
-					ret.setPoint(0, ypos, this.getPoint(ypos, 0));
-					
-				for (int xpos = 1; xpos < this.xSize; xpos ++) {
-					Vecteur v = surface.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
-					if ((v != null)&&(!v.equals(this.getPoint(xpos-1, ypos)))) {
-						auDessus = !auDessus;
-						inter = v;
+			for (int xpos = 0; xpos < this.xSize; xpos ++) {
+				if (surface.donneCote(getPoint(xpos, ypos)) <= 0) {// en dessous
+					ret.setPoint(xpos, ypos, getPoint(xpos, ypos));
+					notNullValues = true;
+					if (xpos > 0) {
+						inter = surface.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
 					}
-					if (auDessus)
-						ret.setPoint(xpos, ypos, inter);
-					else 
-						ret.setPoint(xpos, ypos, this.getPoint(xpos, ypos));
-				}									
+				} else {
+					if (inter == null) nullValues = true;
+					else notNullValues = true;
+					ret.setPoint(xpos, ypos, inter);
+				}
+			} 
+			// Toutes les valeurs sont nulles
+			if (notNullValues == false) {
+				toRemove.add(ypos);
 			}
-		}	
+			// Attention, il existe des cas à null
+			if (nullValues) {
+				Vecteur last = null;
+				for (int xpos = this.xSize-1; xpos >= 0 ; xpos --) {
+					if (ret.getPoint(xpos, ypos) == null)
+						ret.setPoint(xpos, ypos, last);
+					else last = ret.getPoint(xpos, ypos);
+				}
+			}
+		}
 		
-		return ret;
+		// Supprime les tranches sans intersections
+		// Si aucune intersection --> retourne aucune MAP
+		if (toRemove.size() == ySize) return null;
+
+		MapDeVecteurs mps = new MapDeVecteurs(this.xSize, this.ySize-toRemove.size());
+		int indx = 0;
+		for (int ypos = 0; ypos < this.ySize; ypos ++) {
+			boolean trouve = false;
+			for (int i : toRemove) if (i == ypos) trouve = true;
+			if (!trouve) {
+				for (int xpos = 0; xpos < this.xSize; xpos ++) {
+					mps.setPoint(xpos, indx, ret.getPoint(xpos, ypos));
+				}	
+				indx ++;
+			}
+		}
+		
+		mps.centre = this.centre;
+		
+		return mps;
 	}
 
 	/** 
