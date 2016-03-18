@@ -72,7 +72,7 @@ public class PoidsTreeNode extends DesignTreeNode {
 		PrintableScene ret = super.getScene(); 
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", false, Color.darkGray, new Position()));					
+		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", true, Color.darkGray, new Position()));					
 
 		// Affiche les poids en rouge
 		for (Poids pds : comp.poids) {

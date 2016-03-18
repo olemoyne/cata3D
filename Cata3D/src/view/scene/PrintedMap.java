@@ -76,7 +76,7 @@ public class PrintedMap extends PrintableObject {
 			gl.glEnd();
 		} else {
 			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, Printer.getColor(color, GL2.GL_DIFFUSE), 0);
-		    gl.glShadeModel(GL2.GL_SMOOTH);
+		    gl.glShadeModel(GL2.GL_FLAT);
 		    
 			gl.glBegin(GL2.GL_LINES);		
 	

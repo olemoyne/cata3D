@@ -56,10 +56,10 @@ public class CataScene {
 		Transformation trs = bateau.mer.getTransformation();
 		// Affiche la mer ... Y = 0 
 		ArrayList<Vecteur> mer = new ArrayList<Vecteur>();
-		mer.add(trs.getPoint(new Vecteur ("-8;0;-8")));
-		mer.add(trs.getPoint(new Vecteur ("8;0;-8")));
-		mer.add(trs.getPoint(new Vecteur ("8;0;8")));
-		mer.add(trs.getPoint(new Vecteur ("-8;0;8")));
+		mer.add(trs.transforme(new Vecteur ("-8;0;-8")));
+		mer.add(trs.transforme(new Vecteur ("8;0;-8")));
+		mer.add(trs.transforme(new Vecteur ("8;0;8")));
+		mer.add(trs.transforme(new Vecteur ("-8;0;8")));
 		
 		Area a = new Area();
 		a.points.addAll(mer);
@@ -68,10 +68,10 @@ public class CataScene {
 		ret.add(new PrintedArea(a, "Mer dessus", true, true, sur, new Position()));
 		// Seconde face -- mer vue du dessous
 		mer = new ArrayList<Vecteur>();
-		mer.add(trs.getPoint(new Vecteur ("-8;0;-8")));
-		mer.add(trs.getPoint(new Vecteur ("-8;0;8")));
-		mer.add(trs.getPoint(new Vecteur ("8;0;8")));
-		mer.add(trs.getPoint(new Vecteur ("8;0;-8")));
+		mer.add(trs.transforme(new Vecteur ("-8;0;-8")));
+		mer.add(trs.transforme(new Vecteur ("-8;0;8")));
+		mer.add(trs.transforme(new Vecteur ("8;0;8")));
+		mer.add(trs.transforme(new Vecteur ("8;0;-8")));
 		
 		a = new Area();
 		a.points.addAll(mer);

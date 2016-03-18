@@ -3,6 +3,7 @@ package model.calcul;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import model.Area;
 import model.math.Axis;
 import model.math.Decimal;
 import model.math.Vecteur;
@@ -33,6 +34,7 @@ public class CalculSurface {
 		Decimal total = Decimal.ZERO;
 		
 		for (int i = 0; i < lst.size()-1; i++) {
+			if (lst.get(i+1) == null) return Decimal.ZERO;
 			Point2D.Double v = lst.get(i).get2D(ax);
 			Point2D.Double vplusun = lst.get(i+1).get2D(ax);
 			double dble = v.x*vplusun.y - v.y*vplusun.x;
@@ -83,6 +85,58 @@ public class CalculSurface {
 		return null;
 	}
 
+	public static Vecteur getCentreSurfaces(ArrayList<Area> surfs, int ax) {
+		// FORMULE : moyenne pondérée des centre =(xg, yg) A = aire
+		// xg = 1/(6*A) * somme[I=0 --> n-1] (Xi + Xi+1)*(XiYi+1 - YiXi+1)
+		// yg = 1/(6*A) * somme[I=0 --> n-1] (Yi + Yi+1)*(XiYi+1 - YiXi+1)
+		
+		Decimal surfTotal = Decimal.ZERO;
+		Decimal totalX = Decimal.ZERO;
+		Decimal totalY = Decimal.ZERO;			
+		Decimal totalZ = Decimal.ZERO;
+
+		for (Area a : surfs) {
+			ArrayList<Vecteur> lst = a.points;
+			Decimal A = getSurface(lst, ax);
+			Decimal abs = A.abs();
+			if (abs.compareTo(new Decimal(0.000001)) > 0) {
+				surfTotal = surfTotal.add(abs);
+
+				Decimal totX = Decimal.ZERO;
+				Decimal totY = Decimal.ZERO;			
+				Decimal totZ = Decimal.ZERO;
+		
+				for (int i = 0; i < lst.size()-1; i++) {
+					Point2D.Double v = lst.get(i).get2D(ax);
+					Point2D.Double  vplusun = lst.get(i+1).get2D(ax);
+					Decimal x = new Decimal(v.x+vplusun.x);
+					Decimal y = new Decimal(v.y+vplusun.y);
+					Decimal sub = new Decimal((v.x*vplusun.y) - (v.y*vplusun.x));
+					totX = totX.add(sub.multiply(x));
+					totY = totY.add(sub.multiply(y));
+					totZ = totZ.add(lst.get(i).getDec(ax));
+				}
+				
+				totZ = totZ.add(lst.get(lst.size()-1).getDec(ax));
+				totZ = totZ.divide(new Decimal(lst.size()));
+				
+				Decimal delta = new Decimal(6);
+				totalX = totalX.add(totX.divide(delta));
+				totalY = totalY.add(totY.divide(delta));
+				totalZ = totalZ.add(totZ);
+			}
+		}
+		if (surfTotal.isZero()) return new Vecteur();
+		
+		if (ax == Axis.XAxis) return new Vecteur (totalZ, totalX.divide(surfTotal), totalY.divide(surfTotal));
+		if (ax == Axis.YAxis) return new Vecteur (totalX.divide(surfTotal), totalZ, totalY.divide(surfTotal));
+		if (ax == Axis.ZAxis) return new Vecteur (totalX.divide(surfTotal), totalY.divide(surfTotal), totalZ);
+		return null;
+	}
+
+	
+	
+	
 	/***
 	 * Calcule le coefficient de rï¿½sistance de chaque pavï¿½ de la carï¿½ne
 	 * 
@@ -95,16 +149,16 @@ public class CalculSurface {
 		if (lst.size() != 4 ) return Decimal.ZERO;
 		
 		
-		Decimal srf = CalculSurface.getSurface(lst, ax);
+		Decimal srf = CalculSurface.getSurface(lst, Axis.XAxis);
 		if (srf.isZero()) return Decimal.ZERO;
 
 		ArrayList<Vecteur> pts = new ArrayList<Vecteur> (4);
 		for (Vecteur v : lst) pts.add(new Vecteur(v.getDecX(), v.getDecY(), Decimal.ZERO));
 
-		Decimal frein = CalculSurface.getSurface(pts, ax);
-
+		Decimal frein = CalculSurface.getSurface(pts, Axis.ZAxis);
+		Decimal coef =  frein.divide(srf).abs();
 		
-		Decimal res = frein.divide(srf).multiply(new Decimal(10f));
+		Decimal res = Decimal.min(coef, Decimal.UN);
 		return res;
 	}
 
@@ -141,4 +195,5 @@ public class CalculSurface {
 		System.out.println("Surface GET : "+getSurface(pts, Axis.XAxis));
 
 	}
+
 }

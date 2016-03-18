@@ -32,6 +32,7 @@ public class StudyTreeNode extends DesignTreeNode {
 		
 		new StabilityTreeNode( this, boat, "Stabilité");
 		new DeriveTreeNode( this, boat, "Dérive");		
+		new DynamismeTreeNode( this, boat, "Dynamisme");
 	}
 	
 

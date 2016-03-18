@@ -209,7 +209,7 @@ public class Solide {
 		ArrayList<Triangle> tr = new ArrayList<Triangle>();
 		for (Triangle tri : this.triangles) {
 			Vecteur[] smt = tri.getSommets(); 
-				tr.add(new Triangle(trans.getPoint(smt[0]), trans.getPoint(smt[1]), trans.getPoint(smt[2])));
+				tr.add(new Triangle(trans.transforme(smt[0]), trans.transforme(smt[1]), trans.transforme(smt[2])));
 		}
 		return new Solide(tr);
 	}

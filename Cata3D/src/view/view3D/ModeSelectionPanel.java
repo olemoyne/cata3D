@@ -31,9 +31,8 @@ public class ModeSelectionPanel extends JPanel {
 	    add(lab);
 	    
 	    // Ajoute les boutons
-	    addButton("Perspective", "Mode perspective", list, group, true);
-	    addButton("Ortho", "Mode orthonormé", list, group, false);
-	    addButton("Découpe", "Mode découpe", list, group, false);
+	    addButton("Surfaces pleines", "Mode perspective", list, group, true);
+	    addButton("Filaire", "Mode orthonormé", list, group, false);
 	}
 
 	private void addButton(String nom, String action, ActionListener list, ButtonGroup grp, boolean val) {

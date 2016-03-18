@@ -80,7 +80,7 @@ public class Poids implements Serializable {
 	}
 
 	public Poids transforme(Transformation trans) {
-		Poids ret = new Poids (this.nom, trans.getPoint(position), force);
+		Poids ret = new Poids (this.nom, trans.transforme(position), force);
 		return ret;
 	}
 	

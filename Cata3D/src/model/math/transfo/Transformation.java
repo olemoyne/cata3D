@@ -2,6 +2,8 @@ package model.math.transfo;
 
 import java.io.Serializable;
 
+import model.math.Axis;
+import model.math.Decimal;
 import model.math.Vecteur;
 
 
@@ -47,6 +49,14 @@ public abstract class Transformation implements Serializable {
 	 * @param ret
 	 * @return
 	 */
-	public abstract Vecteur getPoint(Vecteur ret);
+	protected abstract Vecteur getPoint(Vecteur ret);
 	
+	
+	public static void main (String[] args){
+		Rotation rot = new Rotation(Axis.XAxis, Decimal.UN, null);
+		Transformation trans = new Translation (new Vecteur ("0;-2;0"), rot);
+		
+		Vecteur res = trans.transforme(new Vecteur ("0;0;1"));
+		System.out.println(res);
+	}
 }

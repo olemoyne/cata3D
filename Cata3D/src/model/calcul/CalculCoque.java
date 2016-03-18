@@ -52,11 +52,28 @@ public class CalculCoque {
 		Plan3D surface = bateau.mer.getPlan();
 		bateau.mer.carenes.clear();
         for (Composant cmp : bateau.composants) {
-        	Transformation trs = cmp.situation.getTransformation(null);
-        	MapDeVecteurs mdv = cmp.mapAffichage.transforme(trs);
-        	MapDeVecteurs crn = mdv.truncate(surface);
-        	if (crn != null) bateau.mer.carenes.add(crn);
+        	if (cmp.mapAffichage != null) {
+	        	Transformation trs = cmp.situation.getTransformation(null);
+	        	MapDeVecteurs mdv = cmp.mapAffichage.transforme(trs);
+	        	MapDeVecteurs crn = mdv.truncate(surface);
+	        	if (crn != null) bateau.mer.carenes.add(crn);
+        	}
         }
+	}
+	
+	public static Decimal calculeSurfaceCoque(MapDeVecteurs map) {
+		Decimal surf = Decimal.ZERO;
+		for (int x = 1; x < map.xSize(); x ++) {
+			for (int y = 1; y < map.ySize(); y ++) {
+				Vecteur A = map.getPoint(x-1,  y-1);
+				Vecteur B= map.getPoint(x,  y-1);
+				Vecteur C = map.getPoint(x,  y);
+				Vecteur D = map.getPoint(x-1,  y);
+				Decimal aire = Vecteur.calculeSurface(A, B, C).add(Vecteur.calculeSurface(A, C, D));
+				surf = surf.add(aire);
+			}
+		}
+		return surf;
 	}
 	
 	/** Calcule la surface totale de la coque et multiplie par le coeficient 
@@ -123,19 +140,17 @@ public class CalculCoque {
 		// Création d'une projection
 		cata.mer.surfaceAntiDerive = new ArrayList<Area>(); 
         for (MapDeVecteurs cmp : cata.mer.carenes) {
-        	cata.mer.surfaceAntiDerive.add(cmp.getProjection());
+        	if (cmp.isValid())
+        		cata.mer.surfaceAntiDerive.add(cmp.getProjection());
         }
 
         Decimal surf = Decimal.ZERO;
         for (Area a : cata.mer.surfaceAntiDerive) surf = surf.add(CalculSurface.getSurface(a.points, Axis.XAxis));
 		cata.mer.surfaceTotale = surf;
 
-		Vecteur ctr = new Vecteur();
-        for (Area a : cata.mer.surfaceAntiDerive) ctr = ctr.add(CalculSurface.getCentreSurface(a.points, Axis.XAxis).multiply(CalculSurface.getSurface(a.points, Axis.XAxis)));
-        if (surf.isZero()) 
-        	cata.mer.centreAntiDerive = new Vecteur();
-        else 
-        	cata.mer.centreAntiDerive = ctr.multiply(Decimal.UN.divide(surf));
+    	Vecteur v = CalculSurface.getCentreSurfaces(cata.mer.surfaceAntiDerive, Axis.XAxis);
+
+       	cata.mer.centreAntiDerive = v;
 	}
 	
 }

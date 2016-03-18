@@ -66,13 +66,14 @@ public class Tube extends Composant {
     	mapAffichage = createMap();
 		Decimal pds = new Decimal(Math.PI).multiply(diametre.square().minus(diametre.minus(Decimal.DEUX.multiply(epaisseur)).square())).multiply(densite).multiply(this.longueur);
 		// TODO : Revoir la position du poids
-		Vecteur ctr = this.situation.getTransformation(null).getPoint(new Vecteur(Decimal.ZERO, longueur.divide(Decimal.DEUX), Decimal.ZERO));
+		Vecteur ctr = this.situation.getTransformation(null).transforme(new Vecteur(Decimal.ZERO, longueur.divide(Decimal.DEUX), Decimal.ZERO));
 		this.gravite = new Poids ("Centre de gravité", ctr, pds);
 		super.recalcule();
     }
 
 	private MapDeVecteurs createMap() {
-		int nbPoints = 8;
+		return null;
+/**		int nbPoints = 8;
 		// Creation d"un saucisson de la longueur du tube
 		MapDeVecteurs map = new MapDeVecteurs(10, nbPoints);
 		// Construit le premier cercle
@@ -96,7 +97,7 @@ public class Tube extends Composant {
 			y = y.add(d);
 		}
 		return map;
-	}
+**/	}
 	
 	public ArrayList<PrintableObject> getSceneObjects(Position trans) {
 		ArrayList<PrintableObject> ret = new ArrayList<PrintableObject>();

@@ -35,14 +35,7 @@ public class Printer {
 	
 	// Affiche un carré rempli
 	public static void drawCarre(GL2 gl, Vecteur a, Vecteur b, Vecteur c, Vecteur d) {
-		// Calcul de la normale
-		Vecteur n = Vecteur.getNormale(a.minus(b), c.minus(b)).negat();
-		if (n.isZero()) {
-			if (a.equals(b))
-				n = Vecteur.getNormale(b.minus(c), d.minus(c)).negat();
-			if (b.equals(c))
-				n = Vecteur.getNormale(c.minus(d), a.minus(d)).negat();
-		}
+		Vecteur n = Printer.getNormale(a, b, c, d);
 	    gl.glNormal3fv(n.getFloats(), 0);
 	    
 		setPoint(a, gl);
@@ -177,6 +170,19 @@ public class Printer {
 	    glu.gluQuadricTexture(quadric, true);
 //        gl.glTranslatef(point.getDecX().floatValue(), point.getDecY().floatValue(), point.getDecZ().floatValue());
         glu.gluCylinder(quadric, rayon.doubleValue(), rayon.doubleValue(), hauteur.doubleValue(), 10, 20);
+	}
+
+
+	public static Vecteur getNormale(Vecteur a, Vecteur b, Vecteur c, Vecteur d) {
+		// Calcul de la normale
+		Vecteur n = Vecteur.getNormale(a.minus(b), c.minus(b)).negat();
+		if (n.isZero()) {
+			if (a.equals(b))
+				n = Vecteur.getNormale(b.minus(c), d.minus(c)).negat();
+			if (b.equals(c))
+				n = Vecteur.getNormale(c.minus(d), a.minus(d)).negat();
+		}
+		return n;
 	}
 	
 

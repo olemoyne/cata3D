@@ -127,14 +127,53 @@ public class MapDeVecteurs implements Serializable {
 	 */
 	public MapDeVecteurs truncate(Plan3D surface) {
 		// Recopie les ï¿½lï¿½ments de la map
-		MapDeVecteurs ret = new MapDeVecteurs(this);
+		// Structure de stockage du résultat
+		int nextPos = 0;
+		Vecteur[][] map = new Vecteur[xSize][ySize];
 		
-		ArrayList<Integer> toRemove = new ArrayList<Integer>(); 
 		
-		//Parcours tous les points verticaux. Attention les points entre et sortent de l'eau
+		//Parcours tous les points verticaux. Attention les points entrent et sortent de l'eau
 		for (int ypos = 0; ypos < this.ySize; ypos ++) {
-			
-			// calcul l'intersection avec le plan
+			// Regarde si toute la form est dans ou hors de l'eau
+			boolean isFull = true;
+			for (int xpos = 1; xpos < this.xSize; xpos ++) {
+				Vecteur inter = surface.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
+				if (inter != null) isFull = false;
+			}
+			if (isFull) {
+				if (surface.donneCote(getPoint(0, ypos)) > 0) {// en dessous
+					// on intègre tous les pts dans le résultat
+					for (int xpos = 0; xpos < this.xSize; xpos ++) {
+						map[xpos][nextPos] = this.getPoint(xpos, ypos);
+					}			
+					nextPos ++;
+				}  // Sinon on ne fait rien
+			} else {
+				// Il y a des points d'intersection
+				// calcul l'intersection avec le plan
+				Vecteur inter = null;
+				// Recherche la premiï¿½re intersection
+				for (int xpos = 0; xpos < this.xSize; xpos ++) {
+					Vecteur v = getPoint(xpos, ypos);
+					if (surface.donneCote(v) > 0) {// en dessous
+						map[xpos][nextPos] = v;
+						if (inter == null) {
+							if (xpos > 0) {
+								inter = surface.intersection(this.getPoint(xpos-1, ypos), v);
+								// Parcours tous les points déjà parcourus pour setter l'inter
+								for (int p = xpos-1; p >= 0; p--) {
+									if (map[p][nextPos] == null) 
+										map[p][nextPos] = inter;
+								}
+							}
+						}
+					} else {
+						map[xpos][nextPos] = inter;
+					}
+				} 
+				nextPos ++;
+			}
+/**			// calcul l'intersection avec le plan
 			Vecteur inter = null;
 			boolean nullValues = false;
 			boolean notNullValues = false;
@@ -166,21 +205,16 @@ public class MapDeVecteurs implements Serializable {
 				}
 			}
 		}
+**/		
+		}
+		// Aucune position au dessous ou à la surface
+		if (nextPos == 0) return null; 
 		
-		// Supprime les tranches sans intersections
-		// Si aucune intersection --> retourne aucune MAP
-		if (toRemove.size() == ySize) return null;
-
-		MapDeVecteurs mps = new MapDeVecteurs(this.xSize, this.ySize-toRemove.size());
-		int indx = 0;
-		for (int ypos = 0; ypos < this.ySize; ypos ++) {
-			boolean trouve = false;
-			for (int i : toRemove) if (i == ypos) trouve = true;
-			if (!trouve) {
-				for (int xpos = 0; xpos < this.xSize; xpos ++) {
-					mps.setPoint(xpos, indx, ret.getPoint(xpos, ypos));
-				}	
-				indx ++;
+		// Conversion du résultat
+		MapDeVecteurs mps = new MapDeVecteurs(this.xSize, nextPos);
+		for (int ypos = 0; ypos < nextPos; ypos ++) {
+			for (int xpos = 0; xpos < this.xSize; xpos ++) {
+				mps.setPoint(xpos, ypos, map[xpos][ypos]);
 			}
 		}
 		
@@ -243,7 +277,7 @@ public class MapDeVecteurs implements Serializable {
 	
 	
 	/**
-	 * TODO : Retourne la projection de la forme sur un plan donnÃ© par l'axe
+	 * Retourne la projection de la forme sur un plan donnÃ© par l'axe
 	 *  
 	 * @return
 	 */
@@ -328,4 +362,13 @@ public class MapDeVecteurs implements Serializable {
 		}
 		return ret;
     }
+
+	public boolean isValid() {
+		for (int y = 0 ; y < this.ySize; y++) {					
+			for (int x = 0 ; x < xSize; x ++) {
+				if (getPoint(x, y) == null) return false;
+			}
+		}
+		return true;
+	}
 }
