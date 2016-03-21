@@ -41,7 +41,8 @@ public class PatchTreeNode extends ComposantTreeNode {
 		
 		ArrayList<TreeNodeProperty> ret = super.getProperties();
 		ret.add(new TreeNodeProperty ("PrÃ©cision", p.precision, true, ObjectUpdater.INTEGER) );
-		ret.add(new TreeNodeProperty ("Symétrie", p.reflexive, true, ObjectUpdater.BOOLEAN) );
+		ret.add(new TreeNodeProperty ("Symï¿½trie", p.reflexive, true, ObjectUpdater.BOOLEAN) );
+		ret.add(new TreeNodeProperty ("RÃ©duction", p.reduction, true, ObjectUpdater.BOOLEAN) );
 		return ret;
 	}
 	
@@ -57,10 +58,15 @@ public class PatchTreeNode extends ComposantTreeNode {
 			Decimal dec = (Decimal)value;
 			pv.precision = (int)Math.round(dec.doubleValue());
 		}
-		// Gestion de la symétrie
-		if (fld.equals("Symétrie")) {
+		// Gestion de la symï¿½trie
+		if (fld.equals("Symï¿½trie")) {
 			Boolean dec = (Boolean)value;
 			pv.reflexive = dec; 
+		}
+		// Gestion de la rÃ©duction
+		if (fld.equals("RÃ©duction")) {
+			Boolean dec = (Boolean)value;
+			pv.reduction = dec; 
 		}
 	}
 
@@ -90,7 +96,7 @@ public class PatchTreeNode extends ComposantTreeNode {
 
 	public void generateSTLFile(String filename) throws InvalidGeomAction {
 		PatchComposant pv = (PatchComposant)composant;
-		// Génération d'un solide
+		// Gï¿½nï¿½ration d'un solide
 		Solide sol = MapConversion.getSolide(pv.mapAffichage, pv.reflexive);
 		STLFile f = new STLFile(1);
 		f.createBinaryFile(filename, sol, pv.nom, Decimal.CENT);

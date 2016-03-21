@@ -29,7 +29,13 @@ public class Translation extends Transformation implements Serializable{
 	}
 
 	public Vecteur getPoint(Vecteur ret) {
-		if (ret == null) throw new NullPointerException ("Translation : point de départ nul");
+		if (ret == null) throw new NullPointerException ("Translation : point de dï¿½part nul");
 		return new Vecteur (ret.getX()+trans.getX(), ret.getY()+trans.getY(), ret.getZ()+trans.getZ());
 	}	
+	
+	public Transformation getReverse(Transformation tr) {
+		Translation ref = new Translation(trans.negat(), tr);
+		return super.getReverse(ref);
+	}
+
 }

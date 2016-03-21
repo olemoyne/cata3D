@@ -39,15 +39,12 @@ public class PatchPlein extends PatchComposant {
 		recalcule();
 	}
 
-	
-    /**
-     * Recalcule les éléments essentiels de la pièce :
+	/**
+	 * Reclacul des éléments hors MAP d'affichage
      *    Map affichage et calcul
      *    centre de gravité et poids
-     *     
-     */
-    public void recalcule () {
-     	super.recalcule();
+	 */
+	public void calculeElements (){
      	if (mapAffichage != null) {
 			if (densite == null) densite = new Decimal(1f);
 
@@ -58,9 +55,9 @@ public class PatchPlein extends PatchComposant {
     		lst.addAll(this.poids); // Ajoute les poids d�finis
     		this.gravite= CalculVolume.getCentreGravite("Poids total", lst);
      	}
-   }
+	}
 
-    
+	    
 	public int getType() {
 		return Composant.PATCH_PLEIN;
 	}

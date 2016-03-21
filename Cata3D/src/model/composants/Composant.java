@@ -110,5 +110,9 @@ public class Composant implements Serializable{
 	public ArrayList<PrintableObject> getSceneObjects(Position trans) {
 		return new ArrayList<PrintableObject>();
 	}
+
+	public boolean isPatch() {
+		return (PatchComposant.class.isAssignableFrom(this.getClass()));
+	}
 	
 }

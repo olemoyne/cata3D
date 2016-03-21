@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import model.calcul.CalculCoque;
 import model.composants.Composant;
+import model.composants.PatchComposant;
 import model.composants.PatchVide;
 
 
@@ -60,6 +61,18 @@ public class Cata implements Serializable{
 			cmp.boat = this;
 			cmp.recalcule();
 		}
+		// Recalcul des réductions si nécessaire 
+		for (Composant cmp : composants) {
+			if (cmp.isPatch()) {
+				PatchComposant pc = (PatchComposant) cmp;
+				if (pc.reduction) { // Remplacement de la map d'affichage par celle extrudée avec les autres composants
+					CalculCoque.extrudeMap(pc, this);
+					// Recalcul de la coque sans prendre en compte la Map de calcul
+					pc.calculeElements();
+				}
+			}
+		}
+		
 		this.recalcule();
 	}
 	

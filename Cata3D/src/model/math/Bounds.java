@@ -6,8 +6,8 @@ import model.math.transfo.Translation;
 
 
 /**
- * Objet représentant l'espace occupé par un solide 
- * Cet espace est représenté par deux point (min et max) 
+ * Objet reprï¿½sentant l'espace occupï¿½ par un solide 
+ * Cet espace est reprï¿½sentï¿½ par deux point (min et max) 
  * @author olemoyne
  *
  */
@@ -111,7 +111,39 @@ public class Bounds {
 		this.max = new Vecteur(xMax, yMax, zMax);
 		this.min = new Vecteur(xMin, yMin, zMin);
 	}
-	
+
+	/**
+	 * 
+	 * @param sol
+	 */
+	public static Bounds getBounds (MapDeVecteurs map) {
+		long xMax = Long.MIN_VALUE;
+		long yMax = Long.MIN_VALUE;
+		long zMax = Long.MIN_VALUE;
+
+		long xMin = Long.MAX_VALUE;
+		long yMin = Long.MAX_VALUE;
+		long zMin = Long.MAX_VALUE;
+		for (int x= 0; x < map.xSize; x++) {
+			for (int y= 0; y < map.ySize; y++) {
+				Vecteur v = map.getPoint(x, y);
+				if (xMax < v.getX()) 
+					xMax = v.getX();
+				if (yMax < v.getY()) 
+					yMax = v.getY();
+				if (zMax < v.getZ()) 
+					zMax = v.getZ();
+				if (xMin > v.getX()) 
+					xMin = v.getX();
+				if (yMin > v.getY()) 
+					yMin = v.getY();
+				if (zMin > v.getZ()) 
+					zMin = v.getZ();
+			}
+		}
+		return new Bounds(new Vecteur(xMin, yMin, zMin), new Vecteur(xMax, yMax, zMax));
+	}
+
 	/**
 	 * Retourne si deux bounds sont en intersection
 	 * 
@@ -177,7 +209,7 @@ public class Bounds {
 		return true;
 	}
 
-	/** Vérifie que le vecteur est dans la zone sans les bords**/
+	/** Vï¿½rifie que le vecteur est dans la zone sans les bords**/
 	public boolean inside(Vecteur v) {
 		if ((v.getX() <= min.getX()) || (v.getX() >= max.getX())) return false;
 		if ((v.getY() <= min.getY()) || (v.getY() >= max.getY())) return false;
@@ -207,7 +239,7 @@ public class Bounds {
 	}
 
 	/**
-	 * On considère qu'un triangle est dans la zone si au moins un des points est inclu dans la zone;
+	 * On considï¿½re qu'un triangle est dans la zone si au moins un des points est inclu dans la zone;
 	 * 
 	 * @param tr
 	 * @return
@@ -228,7 +260,7 @@ public class Bounds {
 
 
 	/**
-	 * Vérifie qu'un triangle est strictement dans la zone (pas sur les bords) ;
+	 * Vï¿½rifie qu'un triangle est strictement dans la zone (pas sur les bords) ;
 	 * 
 	 * @param tr
 	 * @return
@@ -242,7 +274,7 @@ public class Bounds {
 
 	
 	/** 
-	 * Déoupe une zone en 8 sous-zones selon un point central
+	 * Dï¿½oupe une zone en 8 sous-zones selon un point central
 	 * @param centre
 	 * @return
 	 */
@@ -263,7 +295,7 @@ public class Bounds {
 	}
 
 	/**
-	 * Applique une transformation à la zone
+	 * Applique une transformation ï¿½ la zone
 	 * 
 	 * @param trans
 	 * @return

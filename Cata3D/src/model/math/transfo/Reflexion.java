@@ -35,7 +35,7 @@ public class Reflexion extends Transformation implements Serializable{
 	}
 
 	public Vecteur getPoint(Vecteur ret) {
-		if (ret == null) throw new NullPointerException ("Reflexion : point de départ nul");
+		if (ret == null) throw new NullPointerException ("Reflexion : point de dï¿½part nul");
 		if (axis == Axis.XAxis) 
 			return new Vecteur(-1*ret.getX(), ret.getY(), ret.getZ());
 		if (axis == Axis.YAxis) 
@@ -44,4 +44,10 @@ public class Reflexion extends Transformation implements Serializable{
 			return new Vecteur(ret.getX(), ret.getY(), -1*ret.getZ());
 		return null;
 	}	
+	
+	public Transformation getReverse(Transformation tr) {
+		Reflexion ref = new Reflexion(this.axis, tr);
+		return super.getReverse(ref);
+	}
+
 }

@@ -11,6 +11,7 @@ import model.Cata;
 import model.Poids;
 import model.Position;
 import model.calcul.CalculCoque;
+import model.math.MapDeVecteurs;
 import model.math.transfo.Transformation;
 import model.patch.Patch;
 
@@ -26,14 +27,22 @@ public class PatchComposant extends Composant {
 
 	/** Patch permettant de stocker les données et calculer la forme **/
 	public Patch patch;	
+	/** Précision d'affichage des données du patch **/
 	public int precision;
+	/** Définit si la forme est symétriques ou pas **/
 	public Boolean reflexive;
+	/** Définit si la forme doit être réduite en cas de collision avec un autre composant **/
+	public Boolean reduction;
+	
+	/** Map de vecteurs calculée avant réduction. Sert à afficher les patchs **/
+	public MapDeVecteurs mapNonReduite;
 	
 	public PatchComposant() {
 		super(); // Creation des données liées au patch
 		patch = new Patch();	
 		precision = 20;
 		reflexive = Boolean.TRUE;
+		reduction = Boolean.FALSE;
 	}
 	
 	
@@ -41,6 +50,7 @@ public class PatchComposant extends Composant {
 		super(bato); // Creation des données liées au patch
 		patch = new Patch();	
 		precision = 20;
+		reduction = Boolean.FALSE;
 		reflexive = Boolean.TRUE;
 	}
 	
@@ -57,6 +67,13 @@ public class PatchComposant extends Composant {
 		recalcule();
 	}
 
+	/**
+	 * Reclacul des éléments hors MAP d'affichage
+	 */
+	public void calculeElements (){
+		// Par déaut, ne fait rien
+	}
+
 	
     /**
      * Recalcule les éléments essentiels de la pièce :
@@ -66,10 +83,12 @@ public class PatchComposant extends Composant {
      */
     public void recalcule () {
 		if (reflexive == null) reflexive = Boolean.TRUE;
+		if (reduction == null) reduction = Boolean.FALSE;
     	if (precision <= 0) precision = 20;
-    	mapAffichage = CalculCoque.createCoque(patch, precision, this.reflexive);
-//		this.gravite = CalculVolume.getPoussee(mapAffichage);
-		super.recalcule();
+    	// calcule la MAP de vecteur de base
+    	this.mapAffichage= CalculCoque.createCoque(patch, precision, this.reflexive);
+    	this.mapNonReduite = null;
+    	calculeElements();
     }
 
 	public ArrayList<PrintableObject> getSceneObjects(Position trans) {

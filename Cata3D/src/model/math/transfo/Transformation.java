@@ -20,7 +20,7 @@ public abstract class Transformation implements Serializable {
 	 */
 	private static final long serialVersionUID = -6429020222059152387L;
 	/**
-	 * Cas d'une transformation imbriquée
+	 * Cas d'une transformation imbriquï¿½e
 	 */
 	private Transformation upper;
 	
@@ -56,7 +56,21 @@ public abstract class Transformation implements Serializable {
 		Rotation rot = new Rotation(Axis.XAxis, Decimal.UN, null);
 		Transformation trans = new Translation (new Vecteur ("0;-2;0"), rot);
 		
+		System.out.println("init :"+new Vecteur ("0;0;1").toString());
+		
 		Vecteur res = trans.transforme(new Vecteur ("0;0;1"));
-		System.out.println(res);
+		System.out.println("trans = "+res);
+
+		res = trans.getReverse(null).transforme(res);
+		System.out.println("trans = "+res);
+	}
+
+	public Transformation getReverse(Transformation tr) {
+		// Gestion de la transformation supÃ©rieure
+		if (this.upper != null) {
+			Transformation ret = upper.getReverse(tr);			
+			return ret;
+		}
+		return tr;
 	}
 }

@@ -6,7 +6,9 @@ import model.Area;
 import model.Cata;
 import model.Poids;
 import model.composants.Composant;
+import model.composants.PatchComposant;
 import model.math.Axis;
+import model.math.Bounds;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
 import model.math.Plan3D;
@@ -132,7 +134,7 @@ public class CalculCoque {
 
 	
 	/** 
-	 * TODO : Calcul du centre de dérive et de la surface anti-dérive
+	 * Calcul du centre de dérive et de la surface anti-dérive
 	 * 
 	 * @param cata
 	 */
@@ -151,6 +153,42 @@ public class CalculCoque {
     	Vecteur v = CalculSurface.getCentreSurfaces(cata.mer.surfaceAntiDerive, Axis.XAxis);
 
        	cata.mer.centreAntiDerive = v;
+	}
+
+
+	/** 
+	 * modifie la MAP d'affichage d'un composant pour extruder avec les composants imbriqués
+	 * 
+	 * @param pc
+	 * @param cata
+	 */
+	public static void extrudeMap(PatchComposant pc, Cata cata) {
+		// Sanity check
+		if (pc.reduction == false) return;
+		if (pc.mapAffichage == null) return;
+		
+		// Working map : map d'affichage repositionnée
+		Transformation trans = pc.situation.getTransformation(null);
+		Transformation back = trans.getReverse(null);
+		MapDeVecteurs myMap = pc.mapAffichage;
+		
+		pc.mapNonReduite = new MapDeVecteurs(pc.mapAffichage);
+		
+		// Calcul les intersections
+		Bounds bnds = Bounds.getBounds(myMap);
+		for (Composant cmp : cata.composants) {
+			// Ne retient que les patchs ou recopie de patch
+			if (cmp.isPatch()) {
+				PatchComposant he = (PatchComposant)cmp;
+				//positionne la MAP dans le même repère que la MAP de calcul
+				MapDeVecteurs hisMap = he.mapAffichage.transforme(he.situation.getTransformation(null)).transforme(back);
+				if (he.mapNonReduite != null) {
+					myMap = CalculFormes.getMapExtrusion(myMap, bnds, hisMap);
+				}
+			}
+		}
+		// Gestion du retour dans le repère initial
+		pc.mapAffichage = myMap.transforme(back);
 	}
 	
 }

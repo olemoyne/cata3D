@@ -72,4 +72,10 @@ public class Rotation extends Transformation implements Serializable{
 		}
 		return null;
 	}
+	
+	public Transformation getReverse(Transformation tr) {
+		Rotation ref = new Rotation(this.axis, angle.negate(), tr);
+		return super.getReverse(ref);
+	}
+
 }

@@ -49,14 +49,10 @@ public class PatchVide extends PatchComposant {
 		recalcule();
 	}
 
-    /**
-     * Recalcule les éléments essentiels de la pièce :
-     *    Map affichage et calcul
-     *    centre de gravité et poids
-     *     
-     */
-    public void recalcule () {
-     	super.recalcule();
+	/**
+	 * Reclacul des éléments hors MAP d'affichage
+	 */
+	public void calculeElements (){
      	if (epaisseurDeBardage == null) epaisseurDeBardage = new Decimal(0.001d);
      	if (densiteBardage == null) densiteBardage = new Decimal(0.6d);
 		Poids pdsCoque = CalculCoque.calculePoidsCoque(mapAffichage, epaisseurDeBardage.multiply(densiteBardage));
@@ -65,8 +61,10 @@ public class PatchVide extends PatchComposant {
 		lst.addAll(this.poids); // Ajoute les poids d�finis
 		lst.addAll(this.structure.getAllPoids(this, PatchComposant.DENSITE_BOIS));
 		this.gravite= CalculVolume.getCentreGravite("Poids total", lst);
-   }
-    
+	}
+
+	
+	
 	public int getType() {
 		return Composant.PATCH_VIDE;
 	}
