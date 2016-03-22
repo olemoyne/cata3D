@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import model.calcul.CalculSurface;
 import model.math.Decimal;
+import model.math.Segment;
 import model.math.Vecteur;
 
 /** 
@@ -46,6 +47,17 @@ public class Area implements Serializable {
 			ret.points.add(pt);
 		}
 		return ret;
+	}
+
+	public boolean isInside(Vecteur v) {
+		Segment seg = new Segment(v, this.points.get(0));
+		Decimal angle = Decimal.ZERO;
+		for (int i = 0; i< points.size(); i++) {
+			Segment seg2 = new Segment(v, this.points.get(i));
+			angle = angle.add(seg.getAngle(seg2));
+		}
+		if (angle.equals(new Decimal(360f))) return true;
+		return false;
 	}	
 
 }

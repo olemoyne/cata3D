@@ -99,7 +99,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	public boolean equals(Decimal d) {
 		if (dec == null) dec = new BigDecimal(val);
 		if (d.dec == null) d.dec = new BigDecimal(d.val);
-		return dec.round(MathContext.DECIMAL32).equals(d.dec.round(MathContext.DECIMAL32));
+		return dec.round(ROUNDING_CTX).equals(d.dec.round(ROUNDING_CTX));
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 			return new Decimal (dec.divide(d.dec));
 		} catch (java.lang.ArithmeticException e) {
 //			System.out.println("Error dividing : "+this.toString()+" with "+d.toString());
-			return new Decimal (dec.divide(d.dec, MathContext.DECIMAL32));
+			return new Decimal (dec.divide(d.dec, ROUNDING_CTX));
 		}
 	}
 
@@ -229,7 +229,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	 */
 	public String toString() {
 		if (dec == null) dec = new BigDecimal(val);
-		return dec.round(MathContext.DECIMAL32).toString(); 
+		return dec.round(ROUNDING_CTX).toString(); 
 	}
 
 	@Override
@@ -237,7 +237,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 		if (dec == null) dec = new BigDecimal(val);
 		if (o == null) return -1;
 		if (o.dec == null) o.dec = new BigDecimal(o.val);
-		return dec.round(MathContext.DECIMAL32).compareTo(o.dec.round(MathContext.DECIMAL32));
+		return dec.round(ROUNDING_CTX).compareTo(o.dec.round(ROUNDING_CTX));
 	}
 
 	public Decimal inverse() {
@@ -267,7 +267,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	public long longValue() {
-		return dec.round(MathContext.DECIMAL32).longValue();
+		return dec.round(ROUNDING_CTX).longValue();
 	}
 
 	public Decimal multiply(long x) {

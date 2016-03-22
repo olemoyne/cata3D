@@ -167,7 +167,7 @@ public class Droite3D {
 	 */
 	public Vecteur getIntersection(Segment seg) {
 		Vecteur myDir = seg.getB().minus(seg.getA());
-		Vecteur myStart = seg.getB();
+		Vecteur myStart = seg.getA();
 		
 		Vecteur hisDir = getDirection().multiply(Decimal.UN.negate());
 		Vecteur hisStart = getPoint();
@@ -176,29 +176,31 @@ public class Droite3D {
 		if (myDir.estColineaire(hisDir)) return null;
 		
 		// Z = 0
-		Decimal k = null;
+		Decimal n= null;
 		Decimal s = new Decimal((double)myDir.getY()*(double)hisDir.getX()-((double)hisDir.getY()*((double)myDir.getX())));
 		if (!s.isZero()) {
 			//Decimal n = hisStart.getY().multiply(myDir.getX()).add(myStart.getX().multiply(myDir.getY())).minus(hisStart.getX().multiply(myDir.getY())).minus(myStart.getY().multiply(myDir.getX()));
-			Decimal n = new Decimal( (double)hisStart.getY()*(double)myDir.getX()+(double)myStart.getX()*(double)myDir.getY()-(double)hisStart.getX()*(double)myDir.getY()-(double)myStart.getY()*(double)myDir.getX());
-			k = n.divide(s);
+			n = new Decimal( (double)hisStart.getY()*(double)myDir.getX()+(double)myStart.getX()*(double)myDir.getY()-(double)hisStart.getX()*(double)myDir.getY()-(double)myStart.getY()*(double)myDir.getX());
 		} else {
 			// X = 0
 			//s = (myDir.getZ().multiply(hisDir.getY()).minus(hisDir.getZ().multiply(myDir.getY())));
 			s = new Decimal((double)myDir.getZ()*(double)hisDir.getY()-(double)hisDir.getZ()*(double)myDir.getY());
 			if (!s.isZero()) {
-				Decimal n = new Decimal((double)hisStart.getZ()*(double)myDir.getY()+(double)myStart.getY()*(double)myDir.getZ()-(double)hisStart.getY()*(double)myDir.getZ()-(double)myStart.getZ()*(double)myDir.getY()); 
-				k = n.divide(s);
+				n = new Decimal((double)hisStart.getZ()*(double)myDir.getY()+(double)myStart.getY()*(double)myDir.getZ()-(double)hisStart.getY()*(double)myDir.getZ()-(double)myStart.getZ()*(double)myDir.getY()); 
 			} else { 
 				s = new Decimal ((double)myDir.getX()*(double)hisDir.getZ()-(double)hisDir.getX()*(double)myDir.getZ());
 				if (s.isZero()) return null;
-				Decimal n = new Decimal((double)hisStart.getX()*(double)myDir.getZ()+(double)myStart.getZ()*(double)myDir.getX()-(double)hisStart.getZ()*(double)myDir.getX()-(double)myStart.getX()*(double)myDir.getZ());
-				k = n.divide(s);
+				n = new Decimal((double)hisStart.getX()*(double)myDir.getZ()+(double)myStart.getZ()*(double)myDir.getX()-(double)hisStart.getZ()*(double)myDir.getX()-(double)myStart.getX()*(double)myDir.getZ());
 			}
 		}
-		if (k == null) return null;
+//		k = n.divide(s);
+		if (n == null) return null;
 		// Calcule le point d'impact
-		Vecteur v = hisDir.multiply(k).add(hisStart);
+		Decimal x = hisDir.getDecX().multiply(n).divide(s).add(hisStart.getDecX());
+		Decimal y = hisDir.getDecY().multiply(n).divide(s).add(hisStart.getDecY());
+		Decimal z = hisDir.getDecZ().multiply(n).divide(s).add(hisStart.getDecZ());
+		
+		Vecteur v = new Vecteur(x, y, z);
 		
 		// Vérifie que inter est bien entre A et B
 		// La distance entre A et V < celle entre A et B

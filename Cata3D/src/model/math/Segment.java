@@ -86,7 +86,7 @@ public class Segment {
 			Decimal d = v.distance(other.A);
 			Decimal t = other.A.distance(other.B);
 			if (t.doubleValue() >= d.doubleValue()) {
-				d = v.distance(other.A);
+				d = v.distance(other.B);
 				if (t.doubleValue() >= d.doubleValue()) return new Segment(v, v);
 			}
 		}
@@ -147,5 +147,25 @@ public class Segment {
 		return false;
 	}
 
+	public static void main (String[] args) {
+		Segment s1 = new Segment(new Vecteur ("3;4;0"), new Vecteur ("3;2;0"));
+		Segment s2 = new Segment(new Vecteur ("2;3.5;0"), new Vecteur ("5;4;0"));
+		
+		Segment s = s1.intersection(s2);
+		if (s != null) System.out.println(s.toString());
+		else System.out.println("Pas d'intersection");
+	}
+
+	public Decimal getAngle(Segment seg2) {
+		if (!this.A.equals(seg2.A)) return null;
+		Decimal d1 = B.getDecY().minus(A.getDecY());
+		Decimal d2 = B.getDecX().minus(A.getDecX());
+
+		Decimal d3 = seg2.B.getDecY().minus(seg2.A.getDecY());
+		Decimal d4 = seg2.B.getDecX().minus(seg2.A.getDecX());
+
+		double dble = Math.atan2(d1.doubleValue(), d2.doubleValue()) - Math.atan2(d3.doubleValue(), d4.doubleValue()); 
+		return new Decimal(dble); 
+	}
 
 }

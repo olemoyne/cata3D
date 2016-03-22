@@ -5,17 +5,14 @@ import java.util.ArrayList;
 import model.Area;
 import model.math.Bounds;
 import model.math.Decimal;
-import model.math.Droite2D;
 import model.math.MapDeVecteurs;
 import model.math.Plan3D;
+import model.math.Segment;
 import model.math.Vecteur;
 
 public class CalculFormes {
 	
-	public class PointIndex{
-		int pos;
-		Vecteur inter;
-	}
+
 
 	/***
 	 *  Calcul les intersections entre deux maps
@@ -50,6 +47,7 @@ public class CalculFormes {
 		}
 		return myMap;
 	}
+	
   /***
    * R√©cup√©ration des points d'une liste donn√©e
    * 
@@ -85,35 +83,147 @@ public class CalculFormes {
 	private static Area getExtrusion(Area myArea, Area hisArea) {
 		int max = myArea.points.size()-1;
 		// Pour permettre de d√©terminer si un point est dans la forme ou pas
-		Droite2D[] droites = new Droite2D[max];
+		Segment[] droites = new Segment[max];
 		for (int p = 0; p < max; p++) 
-			droites[p] = new Droite2D(myArea.points.get(p), myArea.points.get(p+1));
-		
-		int posMyStart = -1;
-		int posHisStart = -1;
-		int posMyStop= -1;
-		int poshisStop= -1;
-		Vecteur interStart= null;
-		Vecteur interStop = null;
-		
-		boolean lastIn = isInside (hisArea.points.get(max), droites);
-		for (int pos = 0; pos <= max; pos ++) {
-			boolean in = isInside (hisArea.points.get(pos), droites);
-			if (lastIn) {
-				if (!in) { // sortie de la forme
-					
+			droites[p] = new Segment(myArea.points.get(p), myArea.points.get(p+1));
+
+		// Identifie la liste des points d'intersection
+		ArrayList<Intersection> inters = new ArrayList<Intersection>(); 
+		int last = hisArea.points.size()-1;
+		// Pour chaque point de la courbe secondaire, identifie les intersections
+		for (int pos = 0; pos < hisArea.points.size(); pos ++ ) {
+			Segment his = new Segment(hisArea.points.get(last), hisArea.points.get(pos));
+			int mypos = 0;
+			for (Segment seg : droites) {
+				Segment inter = seg.intersection(his); 
+				if ( inter != null) {
+					if (inter.getA().equals(inter.getB())) { // un seul point --> on enregistre une intersection
+						if (!inter.getA().equals(seg.getB())) {  
+							inters.add(new Intersection(mypos, last, inter.getA()));
+						} // On ne prend pas le dernier point 
+					} // Deux points diffÈrents --> on ne fait rien						
 				}
+				mypos ++;
 			}
+			last = pos;
+		}
+		// Compte le nombre de positions
+		if (inters.size() == 0) return null; // pas d'intersections
+		// Il y a une seule intersection --> tangente --> pas d'intÈret
+		if (inters.size() == 1) return null; // pas d'intersections
+		if (inters.size() > 2) return null; // trop d'intersections
+		if (inters.get(0).inter.equals(inters.get(1).inter)) return null; // pas d'intersections
+		// --> Maintenant il faut parcourir la liste des points
+		Intersection inter1 = inters.get(0);
+		Intersection inter2 = inters.get(1);
+		if ( (inter1.hisPos - inter2.hisPos == 1) || (inter1.hisPos - inter2.hisPos == -1) || (inter1.hisPos - inter2.hisPos == 0) )
+		   return null; 		// Si les deux points sont consÈcutifs --> rien
+
+		Intersection myStart = null;
+		Intersection myEnd = null;
+		if (inter1.myPos > inter2.myPos) { myStart = inter2; myEnd = inter1; }
+		else { myStart = inter1; myEnd = inter2; }
+		
+		Intersection hisStart = null;
+		Intersection hisEnd = null;
+		if (inter1.hisPos > inter2.hisPos) { hisStart = inter2; hisEnd = inter1; }
+		else { hisStart = inter1; hisEnd = inter2; }
+		
+		Area ret = new Area();
+		if (hisStart == myStart) { // Meme sens
+			
+		} else { // Autre sens
 			
 		}
-		
-		
-		
-		// TODO Auto-generated method stub
-		return null;
+		return new Area();
 	}
-	
 
+	public static void main (String[] args) {
+		
+		Area a1 = new Area();
+		a1.points.add(new Vecteur("0;0;0"));
+		a1.points.add(new Vecteur("0;4;0"));
+		a1.points.add(new Vecteur("3;4;0"));
+		a1.points.add(new Vecteur("3;2;0"));
+		a1.points.add(new Vecteur("3;0;0"));
+
+		Area a2 = new Area();
+		a2.points.add(new Vecteur("8;0;0"));
+		a2.points.add(new Vecteur("8;4;0"));
+		a2.points.add(new Vecteur("5;4;0"));
+		a2.points.add(new Vecteur("5;2;0"));
+		a2.points.add(new Vecteur("5;0;0"));
+
+		Area res = CalculFormes.getExtrusion(a1, a2);
+		if (res != null)
+			System.out.println("Resultat 1 : "+res.points.toString());
+		else System.out.println("Resultat 1 : pas d'intersection");
+
+		Area a3 = new Area();
+		a3.points.add(new Vecteur("1;1;0"));
+		a3.points.add(new Vecteur("1;3;0"));
+		a3.points.add(new Vecteur("2;3;0"));
+		a3.points.add(new Vecteur("2;1;0"));
+
+		res = CalculFormes.getExtrusion(a1, a3);
+		if (res != null)
+			System.out.println("Resultat 2 : "+res.points.toString());
+		else System.out.println("Resultat 2 : pas d'intersection");
+
+		Area a4 = new Area();
+		a4.points.add(new Vecteur("0;0;0"));
+		a4.points.add(new Vecteur("1;4;0"));
+		a4.points.add(new Vecteur("3;4;0"));
+		a4.points.add(new Vecteur("3;2;0"));
+		a4.points.add(new Vecteur("1;2;0"));
+		a4.points.add(new Vecteur("1;0;0"));
+
+		Area a5 = new Area();
+		a5.points.add(new Vecteur("2;0;0"));
+		a5.points.add(new Vecteur("5;0;0"));
+		a5.points.add(new Vecteur("5;3;0"));
+		a5.points.add(new Vecteur("4;3;0"));
+		a5.points.add(new Vecteur("2;1;0"));
+
+		res = CalculFormes.getExtrusion(a4, a5);
+		if (res != null)
+			System.out.println("Resultat 3 : "+res.points.toString());
+		else System.out.println("Resultat 3 : pas d'intersection");
+
+		Area a6 = new Area();
+		a6.points.add(new Vecteur("3;4;0"));
+		a6.points.add(new Vecteur("6;4;0"));
+		a6.points.add(new Vecteur("6;1;0"));
+		a6.points.add(new Vecteur("3;1;0"));
+
+		res = CalculFormes.getExtrusion(a1, a6);
+		if (res != null)
+			System.out.println("Resultat 4 : "+res.points.toString());
+		else System.out.println("Resultat 4 : pas d'intersection");
+
+		Area a7 = new Area();
+		a7.points.add(new Vecteur("3;4;0"));
+		a7.points.add(new Vecteur("6;4;0"));
+		a7.points.add(new Vecteur("6;3;0"));
+		a7.points.add(new Vecteur("3;3;0"));
+
+		res = CalculFormes.getExtrusion(a1, a7);
+		if (res != null)
+			System.out.println("Resultat 5 : "+res.points.toString());
+		else System.out.println("Resultat 5 : pas d'intersection");
+
+		Area a8 = new Area();
+		a8.points.add(new Vecteur("5;4;0"));
+		a8.points.add(new Vecteur("5;2.5;0"));
+		a8.points.add(new Vecteur("2;2.5;0"));
+		a8.points.add(new Vecteur("2;3.5;0"));
+
+		res = CalculFormes.getExtrusion(a1, a8);
+		if (res != null)
+			System.out.println("Resultat 6 : "+res.points.toString());
+		else System.out.println("Resultat 6 : pas d'intersection");
+		
+	}
 	
 
 }
