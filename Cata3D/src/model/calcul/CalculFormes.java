@@ -2,12 +2,15 @@ package model.calcul;
 
 import java.util.ArrayList;
 
+import math.geom2d.Point2D;
+import math.geom2d.polygon.Polygon2D;
+import math.geom2d.polygon.Polygons2D;
 import model.Area;
+import model.math.Axis;
 import model.math.Bounds;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
 import model.math.Plan3D;
-import model.math.Segment;
 import model.math.Vecteur;
 
 public class CalculFormes {
@@ -27,6 +30,7 @@ public class CalculFormes {
 		// vÃ©rifie l'intersection
 		Bounds hisBnds = Bounds.getBounds(hisMap);
 		if (!myBounds.intersecs(hisBnds)) return myMap; // Pas d'intersection --> pas de'extrusion
+
 		// Liste des Area resultantes :
 		ArrayList<Area> liste = new ArrayList<Area>(); 
 		
@@ -40,15 +44,41 @@ public class CalculFormes {
 			Area hisArea = hisMap.intersectionHorizontale(getPlan(pos));
 			
 			// Calcule la conjugaison des deux aires
-			Area resArea = getExtrusion(myArea, hisArea);
+			Area resArea = getExtrusion(myArea, hisArea, pos);
+			if (resArea == null) {
+				System.err.println("Extruction error : "+pos.toString());
+				return null;
+			}
 			
 			if (resArea != null) liste.add(resArea);
 			
 		}
-		return myMap;
+		// Liste des intersections effectuée
+		// calul de la MAP --> nom max de points 
+		int maxX = 0;
+		for (Area a : liste) {
+			if (a.points.size() > maxX) 
+				maxX = a.points.size();
+		}
+		MapDeVecteurs res = new MapDeVecteurs(maxX, myMap.ySize());
+		int y = 0;
+		for (Area a : liste) {
+			int x = 0;
+			Vecteur last = null;
+			for (Vecteur v : a.points) {
+				res.setPoint(x, y, v); x ++;
+				last = v;
+			}
+			while (x < maxX) {
+				res.setPoint(x, y, last); x ++;
+			}
+			y ++; // Passe au niveau supérieur
+		}
+		
+		return res;
 	}
-	
-  /***
+
+	/***
    * RÃ©cupÃ©ration des points d'une liste donnÃ©e
    * 
    */
@@ -69,7 +99,6 @@ public class CalculFormes {
 		
 		return new Plan3D(a, b, c);
 	}
-
 	
 	
 	
@@ -80,63 +109,33 @@ public class CalculFormes {
 	 * @param hisArea
 	 * @return
 	 */
-	private static Area getExtrusion(Area myArea, Area hisArea) {
-		int max = myArea.points.size()-1;
-		// Pour permettre de dÃ©terminer si un point est dans la forme ou pas
-		Segment[] droites = new Segment[max];
-		for (int p = 0; p < max; p++) 
-			droites[p] = new Segment(myArea.points.get(p), myArea.points.get(p+1));
+	private static Area getExtrusion(Area myArea, Area hisArea, Decimal z) {
+		Polygon2D myPoly = CalculSurface.getPoly(myArea.points, Axis.ZAxis);
+		Polygon2D hisPoly = CalculSurface.getPoly(hisArea.points, Axis.ZAxis);
 
-		// Identifie la liste des points d'intersection
-		ArrayList<Intersection> inters = new ArrayList<Intersection>(); 
-		int last = hisArea.points.size()-1;
-		// Pour chaque point de la courbe secondaire, identifie les intersections
-		for (int pos = 0; pos < hisArea.points.size(); pos ++ ) {
-			Segment his = new Segment(hisArea.points.get(last), hisArea.points.get(pos));
-			int mypos = 0;
-			for (Segment seg : droites) {
-				Segment inter = seg.intersection(his); 
-				if ( inter != null) {
-					if (inter.getA().equals(inter.getB())) { // un seul point --> on enregistre une intersection
-						if (!inter.getA().equals(seg.getB())) {  
-							inters.add(new Intersection(mypos, last, inter.getA()));
-						} // On ne prend pas le dernier point 
-					} // Deux points différents --> on ne fait rien						
-				}
-				mypos ++;
-			}
-			last = pos;
+		Polygon2D resPoly = Polygons2D.difference(myPoly, hisPoly); 
+		if (resPoly == null) {
+			System.err.println("Extruction error : Non polygon");
+			return null;
 		}
-		// Compte le nombre de positions
-		if (inters.size() == 0) return null; // pas d'intersections
-		// Il y a une seule intersection --> tangente --> pas d'intéret
-		if (inters.size() == 1) return null; // pas d'intersections
-		if (inters.size() > 2) return null; // trop d'intersections
-		if (inters.get(0).inter.equals(inters.get(1).inter)) return null; // pas d'intersections
-		// --> Maintenant il faut parcourir la liste des points
-		Intersection inter1 = inters.get(0);
-		Intersection inter2 = inters.get(1);
-		if ( (inter1.hisPos - inter2.hisPos == 1) || (inter1.hisPos - inter2.hisPos == -1) || (inter1.hisPos - inter2.hisPos == 0) )
-		   return null; 		// Si les deux points sont consécutifs --> rien
-
-		Intersection myStart = null;
-		Intersection myEnd = null;
-		if (inter1.myPos > inter2.myPos) { myStart = inter2; myEnd = inter1; }
-		else { myStart = inter1; myEnd = inter2; }
-		
-		Intersection hisStart = null;
-		Intersection hisEnd = null;
-		if (inter1.hisPos > inter2.hisPos) { hisStart = inter2; hisEnd = inter1; }
-		else { hisStart = inter1; hisEnd = inter2; }
-		
+		if (resPoly.edgeNumber() == 0) {
+			System.err.println("Extruction error : Empty polygon");
+			Area ret = new Area();
+			ret.points.add(myArea.points.get(0));
+			return ret;
+		}
+		if (resPoly.contours().size() > 1) {
+			System.err.println("Extruction error : Multiple polygon");
+			return null;
+		};
 		Area ret = new Area();
-		if (hisStart == myStart) { // Meme sens
-			
-		} else { // Autre sens
-			
+		for (int p = resPoly.vertexNumber()-1; p >= 0; p--) {
+			Point2D pt  = resPoly.vertex(p);
+			ret.points.add(new Vecteur(new Decimal(pt.x()), new Decimal(pt.y()), z));
 		}
-		return new Area();
+		return ret;
 	}
+		
 
 	public static void main (String[] args) {
 		
@@ -154,7 +153,7 @@ public class CalculFormes {
 		a2.points.add(new Vecteur("5;2;0"));
 		a2.points.add(new Vecteur("5;0;0"));
 
-		Area res = CalculFormes.getExtrusion(a1, a2);
+		Area res = CalculFormes.getExtrusion(a1, a2, Decimal.ZERO);
 		if (res != null)
 			System.out.println("Resultat 1 : "+res.points.toString());
 		else System.out.println("Resultat 1 : pas d'intersection");
@@ -165,14 +164,14 @@ public class CalculFormes {
 		a3.points.add(new Vecteur("2;3;0"));
 		a3.points.add(new Vecteur("2;1;0"));
 
-		res = CalculFormes.getExtrusion(a1, a3);
+		res = CalculFormes.getExtrusion(a1, a3, Decimal.ZERO);
 		if (res != null)
 			System.out.println("Resultat 2 : "+res.points.toString());
 		else System.out.println("Resultat 2 : pas d'intersection");
 
 		Area a4 = new Area();
 		a4.points.add(new Vecteur("0;0;0"));
-		a4.points.add(new Vecteur("1;4;0"));
+		a4.points.add(new Vecteur("0;4;0"));
 		a4.points.add(new Vecteur("3;4;0"));
 		a4.points.add(new Vecteur("3;2;0"));
 		a4.points.add(new Vecteur("1;2;0"));
@@ -185,7 +184,7 @@ public class CalculFormes {
 		a5.points.add(new Vecteur("4;3;0"));
 		a5.points.add(new Vecteur("2;1;0"));
 
-		res = CalculFormes.getExtrusion(a4, a5);
+		res = CalculFormes.getExtrusion(a4, a5, Decimal.ZERO);
 		if (res != null)
 			System.out.println("Resultat 3 : "+res.points.toString());
 		else System.out.println("Resultat 3 : pas d'intersection");
@@ -196,7 +195,7 @@ public class CalculFormes {
 		a6.points.add(new Vecteur("6;1;0"));
 		a6.points.add(new Vecteur("3;1;0"));
 
-		res = CalculFormes.getExtrusion(a1, a6);
+		res = CalculFormes.getExtrusion(a1, a6, Decimal.ZERO);
 		if (res != null)
 			System.out.println("Resultat 4 : "+res.points.toString());
 		else System.out.println("Resultat 4 : pas d'intersection");
@@ -207,7 +206,7 @@ public class CalculFormes {
 		a7.points.add(new Vecteur("6;3;0"));
 		a7.points.add(new Vecteur("3;3;0"));
 
-		res = CalculFormes.getExtrusion(a1, a7);
+		res = CalculFormes.getExtrusion(a1, a7, Decimal.ZERO);
 		if (res != null)
 			System.out.println("Resultat 5 : "+res.points.toString());
 		else System.out.println("Resultat 5 : pas d'intersection");
@@ -218,11 +217,76 @@ public class CalculFormes {
 		a8.points.add(new Vecteur("2;2.5;0"));
 		a8.points.add(new Vecteur("2;3.5;0"));
 
-		res = CalculFormes.getExtrusion(a1, a8);
+		res = CalculFormes.getExtrusion(a1, a8, Decimal.ZERO);
 		if (res != null)
 			System.out.println("Resultat 6 : "+res.points.toString());
 		else System.out.println("Resultat 6 : pas d'intersection");
+
+		Area a9 = new Area();
+		a9.points.add(new Vecteur("0;0;0"));
+		a9.points.add(new Vecteur("0;3;0"));
+		a9.points.add(new Vecteur("3;3;0"));
+		a9.points.add(new Vecteur("3;2;0"));
+		a9.points.add(new Vecteur("5;2;0"));
+		a9.points.add(new Vecteur("5;0;0"));
+
+		Area a10 = new Area();
+		a10.points.add(new Vecteur("4;4;0"));
+		a10.points.add(new Vecteur("4;1;0"));
+		a10.points.add(new Vecteur("6;1;0"));
+		a10.points.add(new Vecteur("6;4;0"));
+
+		res = CalculFormes.getExtrusion(a9, a10, Decimal.ZERO);
+		if (res != null)
+			System.out.println("Resultat 7 : "+res.points.toString());
+		else System.out.println("Resultat 7 : pas d'intersection");
+
+		Area a11 = new Area();
+		a11.points.add(new Vecteur("5;4;0"));
+		a11.points.add(new Vecteur("6;4;0"));
+		a11.points.add(new Vecteur("6;1;0"));
+		a11.points.add(new Vecteur("1;1;0"));
+		a11.points.add(new Vecteur("1;2;0"));
+		a11.points.add(new Vecteur("5;2;0"));
+
+		res = CalculFormes.getExtrusion(a1, a11, Decimal.ZERO);
+		if (res != null)
+			System.out.println("Resultat 8 : "+res.points.toString());
+		else System.out.println("Resultat 8 : pas d'intersection");
 		
+		Area a12 = new Area();
+		a12.points.add(new Vecteur("2;2;0"));
+		a12.points.add(new Vecteur("6;2;0"));
+		a12.points.add(new Vecteur("6;0;0"));
+		a12.points.add(new Vecteur("2;0;0"));
+
+		res = CalculFormes.getExtrusion(a1, a12, Decimal.ZERO);
+		if (res != null)
+			System.out.println("Resultat 9 : "+res.points.toString());
+		else System.out.println("Resultat 9 : pas d'intersection");
+
+		Area a13 = new Area();
+		a13.points.add(new Vecteur("2;3;0"));
+		a13.points.add(new Vecteur("5;3;0"));
+		a13.points.add(new Vecteur("5;1;0"));
+		a13.points.add(new Vecteur("2;1;0"));
+
+		res = CalculFormes.getExtrusion(a1, a13, Decimal.ZERO);
+		if (res != null)
+			System.out.println("Resultat 10 : "+res.points.toString());
+		else System.out.println("Resultat 10 : pas d'intersection");
+
+		Area a14 = new Area();
+		a14.points.add(new Vecteur("4;3;0"));
+		a14.points.add(new Vecteur("4;1;0"));
+		a14.points.add(new Vecteur("-1;1;0"));
+		a14.points.add(new Vecteur("-1;3;0"));
+
+		res = CalculFormes.getExtrusion(a1, a14, Decimal.ZERO);
+		if (res != null)
+			System.out.println("Resultat 11 : "+res.points.toString());
+		else System.out.println("Resultat 11 : pas d'intersection");
+
 	}
 	
 

@@ -1,8 +1,11 @@
 package model.calcul;
 
 import java.awt.geom.Point2D;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
+import math.geom2d.polygon.Polygon2D;
+import math.geom2d.polygon.SimplePolygon2D;
 import model.Area;
 import model.math.Axis;
 import model.math.Decimal;
@@ -26,9 +29,19 @@ public class CalculSurface {
 		return c.multiply(Decimal.UN.divide(new Decimal(lst.size())));
 	}
 
+	
+	public static Polygon2D getPoly(ArrayList<Vecteur> a, int ax) {
+		SimplePolygon2D poly = new SimplePolygon2D();
+		for (Vecteur v : a) {
+			Point2D pt = v.get2D(ax);
+			poly.addVertex(new math.geom2d.Point2D(pt.getX(), pt.getY()));
+		}
+		return poly;
+	}
+	
 	/** 
 	 * Calcul la surface 
-	 * */
+	 * *
 	public static Decimal getSurface(ArrayList<Vecteur> lst, int ax) {
 		// FORMULE : Aire = 1/2 * somme[I=0 --> n-1] (XiYi+1 - YiXi+1)
 		Decimal total = Decimal.ZERO;
@@ -48,7 +61,7 @@ public class CalculSurface {
 
 	/** 
 	 * Calcul le centre de surface d'une aire
-	 * */
+	 * *
 	public static Vecteur getCentreSurface(ArrayList<Vecteur> lst, int ax) {
 		// FORMULE : centre =(xg, yg) A = aire
 		// xg = 1/(6*A) * somme[I=0 --> n-1] (Xi + Xi+1)*(XiYi+1 - YiXi+1)
@@ -135,34 +148,6 @@ public class CalculSurface {
 	}
 
 	
-	
-	
-	/***
-	 * Calcule le coefficient de r�sistance de chaque pav� de la car�ne
-	 * 
-	 * --> pour chaque �l�ment, je calule la surface totale et la surface projet�e sur le plan z = 0
-	 * --> retourne une valeu entre 0 et 256 
-	 */
-
-	public static Decimal getCoeficient (ArrayList<Vecteur> lst, int ax) {
-		if (lst == null) return Decimal.ZERO;
-		if (lst.size() != 4 ) return Decimal.ZERO;
-		
-		
-		Decimal srf = CalculSurface.getSurface(lst, Axis.XAxis);
-		if (srf.isZero()) return Decimal.ZERO;
-
-		ArrayList<Vecteur> pts = new ArrayList<Vecteur> (4);
-		for (Vecteur v : lst) pts.add(new Vecteur(v.getDecX(), v.getDecY(), Decimal.ZERO));
-
-		Decimal frein = CalculSurface.getSurface(pts, Axis.ZAxis);
-		Decimal coef =  frein.divide(srf).abs();
-		
-		Decimal res = Decimal.min(coef, Decimal.UN);
-		return res;
-	}
-
-	
 	/**
 	 * Test des fonctions de calcule
 	 * 
@@ -191,9 +176,56 @@ public class CalculSurface {
 		pts.add(new Vecteur("0;-0.1356;0.5594"));
 		pts.add(new Vecteur("0;-0.1039;0.0034"));
 		
-		System.out.println("Centre GET : "+getCentreSurface(pts, Axis.XAxis));
-		System.out.println("Surface GET : "+getSurface(pts, Axis.XAxis));
 
+	}
+
+	public static Vecteur getCentre(ArrayList<Vecteur>a, int axis) {
+		Polygon2D poly = CalculSurface.getPoly(a, axis);
+		return getCentre (poly, a.get(0).getDec(axis), axis);
+	}
+
+	public static Vecteur getCentreSurfaces(ArrayList<Area> l, int axis) {
+		Decimal x = Decimal.ZERO; Decimal y= Decimal.ZERO; Decimal z= Decimal.ZERO;;
+		Decimal aireTotale = Decimal.ZERO;
+		for (Area a : l) {
+			Polygon2D poly = CalculSurface.getPoly(a.points, axis);
+			Vecteur v =getCentre (poly, a.points.get(0).getDec(axis), axis);
+			Decimal aire = new Decimal(poly.area());
+			
+			aireTotale = aireTotale.add(aire);
+			x = x.add(v.getDecX().multiply(aire));
+			y = y.add(v.getDecY().multiply(aire));
+			z = z.add(v.getDecZ().multiply(aire));
+		}
+		
+		x = x.divide(aireTotale);
+		y = y.divide(aireTotale);
+		z = z.divide(aireTotale);
+		return new Vecteur(x, y, z);
+	}
+
+	
+	public static Vecteur getCentre(Polygon2D pol, Decimal val, int axis) {
+		if (pol == null) return null;
+		math.geom2d.Point2D pt = pol.centroid();
+		if ( (Double.isNaN(pt.getX())) || (Double.isNaN(pt.getY())) ) {
+			pt = pol.vertex(0);
+		}
+		if (axis == Axis.XAxis) return new Vecteur (val, new Decimal(pt.getX()), new Decimal(pt.getY()));
+		if (axis == Axis.YAxis) return new Vecteur (new Decimal(pt.getX()), val, new Decimal(pt.getY()));
+		if (axis == Axis.ZAxis) return new Vecteur (new Decimal(pt.getX()), new Decimal(pt.getY()), val);
+		return null;
+	}
+
+	public static void writePol(PrintStream out, String msg, Polygon2D pol) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(msg);
+		sb.append(" ");
+		for (math.geom2d.Point2D pt : pol.vertices()) {
+			sb.append(pt.toString());
+			sb.append(";");
+		}
+		out.println(sb.toString());
 	}
 
 }

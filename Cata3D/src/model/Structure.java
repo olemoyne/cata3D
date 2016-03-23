@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import math.geom2d.polygon.Polygon2D;
 import model.calcul.CalculSurface;
 import model.calcul.CalculVolume;
 import model.composants.PatchVide;
@@ -43,12 +44,14 @@ public class Structure implements Serializable {
 			Vecteur ep = new Vecteur(Decimal.ZERO, Decimal.ZERO, gab.epaisseur.divide(Decimal.DEUX));
 			ArrayList<Poids> pds = new ArrayList<Poids> ();
 			Area a = gab.getArea(ptch, Decimal.ZERO);
-			Decimal vol = CalculSurface.getSurface(a.points, Axis.ZAxis).multiply(gab.epaisseur).multiply(dens).multiply(Decimal.MILLE);
-			Vecteur ctr = CalculSurface.getCentreGeometrique(a.points).add(ep);
+			Polygon2D pol = CalculSurface.getPoly(a.points, Axis.ZAxis);
+			Decimal vol = new Decimal(pol.area()).multiply(gab.epaisseur).multiply(dens).multiply(Decimal.MILLE);
+			Vecteur ctr = CalculSurface.getCentre(pol, Decimal.ZERO, Axis.ZAxis).add(ep);
 			pds.add(new Poids("Surf", ctr, vol));
 			for (Area sub : gab.getTrous(poutres)) {
-				vol = CalculSurface.getSurface(sub.points, Axis.ZAxis).multiply(gab.epaisseur).multiply(dens);
-				ctr = CalculSurface.getCentreGeometrique(sub.points).add(ep);
+				pol = CalculSurface.getPoly(sub.points, Axis.ZAxis);
+				vol = new Decimal(pol.area()).multiply(gab.epaisseur).multiply(dens).multiply(Decimal.MILLE);
+				ctr = CalculSurface.getCentre(pol, Decimal.ZERO, Axis.ZAxis).add(ep);
 				pds.add(new Poids("Trou", ctr, vol.negate()));
 			}
 			ret.add(CalculVolume.getCentreGravite("Gab", pds));

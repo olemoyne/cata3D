@@ -2,6 +2,7 @@ package model.calcul;
 
 import java.util.ArrayList;
 
+import math.geom2d.polygon.Polygon2D;
 import model.Area;
 import model.Cata;
 import model.Poids;
@@ -147,7 +148,10 @@ public class CalculCoque {
         }
 
         Decimal surf = Decimal.ZERO;
-        for (Area a : cata.mer.surfaceAntiDerive) surf = surf.add(CalculSurface.getSurface(a.points, Axis.XAxis));
+        for (Area a : cata.mer.surfaceAntiDerive) {
+        	Polygon2D pol = CalculSurface.getPoly(a.points, Axis.XAxis);
+        	surf = surf.add(new Decimal(pol.area()));
+        }
 		cata.mer.surfaceTotale = surf;
 
     	Vecteur v = CalculSurface.getCentreSurfaces(cata.mer.surfaceAntiDerive, Axis.XAxis);
@@ -170,7 +174,7 @@ public class CalculCoque {
 		// Working map : map d'affichage repositionnée
 		Transformation trans = pc.situation.getTransformation(null);
 		Transformation back = trans.getReverse(null);
-		MapDeVecteurs myMap = pc.mapAffichage;
+		MapDeVecteurs myMap = pc.mapAffichage.transforme(trans);
 		
 		pc.mapNonReduite = new MapDeVecteurs(pc.mapAffichage);
 		
@@ -178,17 +182,23 @@ public class CalculCoque {
 		Bounds bnds = Bounds.getBounds(myMap);
 		for (Composant cmp : cata.composants) {
 			// Ne retient que les patchs ou recopie de patch
-			if (cmp.isPatch()) {
-				PatchComposant he = (PatchComposant)cmp;
+			if ((cmp.isPatch())&&(myMap != null)&&(cmp != pc)) {
 				//positionne la MAP dans le même repère que la MAP de calcul
-				MapDeVecteurs hisMap = he.mapAffichage.transforme(he.situation.getTransformation(null)).transforme(back);
-				if (he.mapNonReduite != null) {
+				MapDeVecteurs hisMap = cmp.mapAffichage.transforme(cmp.situation.getTransformation(null)).transforme(back);
+				if (cmp.getMapNonReduite() == null) {
 					myMap = CalculFormes.getMapExtrusion(myMap, bnds, hisMap);
+					if (myMap == null)
+						System.err.println("Collision with forme "+pc.nom+" "+cmp.nom);
 				}
 			}
 		}
-		// Gestion du retour dans le repère initial
-		pc.mapAffichage = myMap.transforme(back);
+		if (myMap != null) {
+			MapDeVecteurs ret = Patch.getMapDecoupe(myMap, pc.precision, Axis.XAxis);
+			pc.mapAffichage = ret;
+			// 
+		} else {
+			System.err.println("Impossible de réduire la forme "+pc.nom);
+		}
 	}
 	
 }

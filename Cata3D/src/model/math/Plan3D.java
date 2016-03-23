@@ -306,11 +306,11 @@ public class Plan3D {
 		return sb.toString();
 	}
 
-	public static Plan3D getPlan(int axis, long pos) {
-		Vecteur orig = new Vecteur(0, 0, 0).set(axis, pos);
-		if (axis == Axis.XAxis) return new Plan3D (new Vecteur(pos, 0, 1), orig, new Vecteur(pos, 1, 0));
-		if (axis == Axis.YAxis) return new Plan3D (new Vecteur(0, pos, 1), orig, new Vecteur(1, pos, 0));
-		if (axis == Axis.ZAxis) return new Plan3D (new Vecteur(0, 1, pos), orig, new Vecteur(1, 0, pos));
+	public static Plan3D getPlan(int axis, Decimal pos) {
+		Vecteur orig = new Vecteur(0, 0, 0).setDec(axis, pos);
+		if (axis == Axis.XAxis) return new Plan3D (new Vecteur(pos, Decimal.ZERO, Decimal.UN), orig, new Vecteur(pos, Decimal.UN, Decimal.ZERO));
+		if (axis == Axis.YAxis) return new Plan3D (new Vecteur(Decimal.ZERO, pos, Decimal.UN), orig, new Vecteur(Decimal.UN, pos, Decimal.ZERO));
+		if (axis == Axis.ZAxis) return new Plan3D (new Vecteur(Decimal.ZERO, Decimal.UN, pos), orig, new Vecteur(Decimal.UN, Decimal.ZERO, pos));
 		return null;
 	}
 }

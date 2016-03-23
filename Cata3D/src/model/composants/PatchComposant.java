@@ -111,5 +111,15 @@ public class PatchComposant extends Composant {
 
 		return ret; 
 	}
+	
+	public boolean isPatch() {
+		return true;
+	}
+
+	public MapDeVecteurs getMapNonReduite() {
+		return this.mapNonReduite;
+	}
+
+
 
 }

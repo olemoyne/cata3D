@@ -37,7 +37,7 @@ public class Area implements Serializable {
 	 */
 	public Area resize(Decimal enPlus, int ax) {
 		Area ret = new Area();
-		Vecteur ctr = CalculSurface.getCentreSurface(points, ax);
+		Vecteur ctr = CalculSurface.getCentre(points, ax);
 		for (Vecteur v : points) {
 			// Calcule la nouvelle position du vecteur
 			Decimal l = v.distance(ctr);
@@ -59,5 +59,31 @@ public class Area implements Serializable {
 		if (angle.equals(new Decimal(360f))) return true;
 		return false;
 	}	
+	
+	public ArrayList<Segment> getSegments (){
+		ArrayList<Segment> segs = new ArrayList<Segment>();
+		int last = points.size()-1;
+		for (int pos = 0; pos < points.size(); pos ++) {
+			Segment seg = new Segment(points.get(last), points.get(pos));
+			segs.add(seg);
+			last = pos;
+		}
+		return segs;
+	}
 
+	
+	public int getIntersectionCount(Area other) {
+		int nb = 0;
+		ArrayList<Segment> mySegs = getSegments();
+		for (Segment hisSeg : other.getSegments()) {
+			for (Segment mySeg : mySegs) {
+				Segment seg = hisSeg.intersection(mySeg);
+				if (seg != null) {
+					if ( (!seg.getA().equals(mySeg.getA())) && ((!seg.getB().equals(mySeg.getA())))) 
+						nb ++;
+				}
+			}
+		}
+		return nb;
+	}
 }

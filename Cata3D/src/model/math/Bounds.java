@@ -127,18 +127,20 @@ public class Bounds {
 		for (int x= 0; x < map.xSize; x++) {
 			for (int y= 0; y < map.ySize; y++) {
 				Vecteur v = map.getPoint(x, y);
-				if (xMax < v.getX()) 
-					xMax = v.getX();
-				if (yMax < v.getY()) 
-					yMax = v.getY();
-				if (zMax < v.getZ()) 
-					zMax = v.getZ();
-				if (xMin > v.getX()) 
-					xMin = v.getX();
-				if (yMin > v.getY()) 
-					yMin = v.getY();
-				if (zMin > v.getZ()) 
-					zMin = v.getZ();
+				if (v != null) {
+					if (xMax < v.getX()) 
+						xMax = v.getX();
+					if (yMax < v.getY()) 
+						yMax = v.getY();
+					if (zMax < v.getZ()) 
+						zMax = v.getZ();
+					if (xMin > v.getX()) 
+						xMin = v.getX();
+					if (yMin > v.getY()) 
+						yMin = v.getY();
+					if (zMin > v.getZ()) 
+						zMin = v.getZ();
+				}
 			}
 		}
 		return new Bounds(new Vecteur(xMin, yMin, zMin), new Vecteur(xMax, yMax, zMax));

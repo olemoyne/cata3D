@@ -2,6 +2,7 @@ package model.calcul;
 
 import java.util.ArrayList;
 
+import math.geom2d.polygon.Polygon2D;
 import model.Poids;
 import model.math.Axis;
 import model.math.Decimal;
@@ -19,7 +20,7 @@ public class CalculVolume {
 	 * @param C
 	 * @param C
 	 * @return
-	 */
+	 *
 	private static Decimal getVolume(Vecteur A, Vecteur B, Vecteur C, Vecteur D) { // 4 points
 		Vecteur v1 = B.minus(A);
 		Vecteur v2 = C.minus(A);
@@ -36,16 +37,16 @@ public class CalculVolume {
 	 * 
 	 * @param v
 	 * @return
-	 */
+	 *
 	private static Decimal getVolume(Vecteur centre, ArrayList<Vecteur> lst) { // tableau de 8 points 
 		
 		Vecteur[] v = new Vecteur[8];
 		lst.toArray(v);
 		
-		/* --> 12 facette :
-		 *  ABC, EFG, ABE, BCF, CDG, DAH
-		 *  BCD, FGH, BEF, CFG, DGH, AHE 
-		 */
+		//* --> 12 facette :
+		//*  ABC, EFG, ABE, BCF, CDG, DAH
+		//*  BCD, FGH, BEF, CFG, DGH, AHE 
+		//*
 		Decimal volume = getVolume(centre, v[0], v[1], v[2]);
 		volume.add(getVolume(centre, v[1], v[2], v[3]));
 		volume.add(getVolume(centre, v[4], v[5], v[6]));
@@ -66,7 +67,7 @@ public class CalculVolume {
 	 * 
 	 * @param map
 	 * @return
-	 */
+	 *
 	public static Poids getPoussee2(MapDeVecteurs map) { 
 		ArrayList<Vecteur> lst = new ArrayList<Vecteur>(8);
 		// Liste des poussées
@@ -111,8 +112,9 @@ public class CalculVolume {
 			for (int x = 0; x < map.xSize(); x ++) 
 				lst.add(map.getPoint(x, y));
 				// Centre sde poussée
-			centresSurf.add(CalculSurface.getCentreSurface (lst, Axis.ZAxis));
-			surfaces.add(CalculSurface.getSurface(lst, Axis.ZAxis).abs());
+			Polygon2D poly = CalculSurface.getPoly(lst, Axis.ZAxis);
+			centresSurf.add(CalculSurface.getCentre(poly, lst.get(0).getDec(Axis.ZAxis), Axis.ZAxis));
+			surfaces.add(new Decimal(poly.area()));
 		}
 
 		

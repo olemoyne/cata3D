@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import model.Area;
-import model.math.Bounds3D;
+import model.math.Axis;
+import model.math.Bounds;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
 import model.math.Plan3D;
@@ -75,27 +76,21 @@ public class Patch implements Serializable {
 			}
 		}
 		MapDeVecteurs temp = map.reverse();
-		// Calcule la zone entre les maps
-		Bounds3D bnds = new Bounds3D();
-		for (int posX = 0; posX < x; posX++) {
-			for (int posY = 0; posY < y; posY++) {
-				bnds.addPoint(points[posX][posY]);
-			}
-		}
+		MapDeVecteurs ret = getMapDecoupe(temp, nbPoints, Axis.ZAxis);		
+		return ret;
+	}
+
+	public static MapDeVecteurs getMapDecoupe(MapDeVecteurs temp, int nbPoints, int axis) {
+		Bounds bnds =Bounds.getBounds(temp);
 		// Par d�faut 10 positions
-		Decimal ecart = bnds.getMax().getDecZ().minus(bnds.getMin().getDecZ()).divide(new Decimal(nbPoints-1));
-		MapDeVecteurs ret = new MapDeVecteurs(temp.xSize(), nbPoints);
+		Decimal ecart = bnds.getMax().getDec(axis).minus(bnds.getMin().getDec(axis)).divide(new Decimal(nbPoints-1));
+		 MapDeVecteurs ret = new MapDeVecteurs(temp.xSize(), nbPoints);
 		for (int nb = 0; nb < nbPoints; nb ++) {
-			Decimal pos = bnds.getMin().getDecZ().add(new Decimal(nb).multiply(ecart));
-			if (pos.compareTo(bnds.getMax().getDecZ())>= 0) {
-				pos = bnds.getMax().getDecZ().minus(new Decimal(0.001d));
+			Decimal pos = bnds.getMin().getDec(axis).add(new Decimal(nb).multiply(ecart));
+			if (pos.compareTo(bnds.getMax().getDec(axis))>= 0) {
+				pos = bnds.getMax().getDec(axis).minus(new Decimal(0.001d));
 			}
-			Vecteur a = new Vecteur(Decimal.UN, Decimal.ZERO, pos);
-			Vecteur b = new Vecteur(Decimal.ZERO, Decimal.ZERO, pos);
-			Vecteur c = new Vecteur(Decimal.ZERO, Decimal.UN, pos);
-			
-			Plan3D pl = new Plan3D(a, b, c);
-			
+			Plan3D pl = Plan3D.getPlan(axis, pos);
 			Area aire = temp.intersectionHorizontale(pl);
 			if (aire.points.size() != 0) {
 				for (int x = 0; x < temp.xSize(); x++) {
@@ -110,7 +105,6 @@ public class Patch implements Serializable {
 				}				
 			}
 		}
-		
 		return ret;
 	}
 

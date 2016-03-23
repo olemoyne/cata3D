@@ -86,6 +86,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	}
 
 	public Decimal(double x) {
+		if (Double.isNaN(x)) throw new NumberFormatException("Error : NAN decimal"); 
 		dec = new BigDecimal(x);
 		val = Double.toString(x);
 	}

@@ -112,7 +112,11 @@ public class Composant implements Serializable{
 	}
 
 	public boolean isPatch() {
-		return (PatchComposant.class.isAssignableFrom(this.getClass()));
+		return false;
+	}
+
+	public MapDeVecteurs getMapNonReduite() {
+		return this.mapAffichage;
 	}
 	
 }

@@ -33,6 +33,9 @@ public class PatchTreeNode extends ComposantTreeNode {
 	    new PoidsTreeNode(this, cmp);
 	    // gestion des plans de construction
 	    new PlanTreeNode(this);
+	    // gestion de la réduction de forme
+	    new ReductionTreeNode(this, cmp);
+
 	}		
 	
 	
