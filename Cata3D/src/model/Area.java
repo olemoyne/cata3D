@@ -86,4 +86,57 @@ public class Area implements Serializable {
 		}
 		return nb;
 	}
+	
+	private int getFirstPoint () {
+		Decimal maxX = Decimal.MILLE.negate();
+		Decimal maxY = Decimal.MILLE.negate();
+		int maxId = 0;
+		int p= 0;
+		for (Vecteur v : points) {
+			if (v.getDecY().compareTo(maxY) > 0) {
+				maxY = v.getDecY(); maxX = v.getDecX(); maxId = p;  
+			} else {
+				if (v.getDecY().compareTo(maxY) == 0) {
+					if (v.getDecX().compareTo(maxX) > 0) {
+						maxY = v.getDecY(); maxX = v.getDecX(); maxId = p;
+					}
+				}
+			}
+			p++;
+		}
+		return maxId;
+	}
+
+	// Eclate l'aire en liste de points equidistants à partir du point le plus haut et le plus à droite 
+	public ArrayList<Vecteur> split(int nbPoints) {
+		ArrayList<Vecteur> ret = new ArrayList<Vecteur>();
+		// Calcule le point de départ
+		int firstPoint = this.getFirstPoint();
+		// calcule le périmetre
+		Decimal p = getPerimetre();
+		Decimal step = p.divide(new Decimal(nbPoints));
+		int pos = firstPoint;
+		// Ajoute le premier point
+		Vecteur last = points.get(firstPoint);
+		int lastId = firstPoint;
+		ret.add(last);
+		Decimal current = Decimal.ZERO;
+		boolean finished = false;
+		for (int i = 1; i < nbPoints; i++) {
+			while (!finished) {
+				Decimal len = points.get(last);
+			}
+		}
+		return null;
+	}
+
+	private Decimal getPerimetre() {
+		Decimal p = Decimal.ZERO;
+		Vecteur last = points.get(points.size()-1);
+		for (Vecteur v : points) {
+			p = p.add(last.distance(v));
+			last = v;
+		}
+		return p;
+	}
 }

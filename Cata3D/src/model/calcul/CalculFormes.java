@@ -53,7 +53,20 @@ public class CalculFormes {
 			if (resArea != null) liste.add(resArea);
 			
 		}
-		// Liste des intersections effectuée
+		int nbPoints = myMap.xSize();
+		MapDeVecteurs res = new MapDeVecteurs(nbPoints, myMap.ySize());
+		int y = 0;
+		for (Area a : liste) {
+			int x = 0;
+			for (Vecteur pt : a.split(nbPoints)) {
+				res.setPoint(x, y, pt); x ++;
+			}
+			y ++;
+		}
+
+			
+
+		/**		// Liste des intersections effectuï¿½e
 		// calul de la MAP --> nom max de points 
 		int maxX = 0;
 		for (Area a : liste) {
@@ -72,9 +85,9 @@ public class CalculFormes {
 			while (x < maxX) {
 				res.setPoint(x, y, last); x ++;
 			}
-			y ++; // Passe au niveau supérieur
+			y ++; // Passe au niveau supï¿½rieur
 		}
-		
+**/		
 		return res;
 	}
 
