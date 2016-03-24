@@ -121,7 +121,31 @@ public class Vecteur implements Serializable{
 		Decimal dec = new Decimal(res);
 		return dec.racine();
 	}
-	
+
+	/**
+	 * Calcule de la distance entre deux points
+	 * Distance rtetournée en MICRONS
+	 */
+	public Decimal decDistance (Vecteur v) {
+		if (v == null) return Decimal.ZERO;
+		
+		// Vérification des valeurs des vecteurs 
+//		if ((Long.isNaN(v1.x))||(Float.isNaN(v1.y))||(Float.isNaN(v1.z))) return 0;
+//		if ((Float.isNaN(v2.x))||(Float.isNaN(v2.y))||(Float.isNaN(v2.z))) return 0;
+		
+		long m =  v.x-x;
+		long res = m*m;
+
+		m =  v.y -y;
+		res += m*m;
+
+		m =  v.z-z;
+		res += m*m;
+
+		Decimal dec = new Decimal(res);
+		return dec.racine().divide(Vecteur.METER);
+	}
+
 	/**
 	 *  Distance avec une droite 
 	 */

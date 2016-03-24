@@ -67,7 +67,7 @@ public class Cata implements Serializable{
 				try {
 					PatchComposant pc = (PatchComposant) cmp;
 					if (pc.reduction) { // Remplacement de la map d'affichage par celle extrudée avec les autres composants
-						//CalculCoque.extrudeMap(pc, this);
+						CalculCoque.extrudeMap(pc, this);
 						// Recalcul de la coque sans prendre en compte la Map de calcul
 						pc.calculeElements();
 					}

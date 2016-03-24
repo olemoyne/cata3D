@@ -17,10 +17,12 @@ public class Droite3D {
 	 *  Vecteur directeur de la droite
 	 */
 	protected Vecteur directeur;
+	
+	protected Decimal norme;
 	/**
 	 * Un point de la droite
 	 */
-	Vecteur point;
+	protected Vecteur point;
 	
 
 	/** Creation de la droite par définition d'un vecteur directeur et d'un point
@@ -30,6 +32,7 @@ public class Droite3D {
 	 */
 	public Droite3D(Vecteur dir, Vecteur pt) {
 		directeur = dir;
+		norme = dir.getNorme();
 		point = pt;
 	}
 
@@ -148,6 +151,7 @@ public class Droite3D {
 
 	public void setData(Vecteur d, Vecteur p) {
 		directeur = d;
+		norme = d.getNorme();
 		this.point = p;
 	}
 
@@ -194,14 +198,10 @@ public class Droite3D {
 			}
 		}
 //		k = n.divide(s);
-		if (n == null) return null;
+//		if (n == null) return null;
+
 		// Calcule le point d'impact
-		Decimal x = hisDir.getDecX().multiply(n).divide(s).add(hisStart.getDecX());
-		Decimal y = hisDir.getDecY().multiply(n).divide(s).add(hisStart.getDecY());
-		Decimal z = hisDir.getDecZ().multiply(n).divide(s).add(hisStart.getDecZ());
-		
-		Vecteur v = new Vecteur(x, y, z);
-		
+		Vecteur v = getPoint(n.divide(s));
 		// Vérifie que inter est bien entre A et B
 		// La distance entre A et V < celle entre A et B
 		if (seg.contient(v)) return v;
@@ -228,6 +228,17 @@ public class Droite3D {
 		Vecteur v = drt.getIntersection(seg);
 		
 		System.out.println(v);
+	}
+
+
+	public Vecteur getPoint(Decimal dist) {
+		Decimal k = dist.divide(norme);
+		Decimal x = this.directeur.getDecX().multiply(k).add(this.point.getDecX());
+		Decimal y = directeur.getDecY().multiply(k).add(point.getDecY());
+		Decimal z = directeur.getDecZ().multiply(k).add(point.getDecZ());
+		
+		Vecteur v = new Vecteur(x, y, z);
+		return v;
 	}
 
 }

@@ -193,9 +193,7 @@ public class CalculCoque {
 			}
 		}
 		if (myMap != null) {
-			MapDeVecteurs ret = Patch.getMapDecoupe(myMap, pc.precision, Axis.XAxis);
-			pc.mapAffichage = ret;
-			// 
+			pc.mapAffichage = myMap.transforme(back);
 		} else {
 			System.err.println("Impossible de réduire la forme "+pc.nom);
 		}

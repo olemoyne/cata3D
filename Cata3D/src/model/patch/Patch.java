@@ -84,14 +84,17 @@ public class Patch implements Serializable {
 		Bounds bnds =Bounds.getBounds(temp);
 		// Par d�faut 10 positions
 		Decimal ecart = bnds.getMax().getDec(axis).minus(bnds.getMin().getDec(axis)).divide(new Decimal(nbPoints-1));
-		 MapDeVecteurs ret = new MapDeVecteurs(temp.xSize(), nbPoints);
+		MapDeVecteurs ret = new MapDeVecteurs(temp.xSize(), nbPoints);
 		for (int nb = 0; nb < nbPoints; nb ++) {
 			Decimal pos = bnds.getMin().getDec(axis).add(new Decimal(nb).multiply(ecart));
 			if (pos.compareTo(bnds.getMax().getDec(axis))>= 0) {
 				pos = bnds.getMax().getDec(axis).minus(new Decimal(0.001d));
 			}
 			Plan3D pl = Plan3D.getPlan(axis, pos);
-			Area aire = temp.intersectionHorizontale(pl);
+			Area aire = null;
+			if (axis == Axis.ZAxis) aire = temp.intersectionHorizontale(pl);
+			if (axis == Axis.XAxis) aire = temp.intersectionVerticale(pl);
+			
 			if (aire.points.size() != 0) {
 				for (int x = 0; x < temp.xSize(); x++) {
 					if (x < aire.points.size())

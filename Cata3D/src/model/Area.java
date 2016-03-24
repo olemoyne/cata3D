@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import model.calcul.CalculSurface;
+import model.math.Axis;
 import model.math.Decimal;
+import model.math.Droite3D;
+import model.math.Plan3D;
 import model.math.Segment;
 import model.math.Vecteur;
 
@@ -23,6 +26,12 @@ public class Area implements Serializable {
 	public ArrayList<Vecteur> points;
 	
 	public Position situation;
+	
+	
+	private class Point  {
+		int pos;
+		Vecteur inter;
+	}
 	
 	public Area () {
 		points = new ArrayList<Vecteur>();
@@ -87,56 +96,105 @@ public class Area implements Serializable {
 		return nb;
 	}
 	
-	private int getFirstPoint () {
-		Decimal maxX = Decimal.MILLE.negate();
+	// Le premier point est le point la plus grande abcisse et la plus grande ordonnÈe 
+	private Point getFirstPoint () {
+		Point ret = new Point();
+		// Point d'interconnexion entre le plan X = 0
+		Plan3D pl = Plan3D.getPlan(Axis.XAxis, Decimal.ZERO);
 		Decimal maxY = Decimal.MILLE.negate();
-		int maxId = 0;
-		int p= 0;
-		for (Vecteur v : points) {
-			if (v.getDecY().compareTo(maxY) > 0) {
-				maxY = v.getDecY(); maxX = v.getDecX(); maxId = p;  
-			} else {
-				if (v.getDecY().compareTo(maxY) == 0) {
-					if (v.getDecX().compareTo(maxX) > 0) {
-						maxY = v.getDecY(); maxX = v.getDecX(); maxId = p;
-					}
-				}
+		int maxId = -1;
+		Vecteur inter = null;
+		int p = 1;
+		for (Segment seg : getSegments()) {
+			Vecteur v = pl.intersection(seg.getA(), seg.getB());
+			if (v!= null) {
+				if (v.getDecY().compareTo(maxY) > 0) {
+					maxY = v.getDecY(); maxId = p;
+					inter = v;
+				}	
 			}
 			p++;
 		}
-		return maxId;
+		if (inter == null) {
+			ret.inter = points.get(0);
+			ret.pos = 0;
+		} else {
+			ret.inter = inter;
+			ret.pos = maxId%points.size();
+		}
+		return ret;
 	}
 
 	// Eclate l'aire en liste de points equidistants √† partir du point le plus haut et le plus √† droite 
 	public ArrayList<Vecteur> split(int nbPoints) {
 		ArrayList<Vecteur> ret = new ArrayList<Vecteur>();
 		// Calcule le point de d√©part
-		int firstPoint = this.getFirstPoint();
+		Point pti = this.getFirstPoint();
+		int firstPoint = pti.pos;
 		// calcule le p√©rimetre
 		Decimal p = getPerimetre();
 		Decimal step = p.divide(new Decimal(nbPoints));
-		int pos = firstPoint;
 		// Ajoute le premier point
-		Vecteur last = points.get(firstPoint);
-		int lastId = firstPoint;
-		ret.add(last);
-		Decimal current = Decimal.ZERO;
+		Vecteur last = pti.inter;//points.get(firstPoint);
+		System.out.println("First = "+last.toString()+ " - "+firstPoint);
+		int nextId = (firstPoint + 1)%points.size();
+		Vecteur next = points.get(nextId);
+		ret.add(last); // Ajoute le premier point
+		Decimal current = step; // position du pas en cours
 		boolean finished = false;
-		for (int i = 1; i < nbPoints; i++) {
-			while (!finished) {
-				Decimal len = points.get(last);
+		while (!finished) {
+			// RÈcupËre le prochain pas
+			Decimal len = last.decDistance(next);
+			int comp = len.compareTo(current) ;
+			if (comp > 0) { // Ecart est plus grand
+				Droite3D dtr = new Droite3D(next.minus(last), last);
+				// identifie le point
+				Vecteur pt = dtr.getPoint(current);
+				ret.add(pt);
+				last = pt;
+				current = step;
+			}  
+			if (comp == 0) { // Ecart est exact
+				last = next;
+				ret.add(next);
+				nextId = (nextId + 1)%points.size();
+				next = points.get(nextId);
+				current = step; 
 			}
+			if (comp < 0) { // Ecart est plus petit
+				last = next;
+				nextId = (nextId + 1)%points.size();
+				next = points.get(nextId);
+				current = current.minus(len); 
+			}
+			if (ret.size() >= nbPoints)
+				finished = true; 
 		}
-		return null;
+		return ret;
 	}
 
 	private Decimal getPerimetre() {
 		Decimal p = Decimal.ZERO;
 		Vecteur last = points.get(points.size()-1);
 		for (Vecteur v : points) {
-			p = p.add(last.distance(v));
+			p = p.add(last.decDistance(v));
 			last = v;
 		}
 		return p;
 	}
+	
+	public static final void main(String[] a) {
+		Area a1 = new Area();
+		a1.points.add(new Vecteur("0;0;1"));
+		a1.points.add(new Vecteur("0;4;1"));
+		a1.points.add(new Vecteur("3;4;1"));
+		a1.points.add(new Vecteur("3;2;1"));
+		a1.points.add(new Vecteur("3;0;1"));
+
+		ArrayList<Vecteur> res = a1.split(10);
+		if (res != null)
+			System.out.println("Resultat 1 : "+res.toString());
+		else System.out.println("Resultat 1 : pas d'intersection");
+	}
+
 }

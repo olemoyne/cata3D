@@ -12,6 +12,7 @@ import model.math.Decimal;
 import model.math.MapDeVecteurs;
 import model.math.Plan3D;
 import model.math.Vecteur;
+import model.patch.Patch;
 
 public class CalculFormes {
 	
@@ -53,6 +54,13 @@ public class CalculFormes {
 			if (resArea != null) liste.add(resArea);
 			
 		}
+
+		int nbPoints = 80;
+		MapDeVecteurs mapX = Patch.getMapDecoupe(myMap, nbPoints, Axis.XAxis);
+		MapDeVecteurs mapZ = Patch.getMapDecoupe(mapX, nbPoints, Axis.ZAxis);
+		return mapZ;
+		
+		/**		// Splitting the points in equal numbers of points 
 		int nbPoints = myMap.xSize();
 		MapDeVecteurs res = new MapDeVecteurs(nbPoints, myMap.ySize());
 		int y = 0;
@@ -63,9 +71,8 @@ public class CalculFormes {
 			}
 			y ++;
 		}
-
-			
-
+		return res;
+**/
 		/**		// Liste des intersections effectu�e
 		// calul de la MAP --> nom max de points 
 		int maxX = 0;
@@ -88,7 +95,6 @@ public class CalculFormes {
 			y ++; // Passe au niveau sup�rieur
 		}
 **/		
-		return res;
 	}
 
 	/***
@@ -122,7 +128,7 @@ public class CalculFormes {
 	 * @param hisArea
 	 * @return
 	 */
-	private static Area getExtrusion(Area myArea, Area hisArea, Decimal z) {
+	public static Area getExtrusion(Area myArea, Area hisArea, Decimal z) {
 		Polygon2D myPoly = CalculSurface.getPoly(myArea.points, Axis.ZAxis);
 		Polygon2D hisPoly = CalculSurface.getPoly(hisArea.points, Axis.ZAxis);
 
