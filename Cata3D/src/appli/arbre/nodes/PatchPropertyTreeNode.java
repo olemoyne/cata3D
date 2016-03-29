@@ -99,9 +99,11 @@ public class PatchPropertyTreeNode extends DesignTreeNode{
 			for (int x = 0; x < data.x; x++) 
 				ret.add(new PrintedPoint(data.points[x][y], "", Color.yellow));
 
-		// Affiche les collisions en rouge
-		for (Collision col : cmp.collisions) {
-			ret.add(new PrintedMap (col.collision, col.autre.nom, false, Color.red, new Position()));					
+		if (cmp.collisions != null) {
+			// Affiche les collisions en rouge
+			for (Collision col : cmp.collisions) {
+				ret.add(new PrintedMap (col.collision, col.autre.nom, false, Color.red, new Position()));					
+			}
 		}
 
 		return ret;

@@ -99,8 +99,10 @@ public class PatchComposant extends Composant {
 			ret.add(new PrintedMap (mapAffichage, this.nom, !app.transparence, app.couleur, trans));
 			if (gravite != null) {
 				Transformation trs = trans.getTransformation(null);
-				Poids pds = new Poids (gravite.nom, trs.transforme(gravite.position), gravite.force);
-				ret.add(new PrintedForce(pds, Color.RED));
+				if (trs != null) {
+					Poids pds = new Poids (gravite.nom, trs.transforme(gravite.position), gravite.force);
+					ret.add(new PrintedForce(pds, Color.RED));
+				}
 			}
 		} else {
 			ret.add(new PrintedMap (mapAffichage, this.nom, false, Color.darkGray, this.situation));

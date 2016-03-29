@@ -2,7 +2,9 @@ package appli.values.updater;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -27,7 +29,8 @@ public class DialogValue extends JDialog implements ActionListener {
 	 */
 	public DialogValue(JFrame frm, TreeNodeProperty prop, ObjectUpdater pnl) {
 		super(frm, true);
-		this.setLocation(frm.getMousePosition());
+		Point pos = frm.getMousePosition();
+		this.setLocation(pos);
 		this.setTitle("Modification d'un paramètre");
 		property = prop;
 		update = pnl;
@@ -61,6 +64,14 @@ public class DialogValue extends JDialog implements ActionListener {
 		
 		setContentPane(panel);
 		this.pack();
+		
+		Dimension dim = this.getSize(); 
+		Dimension max = this.getSize();
+		if (pos.y + dim.height > max.height) {
+			pos.y = pos.y - dim.height;
+			this.setLocation(pos);
+		}
+		
 		this.setVisible(true);
 	}
 

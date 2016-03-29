@@ -170,6 +170,7 @@ public class CalculCoque {
 		
 		// Working map : map d'affichage repositionnée
 		Transformation trans = pc.situation.getTransformation(null);
+		if (trans == null) return false;
 		Transformation back = trans.getReverse(null);
 		MapDeVecteurs myMap = pc.mapAffichage.transforme(trans);
 		if (pc.collisions ==null) pc.collisions = new ArrayList<Collision>();
