@@ -50,10 +50,14 @@ public class Area implements Serializable {
 		for (Vecteur v : points) {
 			// Calcule la nouvelle position du vecteur
 			Decimal l = v.distance(ctr);
-			Decimal coef = l.add(enPlus).divide(l); 
+			if (!l.isZero()) {
+				Decimal coef = l.add(enPlus).divide(l); 
 			// Applique le coeficient au point
-			Vecteur pt = ctr.add(v.minus(ctr).multiply(coef));
-			ret.points.add(pt);
+				Vecteur pt = ctr.add(v.minus(ctr).multiply(coef));
+				ret.points.add(pt);
+			} else {
+				ret.points.add(v);
+			}
 		}
 		return ret;
 	}

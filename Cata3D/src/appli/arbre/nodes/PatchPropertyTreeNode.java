@@ -8,6 +8,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import appli.arbre.TreeNodeProperty;
 import appli.values.updater.ObjectUpdater;
 import model.Position;
+import model.composants.Collision;
 import model.composants.PatchComposant;
 import model.math.Decimal;
 import model.math.Vecteur;
@@ -91,12 +92,17 @@ public class PatchPropertyTreeNode extends DesignTreeNode{
 		PrintableScene ret = super.getScene(); 
 
 		// Affiche la coque en gris
-		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", false, Color.darkGray, new Position()));					
+		ret.add(new PrintedMap (cmp.mapAffichage, "Coque", true, Color.darkGray, new Position()));					
 
 		// Affiche les points en jaune
 		for (int y = 0; y < data.y; y++) 
 			for (int x = 0; x < data.x; x++) 
 				ret.add(new PrintedPoint(data.points[x][y], "", Color.yellow));
+
+		// Affiche les collisions en rouge
+		for (Collision col : cmp.collisions) {
+			ret.add(new PrintedMap (col.collision, col.autre.nom, false, Color.red, new Position()));					
+		}
 
 		return ret;
 	}

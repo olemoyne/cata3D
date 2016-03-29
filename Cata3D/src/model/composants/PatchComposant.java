@@ -11,7 +11,6 @@ import model.Cata;
 import model.Poids;
 import model.Position;
 import model.calcul.CalculCoque;
-import model.math.MapDeVecteurs;
 import model.math.transfo.Transformation;
 import model.patch.Patch;
 
@@ -33,16 +32,19 @@ public class PatchComposant extends Composant {
 	public Boolean reflexive;
 	/** Définit si la forme doit être réduite en cas de collision avec un autre composant **/
 	public Boolean reduction;
+
+	/** Définit si la forme est en collision avec un autre composant **/
+	public Boolean collision;
 	
-	/** Map de vecteurs calculée avant réduction. Sert à afficher les patchs **/
-	public MapDeVecteurs mapNonReduite;
+	public ArrayList<Collision> collisions;
 	
 	public PatchComposant() {
 		super(); // Creation des données liées au patch
 		patch = new Patch();	
 		precision = 20;
 		reflexive = Boolean.TRUE;
-		reduction = Boolean.FALSE;
+		collision= Boolean.FALSE;
+		collisions = new ArrayList<Collision>();
 	}
 	
 	
@@ -50,7 +52,7 @@ public class PatchComposant extends Composant {
 		super(bato); // Creation des données liées au patch
 		patch = new Patch();	
 		precision = 20;
-		reduction = Boolean.FALSE;
+		collision = Boolean.FALSE;
 		reflexive = Boolean.TRUE;
 	}
 	
@@ -87,7 +89,6 @@ public class PatchComposant extends Composant {
     	if (precision <= 0) precision = 20;
     	// calcule la MAP de vecteur de base
     	this.mapAffichage= CalculCoque.createCoque(patch, precision, this.reflexive);
-    	this.mapNonReduite = null;
     	calculeElements();
     }
 
@@ -115,11 +116,4 @@ public class PatchComposant extends Composant {
 	public boolean isPatch() {
 		return true;
 	}
-
-	public MapDeVecteurs getMapNonReduite() {
-		return this.mapNonReduite;
-	}
-
-
-
 }

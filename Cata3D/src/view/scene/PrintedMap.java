@@ -5,6 +5,7 @@ import java.awt.Color;
 import view.view3D.Printer;
 import model.Position;
 import model.math.Axis;
+import model.math.Bounds;
 import model.math.Decimal;
 import model.math.MapDeVecteurs;
 
@@ -33,7 +34,8 @@ public class PrintedMap extends PrintableObject {
 
 		if (map == null) return;
 		
-		Decimal centre = map.getCenter().getDecX();
+		Bounds bnds = Bounds.getBounds(map);
+		Decimal centre = bnds.getMax().getDecX().add(bnds.getMin().getDecX()).divide(Decimal.DEUX);
 
 		if ((!fillup)&&(mode == 0)) {
 					

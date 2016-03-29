@@ -90,10 +90,13 @@ public class Patch implements Serializable {
 			if (pos.compareTo(bnds.getMax().getDec(axis))>= 0) {
 				pos = bnds.getMax().getDec(axis).minus(new Decimal(0.001d));
 			}
+			if (pos.compareTo(bnds.getMin().getDec(axis))<= 0) {
+				pos = bnds.getMin().getDec(axis).add(new Decimal(0.001d));
+			}
 			Plan3D pl = Plan3D.getPlan(axis, pos);
 			Area aire = null;
-			if (axis == Axis.ZAxis) aire = temp.intersectionHorizontale(pl);
-			if (axis == Axis.XAxis) aire = temp.intersectionVerticale(pl);
+			if (axis != Axis.XAxis) aire = temp.intersectionHorizontaleZ(pl);
+			else aire = temp.intersectionHorizontaleX(pl);
 			
 			if (aire.points.size() != 0) {
 				for (int x = 0; x < temp.xSize(); x++) {

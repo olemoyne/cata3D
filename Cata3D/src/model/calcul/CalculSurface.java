@@ -180,6 +180,7 @@ public class CalculSurface {
 	}
 
 	public static Vecteur getCentre(ArrayList<Vecteur>a, int axis) {
+		if (a.size() == 0) return null;
 		Polygon2D poly = CalculSurface.getPoly(a, axis);
 		return getCentre (poly, a.get(0).getDec(axis), axis);
 	}
@@ -209,6 +210,9 @@ public class CalculSurface {
 		if (pol == null) return null;
 		math.geom2d.Point2D pt = pol.centroid();
 		if ( (Double.isNaN(pt.getX())) || (Double.isNaN(pt.getY())) ) {
+			pt = pol.vertex(0);
+		}
+		if ( (Double.isInfinite(pt.getX())) || (Double.isInfinite(pt.getY())) ) {
 			pt = pol.vertex(0);
 		}
 		if (axis == Axis.XAxis) return new Vecteur (val, new Decimal(pt.getX()), new Decimal(pt.getY()));

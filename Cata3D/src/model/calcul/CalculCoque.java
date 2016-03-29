@@ -6,6 +6,7 @@ import math.geom2d.polygon.Polygon2D;
 import model.Area;
 import model.Cata;
 import model.Poids;
+import model.composants.Collision;
 import model.composants.Composant;
 import model.composants.PatchComposant;
 import model.math.Axis;
@@ -159,6 +160,39 @@ public class CalculCoque {
        	cata.mer.centreAntiDerive = v;
 	}
 
+	
+	/**
+	 * Check if a map is collided with an other
+	 */
+	public static boolean checkCollisions(PatchComposant pc, Cata cata) {
+		// Sanity check
+		if (pc.mapAffichage == null) return false;
+		
+		// Working map : map d'affichage repositionnée
+		Transformation trans = pc.situation.getTransformation(null);
+		Transformation back = trans.getReverse(null);
+		MapDeVecteurs myMap = pc.mapAffichage.transforme(trans);
+		if (pc.collisions ==null) pc.collisions = new ArrayList<Collision>();
+		pc.collisions.clear();
+
+		Bounds bnds = Bounds.getBounds(myMap);
+		for (Composant cmp : cata.composants) {
+			// Ne retient que les patchs ou recopie de patch
+			if ((cmp.isPatch())&&(myMap != null)&&(cmp != pc)) {
+				//positionne la MAP dans le même repère que la MAP de calcul
+				MapDeVecteurs hisMap = cmp.mapAffichage.transforme(cmp.situation.getTransformation(null)).transforme(back);
+				MapDeVecteurs  coll =  CalculFormes.getCollision(myMap, bnds, hisMap);
+				if (coll != null) {
+					coll = coll.transforme(back);
+					Collision c = new Collision();
+					c.autre = cmp;
+					c.collision = coll;
+					pc.collisions.add(c);
+				}
+			}
+		}
+		return (pc.collisions.size() == 0);
+	}
 
 	/** 
 	 * modifie la MAP d'affichage d'un composant pour extruder avec les composants imbriqués
@@ -176,9 +210,13 @@ public class CalculCoque {
 		Transformation back = trans.getReverse(null);
 		MapDeVecteurs myMap = pc.mapAffichage.transforme(trans);
 		
-		pc.mapNonReduite = new MapDeVecteurs(pc.mapAffichage);
 		
-		// Calcul les intersections
+		int nbPoints = 80;
+		MapDeVecteurs mapX = Patch.getMapDecoupe(myMap, nbPoints, Axis.XAxis);
+//		MapDeVecteurs mapX = Patch.getMapDecoupe(myMap, nbPoints, Axis.XAxis);
+
+		pc.mapAffichage = mapX.transforme(back);
+/**		// Calcul les intersections
 		Bounds bnds = Bounds.getBounds(myMap);
 		for (Composant cmp : cata.composants) {
 			// Ne retient que les patchs ou recopie de patch
@@ -197,6 +235,8 @@ public class CalculCoque {
 		} else {
 			System.err.println("Impossible de réduire la forme "+pc.nom);
 		}
+			**/
 	}
-	
+
+
 }

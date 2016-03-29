@@ -49,7 +49,7 @@ public class Gabarit implements Serializable {
 	public Area getArea(PatchVide cmp, Decimal i) {
 		// Plan Z = position;
 		Plan3D pl = this.getPlan(i);
-		Area coupe = cmp.mapAffichage.intersectionHorizontale(pl);
+		Area coupe = cmp.mapAffichage.intersectionHorizontaleZ(pl);
 		
 		return coupe.resize(cmp.epaisseurDeBardage.negate(), Axis.ZAxis);
 	}

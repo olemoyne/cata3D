@@ -44,17 +44,19 @@ public class Structure implements Serializable {
 			Vecteur ep = new Vecteur(Decimal.ZERO, Decimal.ZERO, gab.epaisseur.divide(Decimal.DEUX));
 			ArrayList<Poids> pds = new ArrayList<Poids> ();
 			Area a = gab.getArea(ptch, Decimal.ZERO);
-			Polygon2D pol = CalculSurface.getPoly(a.points, Axis.ZAxis);
-			Decimal vol = new Decimal(pol.area()).multiply(gab.epaisseur).multiply(dens).multiply(Decimal.MILLE);
-			Vecteur ctr = CalculSurface.getCentre(pol, Decimal.ZERO, Axis.ZAxis).add(ep);
-			pds.add(new Poids("Surf", ctr, vol));
-			for (Area sub : gab.getTrous(poutres)) {
-				pol = CalculSurface.getPoly(sub.points, Axis.ZAxis);
-				vol = new Decimal(pol.area()).multiply(gab.epaisseur).multiply(dens).multiply(Decimal.MILLE);
-				ctr = CalculSurface.getCentre(pol, Decimal.ZERO, Axis.ZAxis).add(ep);
-				pds.add(new Poids("Trou", ctr, vol.negate()));
+			if (a.points.size() != 0) {
+				Polygon2D pol = CalculSurface.getPoly(a.points, Axis.ZAxis);
+				Decimal vol = new Decimal(pol.area()).multiply(gab.epaisseur).multiply(dens).multiply(Decimal.MILLE);
+				Vecteur ctr = CalculSurface.getCentre(pol, Decimal.ZERO, Axis.ZAxis).add(ep);
+				pds.add(new Poids("Surf", ctr, vol));
+				for (Area sub : gab.getTrous(poutres)) {
+					pol = CalculSurface.getPoly(sub.points, Axis.ZAxis);
+					vol = new Decimal(pol.area()).multiply(gab.epaisseur).multiply(dens).multiply(Decimal.MILLE);
+					ctr = CalculSurface.getCentre(pol, Decimal.ZERO, Axis.ZAxis).add(ep);
+					pds.add(new Poids("Trou", ctr, vol.negate()));
+				}
+				ret.add(CalculVolume.getCentreGravite("Gab", pds));
 			}
-			ret.add(CalculVolume.getCentreGravite("Gab", pds));
 		}
 		for (Poutre ptr : poutres){ // ajoute le poids des poutres
 			Decimal vol = ptr.epaisseur.multiply(ptr.hauteur).multiply(ptr.longueur).multiply(dens);

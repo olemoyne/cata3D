@@ -65,9 +65,9 @@ public class Recopie extends Composant {
 
 	
 	public boolean isPatch() {
-//		if (autre == null) 
+		if (autre == null) 
 			return false;
-//		return autre.isPatch();
+		return autre.isPatch();
 	}
 	
 	public MapDeVecteurs getMapNonReduite() {

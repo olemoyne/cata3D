@@ -42,7 +42,7 @@ public class CalculFormes {
 			Vecteur v = myMap.getPoint(0, y);		
 			Decimal pos = v.getDecZ(); // position du plan d'intersection
 			
-			Area hisArea = hisMap.intersectionHorizontale(getPlan(pos));
+			Area hisArea = hisMap.intersectionHorizontaleZ(getPlan(pos));
 			
 			// Calcule la conjugaison des deux aires
 			Area resArea = getExtrusion(myArea, hisArea, pos);
@@ -55,10 +55,10 @@ public class CalculFormes {
 			
 		}
 
-		int nbPoints = 80;
+		int nbPoints = 30;
 		MapDeVecteurs mapX = Patch.getMapDecoupe(myMap, nbPoints, Axis.XAxis);
-		MapDeVecteurs mapZ = Patch.getMapDecoupe(mapX, nbPoints, Axis.ZAxis);
-		return mapZ;
+//		MapDeVecteurs mapZ = Patch.getMapDecoupe(mapX, nbPoints, Axis.ZAxis);
+		return mapX;
 		
 		/**		// Splitting the points in equal numbers of points 
 		int nbPoints = myMap.xSize();
@@ -96,6 +96,54 @@ public class CalculFormes {
 		}
 **/		
 	}
+	
+
+	public static MapDeVecteurs getCollision(MapDeVecteurs myMap, Bounds bnds, MapDeVecteurs hisMap) {
+		Bounds hisBnds = Bounds.getBounds(hisMap);
+		if (!bnds.intersecs(hisBnds)) return null; // Pas d'intersection --> pas de'extrusion
+		
+		ArrayList<Area> lst = new ArrayList<Area>(); 
+		// Parcours les lignes de la MAP pour déterminer les surfaces d'intersections
+		for (int y = 0; y < myMap.ySize(); y++) {
+			Area myArea = getArea(myMap, y); 
+
+			Vecteur v = myMap.getPoint(0, y);		
+			Decimal pos = v.getDecZ(); // position du plan d'intersection
+			
+			Area hisArea = hisMap.intersectionHorizontaleZ(getPlan(pos));
+
+			Area a = getCollision(myArea, hisArea, pos);
+			if (a != null) lst.add(a);
+		}
+		int min = 0;
+		for (Area a : lst) if (a.points.size() > min) min = a.points.size();
+		MapDeVecteurs ret = new MapDeVecteurs(min, lst.size());
+		int y = 0;
+		Vecteur last = null;
+		for (Area a : lst) {
+			for (int x = 0; x < min; x++) {
+				if (x < a.points.size()) last = a.points.get(x);
+				
+				ret.setPoint(x, y, last);
+			}
+			y++;
+		}
+
+		return ret;
+	}
+	
+
+
+/**	private static boolean getCollision(Area myArea, Area hisArea) {
+		Polygon2D myPoly = CalculSurface.getPoly(myArea.points, Axis.ZAxis);
+		Polygon2D hisPoly = CalculSurface.getPoly(hisArea.points, Axis.ZAxis);
+
+		Polygon2D res = Polygons2D.intersection(myPoly, hisPoly); 
+		if ( res == null ) return false;
+		if (res.vertices().size() == 0) return false;
+		return true;
+	}
+**/
 
 	/***
    * Récupération des points d'une liste donnée
@@ -119,7 +167,37 @@ public class CalculFormes {
 		return new Plan3D(a, b, c);
 	}
 	
+
 	
+	/**
+	 * Algorithme complexe de calcul d'intersection entre deux zones
+	 * 
+	 * @param myArea
+	 * @param hisArea
+	 * @return
+	 */
+	public static Area getCollision(Area myArea, Area hisArea, Decimal z) {
+		Polygon2D myPoly = CalculSurface.getPoly(myArea.points, Axis.ZAxis);
+		Polygon2D hisPoly = CalculSurface.getPoly(hisArea.points, Axis.ZAxis);
+
+		Polygon2D resPoly = Polygons2D.intersection(myPoly, hisPoly); 
+		if (resPoly == null) {
+			return null;
+		}
+		if (resPoly.edgeNumber() == 0) {
+			return null;
+		}
+		if (resPoly.contours().size() > 1) {
+			return null;
+		}
+		Area ret = new Area();
+		for (int p = resPoly.vertexNumber()-1; p >= 0; p--) {
+			Point2D pt  = resPoly.vertex(p);
+			ret.points.add(new Vecteur(new Decimal(pt.x()), new Decimal(pt.y()), z));
+		}
+		return ret;
+	}
+
 	
 	/**
 	 * Algorithme complexe de calcul d'intersection entre deux zones
@@ -307,6 +385,5 @@ public class CalculFormes {
 		else System.out.println("Resultat 11 : pas d'intersection");
 
 	}
-	
 
 }

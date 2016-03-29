@@ -249,13 +249,17 @@ public class MapDeVecteurs implements Serializable {
 			// calcule la position du plan pour une tranche
 			for (int xpos = 1; xpos < this.xSize; xpos ++) {
 				Vecteur v = pl.intersection(this.getPoint(xpos-1, ypos), this.getPoint(xpos, ypos));
-				if (v!= null) ret.points.add(v);
+				if (v!= null) {
+					if (!ret.points.contains(v)) {
+						ret.points.add(v);
+					}
+				}
 			}
 		}
 		return ret;
 	}
 
-	public Area intersectionHorizontale(Plan3D pl) {
+	public Area intersectionHorizontaleZ(Plan3D pl) {
 		Area ret = new Area();
 		//Parcours tous les points verticaux. Attention les points entre et sortent de l'eau
 		for (int xpos = 0; xpos < this.xSize; xpos ++) {
@@ -274,7 +278,47 @@ public class MapDeVecteurs implements Serializable {
 		}
 		return ret;
 	}
-	
+
+	// DÈcoupe en tranche sur le plan X = pos
+	public Area intersectionHorizontaleX(Plan3D pl) {
+		Area ret = new Area();
+		ArrayList<Vecteur> haut = new ArrayList<Vecteur> ();
+		ArrayList<Vecteur> bas = new ArrayList<Vecteur> ();
+		//Parcours tous les points verticaux. Attention les points entre et sortent de l'eau
+		for (int ypos = 0; ypos < this.ySize; ypos ++) {
+			Vecteur last = null;
+			boolean ok = false;
+			// calcule la position du plan pour une tranche
+			for (int xpos = 1; xpos < this.xSize; xpos ++) {
+				Vecteur A = this.getPoint(xpos-1, ypos);
+				Vecteur B = this.getPoint(xpos, ypos);
+				Vecteur v = pl.intersection(A, B);
+				if (v!= null) {
+					if (last == null) { 
+						last = v;
+					} else {
+						ok = true;
+						if (last.getDecY().compareTo(v.getDecY()) >= 0) {
+							haut.add(last); bas.add(v); 
+						} else {
+							haut.add(v); bas.add(last); 
+						}
+					}
+				}
+			}
+			if (!ok) { // haut et bas non affectÈs
+				if( last != null) { // un seul point
+					haut.add(last);
+					bas.add(last);
+				}
+			}
+		}
+		// parcous les liste et ajout les ÈlÈments
+		for (Vecteur v : haut) ret.points.add(v);
+		for (int p = bas.size()-1; p >= 0; p--) ret.points.add(bas.get(p));
+		return ret;
+	}
+
 	
 	/**
 	 * Retourne la projection de la forme sur un plan donn√© par l'axe

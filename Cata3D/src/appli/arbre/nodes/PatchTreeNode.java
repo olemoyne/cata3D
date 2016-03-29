@@ -33,8 +33,8 @@ public class PatchTreeNode extends ComposantTreeNode {
 	    new PoidsTreeNode(this, cmp);
 	    // gestion des plans de construction
 	    new PlanTreeNode(this);
-	    // gestion de la r�duction de forme
-	    new ReductionTreeNode(this, cmp);
+	    // Liste des collisions 
+	    new CollisionsTreeNode(this, cmp);
 
 	}		
 	
@@ -45,7 +45,7 @@ public class PatchTreeNode extends ComposantTreeNode {
 		ArrayList<TreeNodeProperty> ret = super.getProperties();
 		ret.add(new TreeNodeProperty ("Précision", p.precision, true, ObjectUpdater.INTEGER) );
 		ret.add(new TreeNodeProperty ("Sym�trie", p.reflexive, true, ObjectUpdater.BOOLEAN) );
-		ret.add(new TreeNodeProperty ("Réduction", p.reduction, true, ObjectUpdater.BOOLEAN) );
+		ret.add(new TreeNodeProperty ("Collision", p.collision, false, ObjectUpdater.BOOLEAN) );
 		return ret;
 	}
 	
@@ -65,11 +65,6 @@ public class PatchTreeNode extends ComposantTreeNode {
 		if (fld.equals("Sym�trie")) {
 			Boolean dec = (Boolean)value;
 			pv.reflexive = dec; 
-		}
-		// Gestion de la réduction
-		if (fld.equals("Réduction")) {
-			Boolean dec = (Boolean)value;
-			pv.reduction = dec; 
 		}
 	}
 
