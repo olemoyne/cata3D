@@ -207,6 +207,7 @@ public class CalculFormes {
 	 * @return
 	 */
 	public static Area getExtrusion(Area myArea, Area hisArea, Decimal z) {
+		if( myArea.points.size() == 0) return myArea;
 		Polygon2D myPoly = CalculSurface.getPoly(myArea.points, Axis.ZAxis);
 		Polygon2D hisPoly = CalculSurface.getPoly(hisArea.points, Axis.ZAxis);
 

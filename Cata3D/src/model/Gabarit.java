@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import model.calcul.CalculFormes;
+import model.composants.Collision;
 import model.composants.PatchVide;
 import model.math.Axis;
 import model.math.Decimal;
@@ -50,6 +52,14 @@ public class Gabarit implements Serializable {
 		// Plan Z = position;
 		Plan3D pl = this.getPlan(i);
 		Area coupe = cmp.mapAffichage.intersectionHorizontaleZ(pl);
+		// SUppression des zones de collisison
+		if (cmp.collisions != null) {
+			for (Collision coll : cmp.collisions) {
+				Area extrude = coll.collision.intersectionHorizontaleZ(pl);
+				Area diff = CalculFormes.getExtrusion(coupe, extrude, position.add(i));
+				if (diff != null) coupe = diff;
+			}
+		}
 		
 		return coupe.resize(cmp.epaisseurDeBardage.negate(), Axis.ZAxis);
 	}

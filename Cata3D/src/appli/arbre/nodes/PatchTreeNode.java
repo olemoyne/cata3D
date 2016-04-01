@@ -87,7 +87,7 @@ public class PatchTreeNode extends ComposantTreeNode {
 	
 
 	public String[] getActionList() {
-		String[] strs =  {"Fichier STL"};
+		String[] strs =  {"Fichier STL", "Supprime composant"};
 		return strs;
 	}
 

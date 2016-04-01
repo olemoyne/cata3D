@@ -67,6 +67,7 @@ public class Cata implements Serializable{
 				try {
 					PatchComposant pc = (PatchComposant) cmp;
 					pc.collision = CalculCoque.checkCollisions(pc, this);
+					pc.calculeElements();
 				} catch (ClassCastException e) {
 				}
 			}

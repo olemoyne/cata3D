@@ -33,11 +33,11 @@ public class ActiveView {
 		/** Creation de la vue 3D **/
 		PrintableViewUpdate upd = new PrintableViewUpdate("0.025", echelle);
 		viewer3D = new PrintableObjectViewer(upd);
-		fond.add(viewer3D, BorderLayout.CENTER);
-		active = viewer3D;
 
 		/** Creation de la vue du gabarit **/
 		gabView = new GabaritDetailsViewer();
+		fond.add(gabView, BorderLayout.CENTER);
+		active = gabView;
 		
 	}
 	
@@ -49,6 +49,7 @@ public class ActiveView {
 				fondDeVue.remove(active);
 				fondDeVue.add(viewer3D, BorderLayout.CENTER);
 				active = viewer3D;
+				fondDeVue.revalidate();
 			}
 		} else {
 			gabView.setScene((GabaritScene)scene);
@@ -56,6 +57,9 @@ public class ActiveView {
 				fondDeVue.remove(active);
 				fondDeVue.add(gabView, BorderLayout.CENTER);
 				active = gabView;
+				System.out.println("Affiche les gabarits");
+				gabView.setPreferredSize(fondDeVue.getSize());
+				fondDeVue.revalidate();
 			}
 		}
 	}

@@ -32,13 +32,15 @@ public class GabaritPlanViewer extends JPanel {
 
 	private Rectangle dim;
 	
+	public DrawingParameters params;
+	
 	
 	/**
 	 * Creation de la vue 2D
 	 */
 	public GabaritPlanViewer () {
 		super();
-		
+		params = new DrawingParameters();
 	}
 
 	
@@ -60,6 +62,8 @@ public class GabaritPlanViewer extends JPanel {
 		}
 		gr.drawLine(getX(surf.points.get(0)), getY(surf.points.get(0)),	getX(v), getY(v));
 	}
+	
+	
 	/** 
 	 * Visualisation du gabarit
 	 * 
