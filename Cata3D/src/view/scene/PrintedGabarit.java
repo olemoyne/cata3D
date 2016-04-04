@@ -8,7 +8,7 @@ import com.jogamp.opengl.GL2;
 import model.Area;
 import model.Gabarit;
 import model.composants.PatchVide;
-import model.math.Bounds3D;
+import model.math.Bounds;
 import model.math.Decimal;
 import model.math.Plan3D;
 import model.math.Segment;
@@ -19,7 +19,7 @@ public class PrintedGabarit extends PrintableObject {
 	public Area fond;
 	public Area devant;
 	
-	public Bounds3D bns;
+	public Bounds bns;
 	
 	public ArrayList<Area> trous;
 	
@@ -34,14 +34,12 @@ public class PrintedGabarit extends PrintableObject {
 		
 		name = gab.toString();
 		
-		bns = new Bounds3D(); 
+		bns = Bounds.getBounds(coque.mapAffichage);
 		
 		Decimal delta = gab.epaisseur.divide(Decimal.DEUX);
 		
 		devant = gab.getArea(coque, delta.negate());
-		bns.add(devant);
 		fond = gab.getArea(coque, delta);
-		bns.add(fond);
 		
 		trous = gab.getTrous(coque.structure.poutres);
 						

@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import javax.swing.JPanel;
 
 import model.Area;
+import model.math.Decimal;
 import model.math.Vecteur;
 import view.scene.PrintedGabarit;
 
@@ -29,10 +30,12 @@ public class GabaritPlanViewer extends JPanel {
 	private PrintedGabarit gabarit;
 
 	private double echelle;
+	private int ctrX;
+	private int ctrY;
 
 	private Rectangle dim;
 	
-	public DrawingParameters params;
+	public PrintingParameters params;
 	
 	
 	/**
@@ -40,16 +43,16 @@ public class GabaritPlanViewer extends JPanel {
 	 */
 	public GabaritPlanViewer () {
 		super();
-		params = new DrawingParameters();
+		params = new PrintingParameters();
 	}
 
 	
 	private int getX (Vecteur v) {
-		return (int)Math.round((v.minus(gabarit.bns.getMin())).getX()*echelle);
+		return (int)Math.round(ctrX + (v.minus(gabarit.bns.getMin())).getX()*echelle);
 	}
 
 	private int getY (Vecteur v) {
-		return (int)Math.round((gabarit.bns.getMax().minus(v)).getY()*echelle);
+		return (int)Math.round((ctrY + (gabarit.bns.getMax().minus(v)).getY()*echelle));
 	}
 
 	
@@ -78,10 +81,16 @@ public class GabaritPlanViewer extends JPanel {
 		
 		echelle = Math.min(echelleX, echelleY);
 		
+		ctrX = 10 + (int)Math.round(( (dim.getWidth()-20) - (gabarit.bns.getMax().getX() - gabarit.bns.getMin().getX())*echelle ) /2);
+		ctrY = 10 + (int)Math.round(( (dim.getHeight()-20) - (gabarit.bns.getMax().getY() - gabarit.bns.getMin().getY())*echelle ) /2);
+		
+		
 		// Affiche le fond en blanc
 		gr.setColor(Color.WHITE);
 		gr.fillRect(dim.x, dim.y, dim.width, dim.height);
 		
+		
+		showQuad(gr);
 
 		// Affiche la limite de flottaison en bleu
 		gr.setColor(Color.BLUE);
@@ -100,6 +109,46 @@ public class GabaritPlanViewer extends JPanel {
 		for (Area a : gabarit.trous) {
 			drawArea(gr, a);
 		}
+		
+	}
+	
+	/***
+	 * affiche le quadrillage 
+	 * **/
+	private void showQuad (Graphics gr) {
+		
+		Decimal gauche = gabarit.bns.getMin().getDecX();
+		Decimal droite = gabarit.bns.getMax().getDecX();
+		
+		// affiche le quadrillage tous les CM 
+		Decimal larg = gabarit.bns.getMax().getDecX().minus(gabarit.bns.getMin().getDecX()); 
+		larg = larg.multiply(Decimal.CENT); // Centimetres
+		
+		int start = (int)Math.floor(gauche.multiply(Decimal.CENT).doubleValue());
+		double nb = larg.doubleValue(); 
+		
+		Decimal haut = gabarit.bns.getMax().getDecY();
+		Decimal bas = gabarit.bns.getMin().getDecY();
+		
+		gr.setColor(new Color (0.80f, 0.80f, 0.80f));
+		for (int pos = start; pos < start + nb + 1; pos ++) {
+			Vecteur h = new Vecteur (new Decimal(pos*0.01d), haut, Decimal.ZERO);
+			Vecteur b = new Vecteur (new Decimal(pos*0.01d), bas, Decimal.ZERO);
+			gr.drawLine(getX(h), getY(h), getX(b), getY(b));			
+		}
+
+		larg = haut.minus(bas); 
+		larg = larg.multiply(Decimal.CENT); // Centimetres
+		
+		start = (int)Math.floor(bas.multiply(Decimal.CENT).doubleValue());
+		nb = larg.doubleValue(); 
+		
+		for (int pos = start; pos < start + nb + 1; pos ++) {
+			Vecteur g = new Vecteur (gauche, new Decimal(pos*0.01d), Decimal.ZERO);
+			Vecteur d = new Vecteur (droite, new Decimal(pos*0.01d), Decimal.ZERO);
+			gr.drawLine(getX(g), getY(g), getX(d), getY(d));			
+		}
+		
 	}
 
 	/**
