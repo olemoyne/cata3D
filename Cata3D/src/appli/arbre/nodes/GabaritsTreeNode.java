@@ -13,7 +13,6 @@ import model.Gabarit;
 import model.Position;
 import model.composants.PatchComposant;
 import model.composants.PatchVide;
-import model.math.Decimal;
 
 public class GabaritsTreeNode extends DesignTreeNode {
 
@@ -65,7 +64,7 @@ public class GabaritsTreeNode extends DesignTreeNode {
 
 		// Affiche les poids en rouge
 		for (Gabarit gab : comp.structure.gabarits) {
-			ret.add(new PrintedArea(gab.getArea(comp, Decimal.ZERO), gab.position.toString(), false, false, Color.GREEN, new Position()));
+			ret.add(new PrintedArea(gab.getArea(comp, gab.position, null, false), gab.position.toString(), false, false, Color.GREEN, new Position()));
 		}
 
 		return ret;

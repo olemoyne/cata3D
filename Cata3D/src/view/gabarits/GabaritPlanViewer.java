@@ -96,6 +96,10 @@ public class GabaritPlanViewer extends JPanel {
 		gr.setColor(Color.BLUE);
 		gr.drawLine(getX(gabarit.mer.getA()), getY(gabarit.mer.getA()), getX(gabarit.mer.getB()), getY(gabarit.mer.getB()));
 
+		// Affiche le gabarit non resizé en rouge
+		gr.setColor(Color.RED);
+		drawArea(gr, gabarit.full);
+
 		// Affiche le gabarit en darkGray
 		gr.setColor(Color.DARK_GRAY);
 		drawArea(gr, gabarit.fond);
@@ -109,7 +113,13 @@ public class GabaritPlanViewer extends JPanel {
 		for (Area a : gabarit.trous) {
 			drawArea(gr, a);
 		}
-		
+
+		// Affiche les éléments adjacents en orange
+		gr.setColor(Color.ORANGE);
+		for (Area a : gabarit.effacements) {
+			drawArea(gr, a);
+		}
+
 	}
 	
 	/***

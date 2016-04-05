@@ -3,6 +3,7 @@ package model.calcul;
 import java.util.ArrayList;
 
 import math.geom2d.Point2D;
+import math.geom2d.polygon.LinearRing2D;
 import math.geom2d.polygon.Polygon2D;
 import math.geom2d.polygon.Polygons2D;
 import model.Area;
@@ -119,12 +120,19 @@ public class CalculFormes {
 		for (Area a : lst) if (a.points.size() > min) min = a.points.size();
 		MapDeVecteurs ret = new MapDeVecteurs(min, lst.size());
 		int y = 0;
-		Vecteur last = null;
-		for (Area a : lst) {
+		for (Area area : lst) {
+			double step = (double)(area.points.size()) / (double)min;
+			Vecteur last = area.points.get(0);
+			int pos = 0;
 			for (int x = 0; x < min; x++) {
-				if (x < a.points.size()) last = a.points.get(x);
-				
-				ret.setPoint(x, y, last);
+				double p = step * x;
+				if (p > pos) {
+					pos ++;
+					if (pos < area.points.size()) last = area.points.get(pos);
+					ret.setPoint(x, y, last);
+				} else {
+					ret.setPoint(x, y, last);					
+				}
 			}
 			y++;
 		}
@@ -224,8 +232,13 @@ public class CalculFormes {
 		}
 		if (resPoly.contours().size() > 1) {
 			System.err.println("Extruction error : Multiple polygon");
-			return null;
-		};
+			Area ret = new Area();
+			LinearRing2D rg = resPoly.contours().iterator().next();
+			for (Point2D pt : rg.vertices()) {
+				ret.points.add(new Vecteur(new Decimal(pt.x()), new Decimal(pt.y()), z));
+			}
+			return ret;
+		}
 		Area ret = new Area();
 		for (int p = resPoly.vertexNumber()-1; p >= 0; p--) {
 			Point2D pt  = resPoly.vertex(p);

@@ -41,28 +41,6 @@ public class Gabarit implements Serializable {
 		return pl;
 	}
 	
-	/** 
-	 * Retourne la surface (liste de points) corrrespondant au gabarit
-	 * 
-	 * @param bateau
-	 * @param i 
-	 * @return
-	 */
-	public Area getArea(PatchVide cmp, Decimal i) {
-		// Plan Z = position;
-		Plan3D pl = this.getPlan(i);
-		Area coupe = cmp.mapAffichage.intersectionHorizontaleZ(pl);
-		// SUppression des zones de collisison
-		if (cmp.collisions != null) {
-			for (Collision coll : cmp.collisions) {
-				Area extrude = coll.collision.intersectionHorizontaleZ(pl);
-				Area diff = CalculFormes.getExtrusion(coupe, extrude, position.add(i));
-				if (diff != null) coupe = diff;
-			}
-		}
-		
-		return coupe.resize(cmp.epaisseurDeBardage.negate(), Axis.ZAxis);
-	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -70,6 +48,32 @@ public class Gabarit implements Serializable {
 		sb.append(" - ");
 		sb.append(epaisseur.toString());
 		return sb.toString();
+	}
+
+	/** 
+	 * Retourne la surface (liste de points) corrrespondant au gabarit
+	 * 
+	 * @param bateau
+	 * @param i 
+	 * @param resize 
+	 * @return
+	 */
+	public Area getArea(PatchVide cmp, Decimal i, ArrayList<Area> effacements, boolean resize) {
+		// Plan Z = position;
+		Plan3D pl = Plan3D.getPlan(Axis.ZAxis, i);
+		Area coupe = cmp.mapAffichage.intersectionHorizontaleZ(pl);
+		// SUppression des zones de collisison
+		if (cmp.collisions != null) {
+			for (Collision coll : cmp.collisions) {
+				Area extrude = coll.collision.intersectionHorizontaleZ(pl);
+				if (effacements != null) effacements.add(extrude);
+				Area diff = CalculFormes.getExtrusion(coupe, extrude, i);
+				if (diff != null) coupe = diff;
+			}
+		}
+		if (resize)
+			return coupe.resize(cmp.epaisseurDeBardage.negate(), Axis.ZAxis);
+		else return coupe;
 	}
 
 	/**

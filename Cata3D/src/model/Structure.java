@@ -43,7 +43,7 @@ public class Structure implements Serializable {
 		for (Gabarit gab : gabarits){ // ajoute le poids des gabarits
 			Vecteur ep = new Vecteur(Decimal.ZERO, Decimal.ZERO, gab.epaisseur.divide(Decimal.DEUX));
 			ArrayList<Poids> pds = new ArrayList<Poids> ();
-			Area a = gab.getArea(ptch, Decimal.ZERO);
+			Area a = gab.getArea(ptch, gab.position, null, true);
 			if (a.points.size() != 0) {
 				Polygon2D pol = CalculSurface.getPoly(a.points, Axis.ZAxis);
 				Decimal vol = new Decimal(pol.area()).multiply(gab.epaisseur).multiply(dens).multiply(Decimal.MILLE);

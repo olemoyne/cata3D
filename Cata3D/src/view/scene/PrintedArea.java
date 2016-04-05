@@ -53,8 +53,10 @@ public class PrintedArea extends PrintableObject {
 			Vecteur pt = zone.points.get(i); 
 			Printer.setPoint(pt, gl);
 		}
-		Vecteur pt = zone.points.get(0);
-		Printer.setPoint(pt, gl);
+		if (zone.points.size() >= 1) {
+			Vecteur pt = zone.points.get(0);
+			Printer.setPoint(pt, gl);
+		}
 		gl.glEnd();
 
 		// Double face si non tranparent
@@ -63,12 +65,13 @@ public class PrintedArea extends PrintableObject {
 			else gl.glBegin(GL2.GL_POLYGON);
 			
 			for (int i = 0; i < zone.points.size(); i++) {
-				pt = zone.points.get(i); 
+				Vecteur pt = zone.points.get(i); 
 				Printer.setPoint(pt, gl);
 			}
-			pt = zone.points.get(0);
-			Printer.setPoint(pt, gl);
-
+			if (zone.points.size() >= 1) {
+				Vecteur pt = zone.points.get(0);
+				Printer.setPoint(pt, gl);
+			}
 			gl.glEnd();
 		}
 

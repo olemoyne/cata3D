@@ -18,11 +18,15 @@ public class PrintedGabarit extends PrintableObject {
 
 	public Area fond;
 	public Area devant;
-	
+
+	public Area full;
+
 	public Bounds bns;
 	
 	public ArrayList<Area> trous;
-	
+
+	public ArrayList<Area> effacements;
+
 	public Segment mer; 
 	
 	
@@ -38,10 +42,14 @@ public class PrintedGabarit extends PrintableObject {
 		
 		Decimal delta = gab.epaisseur.divide(Decimal.DEUX);
 		
-		devant = gab.getArea(coque, delta.negate());
-		fond = gab.getArea(coque, delta);
+		effacements = new ArrayList<Area>();
+		
+		devant = gab.getArea(coque, gab.position.minus(delta), null, true);
+		fond = gab.getArea(coque, gab.position.add(delta), this.effacements, true);
+		full = gab.getArea(coque, gab.position, null, false);
 		
 		trous = gab.getTrous(coque.structure.poutres);
+		
 						
 		Vecteur s = bns.getMin();
 		Vecteur e = new Vecteur (bns.getMin().getDecX(), bns.getMax().getDecY(), bns.getMin().getDecZ());
@@ -53,6 +61,8 @@ public class PrintedGabarit extends PrintableObject {
 
 		mer = new Segment (mstart, mend);
 	}
+
+	
 
 
 	/**
