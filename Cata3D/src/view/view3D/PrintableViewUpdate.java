@@ -37,7 +37,7 @@ public class PrintableViewUpdate extends ViewUpdate implements ListCellRenderer<
 		updated = true;
 	}
 	
-	protected void setScene (PrintableScene scn) {
+	public void setScene (PrintableScene scn) {
 		scene = scn;
 		updated = true;
 	}

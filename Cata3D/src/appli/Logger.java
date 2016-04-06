@@ -1,6 +1,10 @@
 package appli;
 
+import javax.swing.JLabel;
+
 public class Logger {
+	
+	public JLabel toScreen;
 	
 	public Logger () {
 		
@@ -12,6 +16,8 @@ public class Logger {
 		System.out.print(tme);
 		System.out.print(" - ");
 		System.out.println(msg);
+		
+		if (toScreen != null) toScreen.setText(msg);
 	}
 
 }

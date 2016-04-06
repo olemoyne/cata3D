@@ -62,13 +62,14 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 		message = new Message();
 		bas.add(message);
 		fond.add(bas, BorderLayout.SOUTH);
+		log.toScreen  = message;
 		
 		/**
 		 * Creation du manager de formes
 		 */
 		log.writeLog("Starting the view");
 		if (ctx.echelle == null) ctx.echelle = Decimal.UN;
-		vue = new ActiveView(fond, ctx.echelle);
+		vue = new ActiveView(fond, ctx.echelle, lg);
 
 		log.writeLog("Drawing the tree");
 		arbre = new ArbreDesign(this);

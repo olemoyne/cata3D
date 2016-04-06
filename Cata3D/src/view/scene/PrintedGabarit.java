@@ -29,6 +29,8 @@ public class PrintedGabarit extends PrintableObject {
 
 	public Segment mer; 
 	
+	public Decimal zPosition;
+	public Decimal epaisseur;
 	
 	/** 
 	 * Construit les éléments du gabarit à afficher 
@@ -40,10 +42,13 @@ public class PrintedGabarit extends PrintableObject {
 		
 		bns = Bounds.getBounds(coque.mapAffichage);
 		
+		zPosition = gab.position;
+		epaisseur = gab.epaisseur;
+		
 		Decimal delta = gab.epaisseur.divide(Decimal.DEUX);
 		
 		effacements = new ArrayList<Area>();
-		
+				
 		devant = gab.getArea(coque, gab.position.minus(delta), null, true);
 		fond = gab.getArea(coque, gab.position.add(delta), this.effacements, true);
 		full = gab.getArea(coque, gab.position, null, false);

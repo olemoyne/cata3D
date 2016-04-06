@@ -3,15 +3,21 @@ package view.gabarits;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
+import java.awt.geom.Point2D;
 
 import javax.swing.JPanel;
 
 import model.Area;
+import model.calcul.CalculSurface;
+import model.math.Axis;
 import model.math.Decimal;
 import model.math.Vecteur;
 import view.scene.PrintedGabarit;
 
-public class GabaritPlanViewer extends JPanel {
+public class GabaritPlanViewer extends JPanel implements MouseMotionListener{
 
 	/**
 	 * 
@@ -37,13 +43,17 @@ public class GabaritPlanViewer extends JPanel {
 	
 	public PrintingParameters params;
 	
+	private GabaritInformation logManager;
 	
 	/**
 	 * Creation de la vue 2D
 	 */
-	public GabaritPlanViewer () {
+	public GabaritPlanViewer (GabaritInformation position, MouseWheelListener list) {
 		super();
 		params = new PrintingParameters();
+		logManager = position;
+		addMouseMotionListener(this);
+		addMouseWheelListener(list);
 	}
 
 	
@@ -51,10 +61,18 @@ public class GabaritPlanViewer extends JPanel {
 		return (int)Math.round(ctrX + (v.minus(gabarit.bns.getMin())).getX()*echelle);
 	}
 
+	
+	private double getXValue (double x) {
+		return ((x-ctrX)/echelle+gabarit.bns.getMin().getX())/1000d;
+	}
+
 	private int getY (Vecteur v) {
 		return (int)Math.round((ctrY + (gabarit.bns.getMax().minus(v)).getY()*echelle));
 	}
 
+	private double getYValue (double y) {
+		return ((y-ctrY)/echelle-gabarit.bns.getMax().getY())/1000d;
+	}
 	
 	private void drawArea (Graphics gr, Area surf) {
 		if (surf.points.size()== 0) return;
@@ -65,7 +83,18 @@ public class GabaritPlanViewer extends JPanel {
 		}
 		gr.drawLine(getX(surf.points.get(0)), getY(surf.points.get(0)),	getX(v), getY(v));
 	}
-	
+
+	private void drawPoint (Graphics gr, Vecteur pt) {
+		if (pt == null) return;
+		
+		int x = getX(pt);
+		int y = getY(pt);
+		
+		gr.drawLine(x-5, y, x+5, y);
+		gr.drawLine(x, y-5, x, y+5);
+		
+	}
+
 	
 	/** 
 	 * Visualisation du gabarit
@@ -119,6 +148,9 @@ public class GabaritPlanViewer extends JPanel {
 		for (Area a : gabarit.effacements) {
 			drawArea(gr, a);
 		}
+		
+		Vecteur pt = CalculSurface.getCentre(gabarit.full.points, Axis.ZAxis);
+		drawPoint(gr, pt);
 
 	}
 	
@@ -171,5 +203,22 @@ public class GabaritPlanViewer extends JPanel {
 	public void setGabarit(PrintedGabarit gab) {
 		// Calcule le gabarit
 		gabarit = gab;
+	}
+
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		
+	}
+
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		Point2D pt = e.getPoint();
+		if (this.gabarit == null) return;
+		this.logManager.mouseX = this.getXValue(pt.getX());
+		this.logManager.mouseY = this.getYValue(pt.getX());
+
+		this.logManager.show();
 	}
 }

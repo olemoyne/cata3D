@@ -27,7 +27,7 @@ public class ActiveView {
 	private JPanel active;
 	
 	
-	public ActiveView (JPanel fond, Decimal echelle) {
+	public ActiveView (JPanel fond, Decimal echelle, Logger log) {
 		fondDeVue = fond;
 		
 		/** Creation de la vue 3D **/
@@ -35,7 +35,7 @@ public class ActiveView {
 		viewer3D = new PrintableObjectViewer(upd);
 
 		/** Creation de la vue du gabarit **/
-		gabView = new GabaritDetailsViewer();
+		gabView = new GabaritDetailsViewer(log);
 		fond.add(gabView, BorderLayout.CENTER);
 		active = gabView;
 		

@@ -46,14 +46,65 @@ public class Area implements Serializable {
 	 */
 	public Area resize(Decimal enPlus, int ax) {
 		Area ret = new Area();
+		if (enPlus.isZero()) return this;
+		if (points.size() == 0) return this;
+		ArrayList<Vecteur> pts = getUnitedPoints();
+		Decimal delta = enPlus.negate();
+		Vecteur last = pts.get(pts.size()-1);
+		for (int pos =0; pos < pts.size(); pos ++) {
+			Vecteur my = pts.get(pos);
+			Vecteur next = null;
+			if (pos < pts.size() - 1) next = pts.get(pos + 1);
+			else next = pts.get(0);
+			
+			Vecteur dir = last.add(next.minus(my)).minus(my);
+			if (dir.getNorme().isZero()) {
+				if (next.minus(my).estColineaire(my.minus(last))) {
+					// Dans ce cas on prends la droite perpendiculaire
+					dir = next.minus(last);
+					dir = new Vecteur (dir.getDecY(), dir.getDecX(), dir.getDecZ());
+				} else {			
+					dir = next.add(last.minus(my)).minus(my);
+				}
+			}
+			Droite3D dr = new Droite3D(dir, my);
+			ret.points.add(dr.getPoint(delta));
+			last = my;
+		}
+		
+		return ret;
+	}
+
+	private ArrayList<Vecteur> getUnitedPoints() {
+		ArrayList<Vecteur> ret = new ArrayList<Vecteur> ();
+		Vecteur last = points.get(points.size()-1);
+		for (Vecteur v : points) {
+			if (!v.equals(last)) ret.add(v); 
+			last = v;
+		}
+		return ret;
+	}
+
+	/**
+	 * Retaille la forme en rognant la distance demand�e
+	 * 
+	 * @param negate
+	 * @return
+	 */
+	public Area resizeCenter(Decimal enPlus, int ax) {
+		Area ret = new Area();
 		Vecteur ctr = CalculSurface.getCentre(points, ax);
+		Decimal delta = enPlus.multiply(Vecteur.METER);
 		for (Vecteur v : points) {
 			// Calcule la nouvelle position du vecteur
 			Decimal l = v.distance(ctr);
 			if (!l.isZero()) {
-				Decimal coef = l.add(enPlus).divide(l); 
+				Decimal coef = l.add(delta).divide(l); 
 			// Applique le coeficient au point
-				Vecteur pt = ctr.add(v.minus(ctr).multiply(coef));
+				Decimal x = ctr.getDecX().add(v.getDecX().minus(ctr.getDecX()).multiply(coef));
+				Decimal y = ctr.getDecY().add(v.getDecY().minus(ctr.getDecY()).multiply(coef));
+				Decimal z = ctr.getDecZ().add(v.getDecZ().minus(ctr.getDecZ()).multiply(coef));
+				Vecteur pt = new Vecteur (x, y, z);
 				ret.points.add(pt);
 			} else {
 				ret.points.add(v);

@@ -2,18 +2,16 @@ package view.gabarits;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import appli.Logger;
 import view.scene.GabaritScene;
-import view.scene.PrintableObject;
 import view.scene.PrintedGabarit;
 
-public class GabaritDetailsViewer extends JPanel implements ActionListener {
+public class GabaritDetailsViewer extends JPanel implements MouseWheelListener  {
 
 	/**
 	 * 
@@ -27,30 +25,24 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 	 */
 	
 	private GabaritPlanViewer vue;
+	private GabaritInformation position;
 	
-	private JComboBox<PrintedGabarit> select;
+	private GabaritScene scene;
+	private int element; 
 	
 	/**
 	 * Creation de la vue 2D
 	 */
-	public GabaritDetailsViewer () {
+	public GabaritDetailsViewer (Logger log) {
 		super();
 		setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
-		
-		// Ajoute les �l�ments 
-		//Liste des gabarits
-		JPanel sub = new JPanel();
-		sub.setLayout(new BoxLayout(sub, BoxLayout.LINE_AXIS));
-		sub.add(new JLabel("Choisissez le gabarit a etudier"));
-		select = new JComboBox<PrintedGabarit>();
-		select.addActionListener(this);
-		sub.add(select);
-		
-		this.add(sub, BorderLayout.NORTH);
+		// Ajoute les informations en haut
+		position = new GabaritInformation();
+		this.add(position, BorderLayout.NORTH);
 		
 		// Vue du plan du Gabarit
-		vue = new GabaritPlanViewer ();
+		vue = new GabaritPlanViewer (position, this);
 		add(vue, BorderLayout.CENTER);
 		
 	}
@@ -61,25 +53,34 @@ public class GabaritDetailsViewer extends JPanel implements ActionListener {
 	 * @param gab
 	 */
 	public void setScene (GabaritScene gab) {
-		// Affiche la liste des gabarits possible
-		select.removeAllItems();
-		for (PrintableObject g : gab.allObjects) select.addItem((PrintedGabarit)g);
-		if (gab.allObjects.size() > 0) {
-			PrintableObject g = gab.allObjects.get(0);
-			if (g != null) select.getModel().setSelectedItem((PrintedGabarit)g);
-		}
+		this.scene = gab;
+		element = 0;
+		showElement();
 		repaint();
 	}
 
-	@Override
-	/** 
-	 * Changement de gabarit selectionn� 
-	 ***/
-	public void actionPerformed(ActionEvent e) {
-		PrintedGabarit gab = (PrintedGabarit)this.select.getSelectedItem();
-		
+	public void showElement() {
+		if (element >= this.scene.allObjects.size()) element = this.scene.allObjects.size()-1;
+		if (element < 0) element = 0;
+
+		PrintedGabarit gab = (PrintedGabarit) this.scene.allObjects.get(element);
+		this.position.epaisseur = gab.epaisseur;
+		this.position.id = element;
+		this.position.position = gab.zPosition;
+		position.show();
+
 		this.vue.setGabarit(gab);
-		repaint();
+		vue.repaint();
 	}
 	
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		int r = e.getWheelRotation();
+		if (r < 0) element -= 1;
+		if (r > 0) element += 1;
+
+		showElement();
+		
+	}
+
 }
