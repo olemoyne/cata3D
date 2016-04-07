@@ -37,6 +37,48 @@ public class Area implements Serializable {
 		points = new ArrayList<Vecteur>();
 		situation = new Position();
 	}
+	
+	public static Vecteur getMediatrice (Vecteur pt1, Vecteur pt2) {
+		Vecteur dir = pt2.minus(pt1);
+		Decimal n = dir.getNorme();
+		Decimal x= dir.getDecY().negate().divide(n);
+		Decimal y= dir.getDecX().divide(n);
+		dir = new Vecteur (x, y, dir.getDecZ());
+		return dir;
+	}
+	
+	
+	private static Vecteur getResizedPoint(Vecteur last, Vecteur my, Vecteur next, Vecteur ctr, Decimal delta) {
+		Vecteur dir = null;
+		if (!next.equals(last)) {
+			if (next.minus(my).estColineaire(my.minus(last))) {
+				// Dans ce cas on prends la droite perpendiculaire
+				dir = getMediatrice(last, next);
+			} else {
+				Droite3D drt1 = new Droite3D(last.minus(my), my);
+				Droite3D drt2 = new Droite3D(next.minus(my), my);
+				Vecteur pt1 = drt1.getPoint(Decimal.UN);
+				Vecteur pt2 = drt2.getPoint(Decimal.UN);
+				Segment seg = new Segment (pt1, pt2);
+				dir = seg.getCenter().minus(my);
+			}
+
+			if (!dir.getNorme().isZero()) {
+				Droite3D dr = new Droite3D(dir, my);
+				Vecteur p = dr.getPoint(delta.negate());
+				Decimal dist = my.decDistance(ctr);
+				Decimal dpt = p.decDistance(ctr);
+				if (dpt.compareTo(dist) > 0) {
+					p = dr.getPoint(delta);
+				}
+				return p;
+			} else {
+				System.err.println("Erreur : "+last.toString()+" "+my.toString()+" "+next.toString());
+				return null;
+			}
+		}		
+		return null;
+	}
 
 	/**
 	 * Retaille la forme en rognant la distance demand�e
@@ -48,8 +90,10 @@ public class Area implements Serializable {
 		Area ret = new Area();
 		if (enPlus.isZero()) return this;
 		if (points.size() == 0) return this;
+		Vecteur ctr = CalculSurface.getCentre(points, ax);
+
 		ArrayList<Vecteur> pts = getUnitedPoints();
-		Decimal delta = enPlus.negate();
+		Decimal delta = enPlus;//.negate();
 		Vecteur last = pts.get(pts.size()-1);
 		for (int pos =0; pos < pts.size(); pos ++) {
 			Vecteur my = pts.get(pos);
@@ -57,21 +101,13 @@ public class Area implements Serializable {
 			if (pos < pts.size() - 1) next = pts.get(pos + 1);
 			else next = pts.get(0);
 			
-			Vecteur dir = last.add(next.minus(my)).minus(my);
-			if (dir.getNorme().isZero()) {
-				if (next.minus(my).estColineaire(my.minus(last))) {
-					// Dans ce cas on prends la droite perpendiculaire
-					dir = next.minus(last);
-					dir = new Vecteur (dir.getDecY(), dir.getDecX(), dir.getDecZ());
-				} else {			
-					dir = next.add(last.minus(my)).minus(my);
-				}
+			Vecteur p = getResizedPoint(last, my, next, ctr, delta);
+			if (p != null) ret.points.add(p);
+			if (my.getY() == -186) {
+				System.out.println(last.toString()+" ; "+my.toString()+" ; "+next.toString()+" : Resized = "+p.toString()+" + "+delta.toString());
 			}
-			Droite3D dr = new Droite3D(dir, my);
-			ret.points.add(dr.getPoint(delta));
 			last = my;
 		}
-		
 		return ret;
 	}
 
@@ -91,7 +127,7 @@ public class Area implements Serializable {
 	 * @param negate
 	 * @return
 	 */
-	public Area resizeCenter(Decimal enPlus, int ax) {
+	public Area resizeCentre(Decimal enPlus, int ax) {
 		Area ret = new Area();
 		Vecteur ctr = CalculSurface.getCentre(points, ax);
 		Decimal delta = enPlus.multiply(Vecteur.METER);
@@ -250,6 +286,50 @@ public class Area implements Serializable {
 		if (res != null)
 			System.out.println("Resultat 1 : "+res.toString());
 		else System.out.println("Resultat 1 : pas d'intersection");
+		
+		// (-0.0309;-0.0249;0.001) ; (-0.0314;-0.0219;0.001) ; (-0.032;-0.0186;0.001) : Resized = (-0.0354;-0.0219;0.001)
+		// Calcul de resize point avec trois points 
+		Vecteur n = new Vecteur ("-0.0320;-0.0186;0.13");
+		Vecteur m = new Vecteur ("-0.0314;-0.0219;0.13");
+		Vecteur l = new Vecteur ("-0.0309;-0.0249;0.13");
+/*		
+		Vecteur pt = Area.getResizedPoint(l, m, n, new Decimal(-0.004d));
+		if (pt != null) {
+			System.out.println(l.toString()+" ; "+m.toString()+" ; "+n.toString()+" : Resized = "+pt.toString());
+			System.out.println("Dist = "+pt.decDistance(m).toString());
+		}
+
+		n = new Vecteur ("-0.0326;-0.0151;0.13");
+		m = new Vecteur ("-0.0320;-0.0186;0.13");
+		l = new Vecteur ("-0.0314;-0.0219;0.13");
+		
+		pt = Area.getResizedPoint(l, m, n, new Decimal(-0.004d));
+		if (pt != null) {
+			System.out.println(l.toString()+" ; "+m.toString()+" ; "+n.toString()+" : Resized = "+pt.toString());
+			System.out.println("Dist = "+pt.decDistance(m).toString());
+		}
+*/
+	}
+
+	/**
+	 * Rtetourne le point de la forme le plus proche
+	 * 
+	 * @param pos
+	 */
+	
+	public int getNearestPoint(Vecteur pos) {
+		int id = 0;
+		Decimal dist = Decimal.MILLE;
+		
+		for (int p = 0; p < points.size(); p++) {
+			Vecteur pt = points.get(p);
+			Decimal d = pos.distance(pt).abs();
+			if (d.compareTo(dist) < 0) {
+				id = p;
+				dist = d;
+			}
+		}
+		return id;
 	}
 
 }

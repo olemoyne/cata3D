@@ -1,10 +1,11 @@
 package view.gabarits;
 
-import javax.swing.JLabel;
+import javax.swing.JTextArea;
 
 import model.math.Decimal;
+import model.math.Vecteur;
 
-public class GabaritInformation extends JLabel {
+public class GabaritInformation extends JTextArea {
 
 	/**
 	 * 
@@ -23,12 +24,16 @@ public class GabaritInformation extends JLabel {
 	 */
 	public Decimal epaisseur;
 	
-	public double mouseX;
-	public double mouseY;
+	public Vecteur mousePosition;
+
+	public Vecteur fullPosition;
+
+	public Vecteur insidePosition;
 	
 	
 	public GabaritInformation () {
 		super();
+		this.mousePosition = new Vecteur();
 	}
 	
 	public void show() {
@@ -41,9 +46,17 @@ public class GabaritInformation extends JLabel {
 		sb.append(epaisseur.toString());
 		sb.append("\n");
 		sb.append("Mouse position : ");
-		sb.append(mouseX);
-		sb.append(" ; ");
-		sb.append(mouseY);
+		sb.append(mousePosition.toString());
+		if (fullPosition != null) {
+			sb.append("\t");
+			sb.append("Full nearest point position : ");
+			sb.append(fullPosition.toString());
+		}
+		if (insidePosition != null) {
+			sb.append("\t");
+			sb.append("Inside nearest point position : ");
+			sb.append(insidePosition.toString());
+		}
 
 		setText(sb.toString());
 	}

@@ -114,6 +114,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 		if (dec == null) dec = new BigDecimal(val);
 		if (d.dec == null) d.dec = new BigDecimal(d.val);
 		try {
+			if (this.dec.floatValue() == 0f) return this;
 			return new Decimal (dec.divide(d.dec));
 		} catch (java.lang.ArithmeticException e) {
 //			System.out.println("Error dividing : "+this.toString()+" with "+d.toString());

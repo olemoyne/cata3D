@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Point2D;
 
 import javax.swing.JPanel;
 
@@ -55,21 +56,24 @@ public class GabaritDetailsViewer extends JPanel implements MouseWheelListener  
 	public void setScene (GabaritScene gab) {
 		this.scene = gab;
 		element = 0;
-		showElement();
+		showElement(null);
 		repaint();
 	}
 
-	public void showElement() {
+	public void showElement(Point2D pt) {
 		if (element >= this.scene.allObjects.size()) element = this.scene.allObjects.size()-1;
 		if (element < 0) element = 0;
 
 		PrintedGabarit gab = (PrintedGabarit) this.scene.allObjects.get(element);
+		this.vue.setGabarit(gab);
+
 		this.position.epaisseur = gab.epaisseur;
 		this.position.id = element;
 		this.position.position = gab.zPosition;
+		
+		if (pt != null) vue.setMousePosition(pt);
 		position.show();
 
-		this.vue.setGabarit(gab);
 		vue.repaint();
 	}
 	
@@ -79,7 +83,7 @@ public class GabaritDetailsViewer extends JPanel implements MouseWheelListener  
 		if (r < 0) element -= 1;
 		if (r > 0) element += 1;
 
-		showElement();
+		showElement(e.getPoint());
 		
 	}
 

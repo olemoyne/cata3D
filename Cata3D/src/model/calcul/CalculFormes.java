@@ -187,7 +187,7 @@ public class CalculFormes {
 	public static Area getCollision(Area myArea, Area hisArea, Decimal z) {
 		Polygon2D myPoly = CalculSurface.getPoly(myArea.points, Axis.ZAxis);
 		Polygon2D hisPoly = CalculSurface.getPoly(hisArea.points, Axis.ZAxis);
-
+		
 		Polygon2D resPoly = Polygons2D.intersection(myPoly, hisPoly); 
 		if (resPoly == null) {
 			return null;

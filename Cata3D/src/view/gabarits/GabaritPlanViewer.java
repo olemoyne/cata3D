@@ -62,17 +62,16 @@ public class GabaritPlanViewer extends JPanel implements MouseMotionListener{
 	}
 
 	
-	private double getXValue (double x) {
-		return ((x-ctrX)/echelle+gabarit.bns.getMin().getX())/1000d;
-	}
-
 	private int getY (Vecteur v) {
 		return (int)Math.round((ctrY + (gabarit.bns.getMax().minus(v)).getY()*echelle));
 	}
 
-	private double getYValue (double y) {
-		return ((y-ctrY)/echelle-gabarit.bns.getMax().getY())/1000d;
+	private Vecteur getPosition(Point2D pt) {
+		Decimal x = new Decimal( (pt.getX()-ctrX)/(echelle*Vecteur.LMETER)).add(gabarit.bns.getMin().getDecX());
+		Decimal y = gabarit.bns.getMax().getDecY().minus(new Decimal( (pt.getY()-ctrY)/(echelle*Vecteur.LMETER)));
+		return new Vecteur (x, y, gabarit.zPosition);
 	}
+
 	
 	private void drawArea (Graphics gr, Area surf) {
 		if (surf.points.size()== 0) return;
@@ -129,13 +128,9 @@ public class GabaritPlanViewer extends JPanel implements MouseMotionListener{
 		gr.setColor(Color.RED);
 		drawArea(gr, gabarit.full);
 
-		// Affiche le gabarit en darkGray
-		gr.setColor(Color.DARK_GRAY);
-		drawArea(gr, gabarit.fond);
-
 		// Affiche le gabarit en noir
 		gr.setColor(Color.BLACK);
-		drawArea(gr, gabarit.devant);
+		drawArea(gr, gabarit.fullInside);
 
 		// Affiche les trous en vert
 		gr.setColor(Color.GREEN);
@@ -151,6 +146,16 @@ public class GabaritPlanViewer extends JPanel implements MouseMotionListener{
 		
 		Vecteur pt = CalculSurface.getCentre(gabarit.full.points, Axis.ZAxis);
 		drawPoint(gr, pt);
+		
+		if (logManager.fullPosition != null) {
+			gr.setColor(Color.RED);
+			drawPoint(gr, logManager.fullPosition);			
+		}
+
+		if (logManager.insidePosition != null) {
+			gr.setColor(Color.CYAN);
+			drawPoint(gr, logManager.insidePosition);			
+		}
 
 	}
 	
@@ -205,6 +210,22 @@ public class GabaritPlanViewer extends JPanel implements MouseMotionListener{
 		gabarit = gab;
 	}
 
+	
+	public void setMousePosition(Point2D pt) {
+		if (this.gabarit == null) return;
+		Vecteur pos= getPosition(pt);
+		this.logManager.mousePosition = pos;
+		
+		// Détermine le point du FULL le plus proche
+		int id = gabarit.full.getNearestPoint(pos);
+		logManager.fullPosition = gabarit.full.points.get(id);
+		if (gabarit.fullInside.points.size() > id)
+			logManager.insidePosition = gabarit.fullInside.points.get(id);
+
+		this.logManager.show();
+		// Affiche les points
+		repaint();
+	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -214,11 +235,9 @@ public class GabaritPlanViewer extends JPanel implements MouseMotionListener{
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		Point2D pt = e.getPoint();
-		if (this.gabarit == null) return;
-		this.logManager.mouseX = this.getXValue(pt.getX());
-		this.logManager.mouseY = this.getYValue(pt.getX());
-
-		this.logManager.show();
+		Point2D pt= e.getPoint();
+		this.setMousePosition(pt);
 	}
+
+
 }

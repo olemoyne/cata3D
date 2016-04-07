@@ -168,4 +168,11 @@ public class Segment {
 		return new Decimal(dble); 
 	}
 
+	public Vecteur getCenter() {
+		Decimal x = this.A.getDecX().add(B.getDecX()).divide(Decimal.DEUX);
+		Decimal y = this.A.getDecY().add(B.getDecY()).divide(Decimal.DEUX);
+		Decimal z = this.A.getDecZ().add(B.getDecZ()).divide(Decimal.DEUX);
+		return new Vecteur (x, y, z);
+	}
+
 }

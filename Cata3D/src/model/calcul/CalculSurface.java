@@ -33,8 +33,10 @@ public class CalculSurface {
 	public static Polygon2D getPoly(ArrayList<Vecteur> a, int ax) {
 		SimplePolygon2D poly = new SimplePolygon2D();
 		for (Vecteur v : a) {
-			Point2D pt = v.get2D(ax);
-			poly.addVertex(new math.geom2d.Point2D(pt.getX(), pt.getY()));
+			if (v != null) {
+				Point2D pt = v.get2D(ax);
+				poly.addVertex(new math.geom2d.Point2D(pt.getX(), pt.getY()));
+			}
 		}
 		return poly;
 	}
