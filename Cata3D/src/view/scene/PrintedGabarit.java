@@ -7,8 +7,8 @@ import com.jogamp.opengl.GL2;
 
 import model.Area;
 import model.Gabarit;
+import model.calcul.CalculArea;
 import model.composants.PatchVide;
-import model.math.Axis;
 import model.math.Bounds;
 import model.math.Decimal;
 import model.math.Plan3D;
@@ -54,7 +54,7 @@ public class PrintedGabarit extends PrintableObject {
 //		devant = gab.getArea(coque, gab.position.minus(delta), null, true);
 //		fond = gab.getArea(coque, gab.position.add(delta), this.effacements, true);
 		full = gab.getArea(coque, gab.position, null, false);
-		fullInside =full.resize(coque.epaisseurDeBardage.negate(), Axis.ZAxis);
+		fullInside =CalculArea.reduce(full, coque.epaisseurDeBardage);
 		
 		trous = gab.getTrous(coque.structure.poutres);
 		

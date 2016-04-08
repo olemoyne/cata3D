@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import model.calcul.CalculArea;
 import model.calcul.CalculFormes;
 import model.composants.Collision;
 import model.composants.PatchVide;
@@ -72,7 +73,7 @@ public class Gabarit implements Serializable {
 			}
 		}
 		if (resize)
-			return coupe.resize(cmp.epaisseurDeBardage.negate(), Axis.ZAxis);
+			return CalculArea.reduce(coupe, cmp.epaisseurDeBardage.negate());
 		else return coupe;
 	}
 

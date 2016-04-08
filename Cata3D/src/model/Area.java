@@ -38,6 +38,11 @@ public class Area implements Serializable {
 		situation = new Position();
 	}
 	
+	public Area(ArrayList<Vecteur> pts) {
+		points = pts;
+		situation = new Position();
+	}
+
 	public static Vecteur getMediatrice (Vecteur pt1, Vecteur pt2) {
 		Vecteur dir = pt2.minus(pt1);
 		Decimal n = dir.getNorme();
@@ -86,7 +91,7 @@ public class Area implements Serializable {
 	 * @param negate
 	 * @return
 	 */
-	public Area resize(Decimal enPlus, int ax) {
+	public Area resizeNormale(Decimal enPlus, int ax) {
 		Area ret = new Area();
 		if (enPlus.isZero()) return this;
 		if (points.size() == 0) return this;
@@ -287,12 +292,12 @@ public class Area implements Serializable {
 			System.out.println("Resultat 1 : "+res.toString());
 		else System.out.println("Resultat 1 : pas d'intersection");
 		
-		// (-0.0309;-0.0249;0.001) ; (-0.0314;-0.0219;0.001) ; (-0.032;-0.0186;0.001) : Resized = (-0.0354;-0.0219;0.001)
+/**		// (-0.0309;-0.0249;0.001) ; (-0.0314;-0.0219;0.001) ; (-0.032;-0.0186;0.001) : Resized = (-0.0354;-0.0219;0.001)
 		// Calcul de resize point avec trois points 
 		Vecteur n = new Vecteur ("-0.0320;-0.0186;0.13");
 		Vecteur m = new Vecteur ("-0.0314;-0.0219;0.13");
 		Vecteur l = new Vecteur ("-0.0309;-0.0249;0.13");
-/*		
+		
 		Vecteur pt = Area.getResizedPoint(l, m, n, new Decimal(-0.004d));
 		if (pt != null) {
 			System.out.println(l.toString()+" ; "+m.toString()+" ; "+n.toString()+" : Resized = "+pt.toString());
