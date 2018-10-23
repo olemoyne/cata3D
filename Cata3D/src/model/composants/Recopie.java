@@ -56,7 +56,7 @@ public class Recopie extends Composant {
 	}
 
 	/** 
-	 * Génère la liste des objets correspondant au composant recopié 
+	 * Gï¿½nï¿½re la liste des objets correspondant au composant recopiï¿½ 
 	 * **/ 
 	public ArrayList<PrintableObject> getSceneObjects(Position trans) {
 		if (autre == null) return new ArrayList<PrintableObject>();

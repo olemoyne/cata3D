@@ -39,9 +39,9 @@ public class DeriveTreeNode extends DesignTreeNode {
 		if (bateau == null) return ret;
 		
 		if (bateau.mer != null) {
-			ret.add(new TreeNodeProperty ("Surface de dérive", bateau.mer.surfaceTotale, false, ObjectUpdater.DECIMAL) );
-			ret.add(new TreeNodeProperty ("Centre de dérive", bateau.mer.centreAntiDerive, false, ObjectUpdater.VECTEUR) );
-			ret.add(new TreeNodeProperty ("Centre de gravité", bateau.mer.poidsTotal.position, false, ObjectUpdater.VECTEUR) );
+			ret.add(new TreeNodeProperty ("Surface de dï¿½rive", bateau.mer.surfaceTotale, false, ObjectUpdater.DECIMAL) );
+			ret.add(new TreeNodeProperty ("Centre de dï¿½rive", bateau.mer.centreAntiDerive, false, ObjectUpdater.VECTEUR) );
+			ret.add(new TreeNodeProperty ("Centre de gravitï¿½", bateau.mer.poidsTotal.position, false, ObjectUpdater.VECTEUR) );
 		}	
 		return ret;
 	}
@@ -51,27 +51,27 @@ public class DeriveTreeNode extends DesignTreeNode {
 	 * 
 	 */
 	public PrintableScene getScene () {
-		PrintableScene  ret =  new PrintableScene(); // CataScene.getNavigationScene(bateau);
+		PrintableScene  ret =  new PrintableScene(bateau.filename); // CataScene.getNavigationScene(bateau);
 		// Affiche les carenes
 		if (bateau.mer.carenes != null) {
 			for (MapDeVecteurs a : bateau.mer.carenes) 
-				ret.add(new PrintedMap(a, "Carène", true, Color.blue, new Position()));
+				ret.add(new PrintedMap(a, "Carï¿½ne", true, Color.blue, new Position()));
 		}
 		
-		// Affiche les zones anti-dérive
+		// Affiche les zones anti-dï¿½rive
 		if (bateau.mer.surfaceAntiDerive != null) {
 			for (Area a : bateau.mer.surfaceAntiDerive) 
-				ret.add(new PrintedArea(a, "Dérive", true, false, Color.RED, new Position()));
+				ret.add(new PrintedArea(a, "Dï¿½rive", true, false, Color.RED, new Position()));
 		}
 		
-		// affiche le centre de gravité
+		// affiche le centre de gravitï¿½
 		if (bateau.mer.poidsTotal != null) {
 			ret.add(new PrintedForce(bateau.mer.poidsTotal, Color.GREEN));
 		}
 
-		// Affiche le centre anti-dérive
+		// Affiche le centre anti-dï¿½rive
 		if (bateau.mer.centreAntiDerive != null) {
-			ret.add(new PrintedPoint(bateau.mer.centreAntiDerive, "Centre antidérive", Color.yellow));
+			ret.add(new PrintedPoint(bateau.mer.centreAntiDerive, "Centre antidï¿½rive", Color.yellow));
 		}
 		
 		return ret;

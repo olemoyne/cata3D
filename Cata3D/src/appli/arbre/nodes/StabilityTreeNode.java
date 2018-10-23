@@ -36,7 +36,7 @@ public class StabilityTreeNode extends DesignTreeNode {
 		
 		if (bateau.mer != null) {
 			ret.add(new TreeNodeProperty ("Poids total", bateau.mer.poidsTotal, false, ObjectUpdater.POIDS) );
-			ret.add(new TreeNodeProperty ("Poussée", bateau.mer.pousseeArchimede, false, ObjectUpdater.POIDS) );
+			ret.add(new TreeNodeProperty ("Poussï¿½e", bateau.mer.pousseeArchimede, false, ObjectUpdater.POIDS) );
 		}	
 		return ret;
 	}
@@ -46,8 +46,8 @@ public class StabilityTreeNode extends DesignTreeNode {
 	 * 
 	 */
 	public PrintableScene getScene () {
-		PrintableScene  ret = CataScene.getNavigationScene(bateau);
-		// Affiche le poids total et la poussée résultante
+		PrintableScene  ret = CataScene.getNavigationScene(bateau, true);
+		// Affiche le poids total et la poussï¿½e rï¿½sultante
 		if (bateau.mer.poidsTotal != null) {
 			ret.add(new PrintedForce(bateau.mer.poidsTotal, Color.RED));
 		}

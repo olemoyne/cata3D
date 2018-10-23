@@ -173,7 +173,7 @@ public class Droite3D {
 		Vecteur myDir = seg.getB().minus(seg.getA());
 		Vecteur myStart = seg.getA();
 		
-		Vecteur hisDir = getDirection().multiply(Decimal.UN.negate());
+		Vecteur hisDir = getDirection();
 		Vecteur hisStart = getPoint();
 		
 		
@@ -183,7 +183,6 @@ public class Droite3D {
 		Decimal n= null;
 		Decimal s = new Decimal((double)myDir.getY()*(double)hisDir.getX()-((double)hisDir.getY()*((double)myDir.getX())));
 		if (!s.isZero()) {
-			//Decimal n = hisStart.getY().multiply(myDir.getX()).add(myStart.getX().multiply(myDir.getY())).minus(hisStart.getX().multiply(myDir.getY())).minus(myStart.getY().multiply(myDir.getX()));
 			n = new Decimal( (double)hisStart.getY()*(double)myDir.getX()+(double)myStart.getX()*(double)myDir.getY()-(double)hisStart.getX()*(double)myDir.getY()-(double)myStart.getY()*(double)myDir.getX());
 		} else {
 			// X = 0
@@ -197,17 +196,62 @@ public class Droite3D {
 				n = new Decimal((double)hisStart.getX()*(double)myDir.getZ()+(double)myStart.getZ()*(double)myDir.getX()-(double)hisStart.getZ()*(double)myDir.getX()-(double)myStart.getX()*(double)myDir.getZ());
 			}
 		}
-//		k = n.divide(s);
 //		if (n == null) return null;
 
 		// Calcule le point d'impact
 		Vecteur v = getPoint(n.divide(s));
 		// Vérifie que inter est bien entre A et B
 		// La distance entre A et V < celle entre A et B
-		if (seg.contient(v)) return v;
+		Decimal da = v.distance(seg.getA());
+		Decimal db = v.distance(seg.getB());
+		Decimal taille = seg.getB().distance(seg.getA());
+		if (taille.compareTo(da.add(db)) >= 0) { //.doubleValue() >= d.doubleValue()) {
+				return v;
+		}
 		return null;
 	}
+
 	
+	
+	/**
+	 * Identifie l'intersection entre une autre droite et la droite;
+	 * 
+	 * @param drt
+	 * @return
+	 */
+	public Vecteur getIntersection(Droite3D o) {
+		Vecteur myDir = o.getDirection();
+		Vecteur myStart = o.getPoint();
+		
+		Vecteur hisDir = getDirection();
+		Vecteur hisStart = getPoint();
+		
+		if (myDir.estColineaire(hisDir)) return null;
+		
+		// Z = 0
+		Decimal n= null;
+		Decimal s = new Decimal((double)myDir.getY()*(double)hisDir.getX()-((double)hisDir.getY()*((double)myDir.getX())));
+		if (!s.isZero()) {
+			n = new Decimal( (double)hisStart.getY()*(double)myDir.getX()+(double)myStart.getX()*(double)myDir.getY()-(double)hisStart.getX()*(double)myDir.getY()-(double)myStart.getY()*(double)myDir.getX());
+		} else {
+			// X = 0
+			//s = (myDir.getZ().multiply(hisDir.getY()).minus(hisDir.getZ().multiply(myDir.getY())));
+			s = new Decimal((double)myDir.getZ()*(double)hisDir.getY()-(double)hisDir.getZ()*(double)myDir.getY());
+			if (!s.isZero()) {
+				n = new Decimal((double)hisStart.getZ()*(double)myDir.getY()+(double)myStart.getY()*(double)myDir.getZ()-(double)hisStart.getY()*(double)myDir.getZ()-(double)myStart.getZ()*(double)myDir.getY()); 
+			} else { 
+				s = new Decimal ((double)myDir.getX()*(double)hisDir.getZ()-(double)hisDir.getX()*(double)myDir.getZ());
+				if (s.isZero()) return null;
+				n = new Decimal((double)hisStart.getX()*(double)myDir.getZ()+(double)myStart.getZ()*(double)myDir.getX()-(double)hisStart.getZ()*(double)myDir.getX()-(double)myStart.getX()*(double)myDir.getZ());
+			}
+		}
+//		if (n == null) return null;
+
+		// Calcule le point d'impact
+		Vecteur v = getPoint(n.divide(s));
+		return v;
+	}
+
 	public String toString () {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Dir : ");
@@ -223,8 +267,8 @@ public class Droite3D {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Droite3D drt = new Droite3D(new Vecteur("1;0;0"), new Vecteur("0;1;0.5"));
-		Segment seg = new Segment(new Vecteur("1.5;1.5;0.5"), new Vecteur("1.5;0.5;0.5"));
+		Droite3D drt = new Droite3D(new Vecteur("0;1;0"), new Vecteur("0.034;0;0"));
+		Segment seg = new Segment(new Vecteur("0.0335;0.0242;0"), new Vecteur("0.0341;0.0203;0"));
 		Vecteur v = drt.getIntersection(seg);
 		
 		System.out.println(v);
@@ -232,7 +276,7 @@ public class Droite3D {
 
 
 	public Vecteur getPoint(Decimal dist) {
-		Decimal k = dist.divide(norme);
+		Decimal k = dist; //.divide(norme);
 		Decimal x = this.directeur.getDecX().multiply(k).add(this.point.getDecX());
 		Decimal y = directeur.getDecY().multiply(k).add(point.getDecY());
 		Decimal z = directeur.getDecZ().multiply(k).add(point.getDecZ());

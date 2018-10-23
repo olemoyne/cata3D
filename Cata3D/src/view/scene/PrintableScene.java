@@ -8,15 +8,19 @@ import com.jogamp.opengl.GL2;
 
 public class PrintableScene {
 
+	
+	public String cataFileName;
+	
 	public ArrayList<PrintableObject> allObjects;
 	
-	public PrintableScene () {
+	public PrintableScene (String cat) {
+		cataFileName = cat;
 		allObjects = new ArrayList<PrintableObject> ();
 	}
 	
 	/**
-	 * Affichage de la scène avec l'échelle et le mode de visualisation.
-	 *   Si mode != perspective --> affichage en ploygone systématique
+	 * Affichage de la scï¿½ne avec l'ï¿½chelle et le mode de visualisation.
+	 *   Si mode != perspective --> affichage en ploygone systï¿½matique
 	 * @param gl
 	 * @param echelle 
 	 * @param echelle

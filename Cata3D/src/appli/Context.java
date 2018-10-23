@@ -29,7 +29,7 @@ public class Context implements Serializable {
 	}
 	
 	public static int saveTofile (Context ctx) {
-		File fle=new File("./context.data");
+		File fle=new File("./data/context.data");
 
 		try {
 			if (!fle.exists()) fle.createNewFile();
@@ -49,7 +49,7 @@ public class Context implements Serializable {
 
 
 	public static Context readFromfile () {
-		File fle = new File ("./context.data");
+		File fle = new File ("./data/context.data");
 		if (!fle.exists()) return new Context();
 			
 		try {

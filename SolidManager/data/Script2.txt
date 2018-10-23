@@ -1,0 +1,19 @@
+AJOUTE:COMPOSANT: # ajout d'un composant de type pave
+      Pave 1:218,222,218:0.6:Bois:{PAVE:2:1;1;1:0;0;0};
+
+AJOUTE:COMPOSANT: # ajout d'un composant de type pave
+      Pave 2:15493408:0.6:Bois:{PAVE:2:1;1;1:0.5;0.5;0.5};
+
+FUSION:Pave1:Pave2:ResultatFusion;
+
+SAUVE:ResultatFusion:STL:/home/lemoyne/dev/ResultatInter1.stl;
+
+INTERSECTION:Pave1:Pave2:ResultatInter;
+
+AJOUTE:COMPOSANT: # ajout d'un composant de type pav�
+      Pave 3:15493408:0.6:Bois:{PAVE:2:1;1;1:0.8;0.8;0.8};
+
+FUSION:Pave3:ResultatFusion:FinFusion;
+
+SAUVE:FinFusion:STL:/home/lemoyne/dev/ResultatInter2.stl;
+      

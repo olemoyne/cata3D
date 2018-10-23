@@ -35,18 +35,26 @@ public class Cata implements Serializable{
 
 	public ArrayList<Composant> composants;
 	
+	public Habitacle habitacle;
+	
 	/** Flottaison **/
 	public Flottaison mer;
+	
+	public String filename;
 	
 	/**
 	 * Constructeur --> intialisation des listes
 	 */
-	public Cata () {
+	public Cata (String f) {
+		
+		filename = f;
 		
 		mer = new Flottaison();
 
 		composants = new ArrayList<Composant>(); 
 		composants.add(PatchVide.getDefaultPatch(this));
+		
+		habitacle = new Habitacle();
 		recalculeAll();
 	}
 	

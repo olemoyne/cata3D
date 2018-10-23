@@ -1,0 +1,9 @@
+LIRE:STL:/home/lemoyne/dev/GIT/cata3D/Cata3D/Coque3D.stl:CoqueG:10000;
+
+LIRE:STL:/home/lemoyne/dev/GIT/cata3D/Cata3D/socle3D.stl:Socle:10000;
+
+#SIMPLIFY:CoqueG:Socle:ResultatFusion;
+FUSION:CoqueG:Socle:ResultatFusion;
+
+
+SAUVE:ResultatFusion:STL:\home\lemoyne\dev\GIT\cata3D\Cata3D\resultCoque.stl;

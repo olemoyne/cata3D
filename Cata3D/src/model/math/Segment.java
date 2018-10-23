@@ -2,7 +2,7 @@ package model.math;
 
 
 /**
- * Segment dans l'espace défini par deux points 3D
+ * Segment dans l'espace dï¿½fini par deux points 3D
  * 
  * @author olemoyne
  *
@@ -13,7 +13,7 @@ public class Segment {
 	private Vecteur B;
 	
 	/**
-	 * Création de Segment
+	 * Crï¿½ation de Segment
 	 * 
 	 * @param a
 	 * @param b
@@ -24,7 +24,7 @@ public class Segment {
 	}
 	
 	/**
-	 * Récupération du point de départ
+	 * Rï¿½cupï¿½ration du point de dï¿½part
 	 * 
 	 * @return
 	 */
@@ -33,7 +33,7 @@ public class Segment {
 	}
 	
 	/**
-	 * Récupération du point d'arrivée
+	 * Rï¿½cupï¿½ration du point d'arrivï¿½e
 	 * 
 	 * @return
 	 */
@@ -42,20 +42,20 @@ public class Segment {
 	}
 
 	/**
-	 * Détermine l'intersection de deux segements dans l'espace 
+	 * Dï¿½termine l'intersection de deux segements dans l'espace 
 	 * 
 	 * @param hisSeg
 	 * @return
 	 */
 	public Segment intersection(Segment other) {
-		// Gestion de deux droites collinéaires (deux vecteurs directeurs colinéaires)
+		// Gestion de deux droites collinï¿½aires (deux vecteurs directeurs colinï¿½aires)
 		if (this.B.minus(A).estColineaire(other.B.minus(other.A))) {
-			// Identifie l'arrête définie par l'intersection
-			// Si les deux points appartienent à l'autre arrete -> retourne moi
+			// Identifie l'arrï¿½te dï¿½finie par l'intersection
+			// Si les deux points appartienent ï¿½ l'autre arrete -> retourne moi
 			if ((other.contient(A))&&(other.contient(B))) {
 				return this;
 			}
-			// Si les deux points appartienent à mon arrete -> retourne lui
+			// Si les deux points appartienent ï¿½ mon arrete -> retourne lui
 			if ((contient(other.A))&&(contient(other.B))) {
 				return other;
 			}
@@ -78,20 +78,26 @@ public class Segment {
 				else return new Segment(other.A, B);
 			}
 		} else {
-			Droite3D drt = new Droite3D(other.B.minus(other.A), other.A);
-			Vecteur v = drt.getIntersection(this);
+			
+			Droite3D drt = getDroite(); 
+			Vecteur v = drt.getIntersection(other);
 			if (v == null) return null;
-			// Vérifie que inter est bien entre D et F
+			// Vï¿½rifie que inter est bien entre D et F
 			// La distance entre D et V < celle entre D et F
-			Decimal d = v.distance(other.A);
-			Decimal t = other.A.distance(other.B);
+			Decimal d = v.distance(A);
+			Decimal t = A.distance(B);
 			if (t.doubleValue() >= d.doubleValue()) {
-				d = v.distance(other.B);
+				d = v.distance(B);
 				if (t.doubleValue() >= d.doubleValue()) return new Segment(v, v);
 			}
+			
 		}
 		// Pas d'intersection
 		return null;
+	}
+
+	private Droite3D getDroite() {
+		return new Droite3D(B.minus(A), A);
 	}
 
 	/**
@@ -102,7 +108,7 @@ public class Segment {
 	 */
 	public boolean contient(Vecteur v) {
 		
-		// vérifie que V appetient à la droite du segment
+		// vï¿½rifie que V appetient ï¿½ la droite du segment
 		Vecteur dir = A.minus(v);
 		Vecteur directeur = B.minus(A);
 
@@ -119,7 +125,7 @@ public class Segment {
 	}
 
 	/**
-	 * Génère une représentation en chaine de caractères du segment
+	 * Gï¿½nï¿½re une reprï¿½sentation en chaine de caractï¿½res du segment
 	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -147,10 +153,10 @@ public class Segment {
 		return false;
 	}
 
+	//Segment A : [(-0.0035;0.0185;0.9);(0.0035;0.0185;0.9)] - Segment B : [(0.0006;0.0195;0.9);(0.0014;0.0163;0.9)]
 	public static void main (String[] args) {
-		Segment s1 = new Segment(new Vecteur ("3;4;0"), new Vecteur ("3;2;0"));
-		Segment s2 = new Segment(new Vecteur ("2;3.5;0"), new Vecteur ("5;4;0"));
-		
+		Segment s1 = new Segment(new Vecteur ("-0.0018;-0.0482;0.9"), new Vecteur ("-0.0018;-0.0481;0.9"));
+		Segment s2 = new Segment(new Vecteur ("-0.0023;0.0131;0.9"), new Vecteur ("-0.0014;0.0163;0.9"));
 		Segment s = s1.intersection(s2);
 		if (s != null) System.out.println(s.toString());
 		else System.out.println("Pas d'intersection");
@@ -174,5 +180,11 @@ public class Segment {
 		Decimal z = this.A.getDecZ().add(B.getDecZ()).divide(Decimal.DEUX);
 		return new Vecteur (x, y, z);
 	}
+
+	public Vecteur getNormale() {
+        Vecteur d = B.minus(A);
+        Vecteur norme = new Vecteur(d.getDecY(), d.getDecX().negate(), Decimal.ZERO);
+        return norme;
+     }
 
 }

@@ -41,7 +41,7 @@ public class DynamismeTreeNode extends DesignTreeNode {
 				Decimal s = CalculCoque.calculeSurfaceCoque(mps);
 				surf = surf.add(s);
 			}
-			ret.add(new TreeNodeProperty ("Surface immergée", surf, false, ObjectUpdater.DECIMAL) );
+			ret.add(new TreeNodeProperty ("Surface immergï¿½e", surf, false, ObjectUpdater.DECIMAL) );
 		}	
 
 		return ret;
@@ -52,11 +52,11 @@ public class DynamismeTreeNode extends DesignTreeNode {
 	 * 
 	 */
 	public PrintableScene getScene () {
-		PrintableScene  ret =  new PrintableScene(); // CataScene.getNavigationScene(bateau);
+		PrintableScene  ret =  new PrintableScene(bateau.filename); // CataScene.getNavigationScene(bateau);
 		// Affiche les carenes
 		if (bateau.mer.carenes != null) {
 			for (MapDeVecteurs a : bateau.mer.carenes) 
-				ret.add(new PrintedFluidityMap("Carène", a, new Position()));
+				ret.add(new PrintedFluidityMap("Carï¿½ne", a, new Position()));
 		}
 		return ret;
 	}

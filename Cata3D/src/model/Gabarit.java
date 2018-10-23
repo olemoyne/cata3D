@@ -73,7 +73,7 @@ public class Gabarit implements Serializable {
 			}
 		}
 		if (resize)
-			return CalculArea.reduce(coupe, cmp.epaisseurDeBardage.negate());
+			return CalculArea.reduceVertical(coupe, cmp.epaisseurDeBardage.negate());
 		else return coupe;
 	}
 

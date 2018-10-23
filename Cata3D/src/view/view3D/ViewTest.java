@@ -47,7 +47,7 @@ public class ViewTest extends JFrame {
 		fond.add(viewer3D, BorderLayout.CENTER);
         
         /**Ajoute la scene qui va bien **/
-        PrintableScene scene = new PrintableScene();
+        PrintableScene scene = new PrintableScene("");
 //        scene.add(new PrintedBlock(new Vecteur("0;0;0"), new Vecteur("2;2;2"), "bloc1", true, Color.red));
    
 //        scene.add(new PrintedBlock(new Vecteur("1;1;1"), new Vecteur("3;3;3"), "bloc2", true, Color.blue));

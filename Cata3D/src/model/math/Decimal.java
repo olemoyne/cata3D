@@ -36,7 +36,9 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 
 	public static final MathContext ROUNDING_CTX = new MathContext(8, RoundingMode.HALF_UP);
 
-	public static final Decimal DEMI = new Decimal("0.5");;
+	public static final Decimal DEMI = new Decimal("0.5");
+
+	public static final Decimal PI = new Decimal("3.141592654");
 
 	/**
 	 * montant � payer
@@ -204,7 +206,7 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 	 */
 	public Decimal racine() {
 		if (dec == null) dec = new BigDecimal(val);
-		return new Decimal ((long)Math.sqrt(dec.doubleValue()));
+		return new Decimal (Math.sqrt(dec.doubleValue()));
 	}
 
 	public boolean isZero() {
@@ -293,6 +295,12 @@ public class Decimal implements Comparable<Decimal>, Serializable{
 		
 		if (d1.compareTo(d2) == 1) return d1;
 		return d2;
+	}
+
+	/**  Retourne l'arc cosinus en radius **/
+	public Decimal arCosinus() {
+		if (dec == null) dec = new BigDecimal(val);
+		return new Decimal (Math.acos(dec.doubleValue()));
 	}
 
 }

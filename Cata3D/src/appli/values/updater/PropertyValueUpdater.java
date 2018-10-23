@@ -50,6 +50,9 @@ public class PropertyValueUpdater {
 		o = new ApparenceUpdater();
 		panels.put(ObjectUpdater.APPARENCE, o);
 
+		o = new CompartimentUpdater();
+		panels.put(ObjectUpdater.COMPARTIMENT, o);
+
 	}
 	
 	

@@ -13,7 +13,7 @@ public class GabaritScene extends PrintableScene {
 	 * Cr�ation de la scene
 	 */
 	public GabaritScene (PatchVide boat, Plan3D mer){
-		super();
+		super(boat.boat.filename);
 		
 		composant = boat;
 		//Pour chaque gabarit, construit un Gabarit visualisable

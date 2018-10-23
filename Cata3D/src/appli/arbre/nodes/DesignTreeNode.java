@@ -56,7 +56,7 @@ public class DesignTreeNode extends DefaultMutableTreeNode {
 	}
 
 	public PrintableScene getScene() {
-		return new PrintableScene();
+		return new PrintableScene("");
 	}
 
 	public TreeNodeProperty getNewProperty() {

@@ -12,10 +12,10 @@ import javax.swing.JPanel;
 /**
  * Permet de visualiser et de tester la forme d'une coque de cata
  * 
- * Contient un menu permettant de tester les caractéristiques de la coque
- *   - forme et carène
+ * Contient un menu permettant de tester les caractï¿½ristiques de la coque
+ *   - forme et carï¿½ne
  *   - hydrodynamisme
- *   - Habitabilité
+ *   - Habitabilitï¿½
  *   - Construction
  * 
  * @author olemoyne
@@ -104,6 +104,7 @@ public class Viewer extends JFrame implements WindowListener {
 	 * @see java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
 	 */
 	public void windowClosing(WindowEvent arg0) {
+		System.out.println("Closing the windows");
 		ctrl.saveContext();
 	}
 	/* (non-Javadoc)

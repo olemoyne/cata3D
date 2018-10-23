@@ -10,9 +10,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import model.math.Decimal;
+import appli.arbre.DialogFileName;
 import appli.values.updater.BooleanField;
 import appli.values.updater.DecimalField;
 
@@ -22,8 +26,8 @@ public class DialogPrintingParameters extends JDialog implements ActionListener 
 	public boolean isOk;
 	
 	private BooleanField quadri;
-	private DecimalField xSize;
-	private DecimalField ySize;
+	private DecimalField ppi;
+	private JTextField editeur;
 
 	/**
 	 * Creation et affichage de la Frame avec le panel associé
@@ -36,7 +40,7 @@ public class DialogPrintingParameters extends JDialog implements ActionListener 
 		super(frm, true);
 		params = p;
 		this.setLocation(frm.getMousePosition());
-		this.setTitle("Gestion des param�tres d'affichage");
+		this.setTitle("Gestion des param�tres d'affichage");
 		isOk = false;
 		
 		//** Construit le panel central avec le choix du type de composant **/
@@ -48,14 +52,26 @@ public class DialogPrintingParameters extends JDialog implements ActionListener 
 		centre.add(quadri);
 		
 		// Hauteur de l'image
-		ySize = new DecimalField("Hauteur de l'image", "pix.");
-		ySize.setField(new Decimal(p.ySize));
-		centre.add(ySize);
+		ppi = new DecimalField("Précision de l'image", "ppi");
+		ppi.setField(new Decimal(p.pixByInch));
+		centre.add(ppi);
+		
+		JLabel lab = new JLabel("Réperoire des fichiers de plans :");
+		centre.add(lab);
+		
+		editeur = new JTextField();
+		editeur.setColumns(20);
+		editeur.setToolTipText("Saisir le chemin vers le fichier � �diter");
+		if (p.fileName != null) editeur.setText(p.fileName);
+		centre.add(editeur);
 
-		// Largeur de l'image
-		xSize = new DecimalField("Largeur de l'image", "pix.");
-		xSize.setField(new Decimal(p.xSize));
-		centre.add(xSize);
+		// Ajoute les boutons de gestion 
+		JButton fichier = new JButton("Selection");
+		fichier.setForeground(Color.black);
+		fichier.setActionCommand("Selection");
+		fichier.addActionListener(this);		
+		centre.add(fichier);
+
 		
 		JPanel sub = new JPanel();
 		sub.setLayout(new FlowLayout(FlowLayout.LEADING));
@@ -90,16 +106,25 @@ public class DialogPrintingParameters extends JDialog implements ActionListener 
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getActionCommand().equals("Valide")) {
 			params.showQuadrillage = this.quadri.getValue();
-			Decimal dec = (Decimal)(this.xSize.getValue());
-			params.xSize = Math.round(dec.floatValue());
-			dec = (Decimal)(this.ySize.getValue());
-			params.ySize = Math.round(dec.floatValue());
+			Decimal dec = (Decimal)(this.ppi.getValue());
+			params.pixByInch = Math.round(dec.floatValue());
+			params.fileName = editeur.getText();
+
 			this.isOk = true;
 			this.setVisible(false);
 		}
 		if (arg0.getActionCommand().equals("Annule")) {
 			this.isOk = false;
 			this.setVisible(false);
+		}
+		if (arg0.getActionCommand().equals("Selection")) {
+			/** d�finition du nom de fichier � produire **/
+			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+			DialogFileName dial = new DialogFileName (topFrame, editeur.getText(), "Sélectionne un répertoire de "); 
+			// Si OK : g�n�ration du fichier
+			if (dial.isOk) {
+				editeur.setText(dial.path);
+			}
 		}
 		
 	}

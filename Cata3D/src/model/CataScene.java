@@ -9,19 +9,20 @@ import model.math.transfo.Transformation;
 import view.scene.PrintableObject;
 import view.scene.PrintableScene;
 import view.scene.PrintedArea;
+import view.scene.PrintedBlock;
 
 public class CataScene {
 	
 	/**
-	 * Affiche les composants d'un bateau sans autres éléments
+	 * Affiche les composants d'un bateau sans autres ï¿½lï¿½ments
 	 * 
 	 * @param boat
 	 * @return
 	 */
 	public static PrintableScene getStandardScene(Cata boat) {
-		PrintableScene ret = new PrintableScene();
+		if (boat == null) return new PrintableScene("");
+		PrintableScene ret = new PrintableScene(boat.filename);
 
-		if (boat == null) return ret;
 		
 		// Affiche chaque composant
 		for (Composant cmp : boat.composants) {
@@ -38,21 +39,21 @@ public class CataScene {
 	 * @param boat
 	 * @return
 	 */
-	public static PrintableScene getNavigationScene(Cata bateau) {
-		PrintableScene ret = new PrintableScene();
-
-		if (bateau == null) return ret;
+	public static PrintableScene getNavigationScene(Cata bateau, boolean filled) {
+		if (bateau == null) return new PrintableScene("");
+		PrintableScene ret = new PrintableScene(bateau.filename);
 		
 		// Calcule la position de la mer 
 //		Transformation mer = bateau.mer.getTransformation();
 		
 		// Affiche chaque composant
 		for (Composant cmp : bateau.composants) {
+			cmp.apparence.transparence = filled;
 			for (PrintableObject obj : cmp.getSceneObjects(cmp.situation)) {
 				ret.add(obj);
 			}
 		}
-		
+				
 		Transformation trs = bateau.mer.getTransformation();
 		// Affiche la mer ... Y = 0 
 		ArrayList<Vecteur> mer = new ArrayList<Vecteur>();
@@ -78,6 +79,19 @@ public class CataScene {
 		
 		Color sous = new Color(0, 0, 100);
 		ret.add(new PrintedArea(a, "Mer dessous", true, true, sous, new Position()));
+		
+		return ret;
+	}
+
+	public static PrintableScene getHabitationScene(Cata bateau) {
+		if (bateau == null) return new PrintableScene("");
+		PrintableScene ret = getNavigationScene(bateau, false); //;new PrintableScene("Habitacle");
+		
+		Habitacle inside = bateau.habitacle;
+		
+		for (Compartiment comp : inside.compartiments) {
+			ret.add(new PrintedBlock(comp.getPosition(), comp.getPosition().add(comp.getTaille()), comp.getNom(), true, comp.getCouleur(), new Position()));
+		}
 		
 		return ret;
 	}

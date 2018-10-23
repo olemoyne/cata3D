@@ -10,6 +10,7 @@ import model.math.Droite3D;
 import model.math.Plan3D;
 import model.math.Segment;
 import model.math.Vecteur;
+import model.math.transfo.Transformation;
 
 /** 
  * Liste de points dï¿½finissant une surface
@@ -59,27 +60,24 @@ public class Area implements Serializable {
 			if (next.minus(my).estColineaire(my.minus(last))) {
 				// Dans ce cas on prends la droite perpendiculaire
 				dir = getMediatrice(last, next);
-			} else {
-				Droite3D drt1 = new Droite3D(last.minus(my), my);
-				Droite3D drt2 = new Droite3D(next.minus(my), my);
-				Vecteur pt1 = drt1.getPoint(Decimal.UN);
-				Vecteur pt2 = drt2.getPoint(Decimal.UN);
-				Segment seg = new Segment (pt1, pt2);
-				dir = seg.getCenter().minus(my);
-			}
 
-			if (!dir.getNorme().isZero()) {
-				Droite3D dr = new Droite3D(dir, my);
-				Vecteur p = dr.getPoint(delta.negate());
-				Decimal dist = my.decDistance(ctr);
-				Decimal dpt = p.decDistance(ctr);
-				if (dpt.compareTo(dist) > 0) {
-					p = dr.getPoint(delta);
+				if (!dir.getNorme().isZero()) {
+					Droite3D dr = new Droite3D(dir, my);
+					Vecteur p = dr.getPoint(delta.negate());
+					Decimal dist = my.decDistance(ctr);
+					Decimal dpt = p.decDistance(ctr);
+					if (dpt.compareTo(dist) > 0) {
+						p = dr.getPoint(delta);
+					}
+					return p;
+				} else {
+					System.err.println("Erreur : "+last.toString()+" "+my.toString()+" "+next.toString());
+					return null;
 				}
-				return p;
 			} else {
-				System.err.println("Erreur : "+last.toString()+" "+my.toString()+" "+next.toString());
-				return null;
+				Vecteur v = next.minus(my.minus(last));
+				Droite3D drt = new Droite3D(v.minus(my), my);
+				return drt.getPoint(delta);
 			}
 		}		
 		return null;
@@ -98,6 +96,7 @@ public class Area implements Serializable {
 		Vecteur ctr = CalculSurface.getCentre(points, ax);
 
 		ArrayList<Vecteur> pts = getUnitedPoints();
+		
 		Decimal delta = enPlus;//.negate();
 		Vecteur last = pts.get(pts.size()-1);
 		for (int pos =0; pos < pts.size(); pos ++) {
@@ -167,12 +166,13 @@ public class Area implements Serializable {
 	
 	public ArrayList<Segment> getSegments (){
 		ArrayList<Segment> segs = new ArrayList<Segment>();
-		int last = points.size()-1;
-		for (int pos = 0; pos < points.size(); pos ++) {
-			Segment seg = new Segment(points.get(last), points.get(pos));
-			segs.add(seg);
+		int last = 0;//points.size()-1;
+		for (int pos = 1; pos < points.size(); pos ++) {
+			segs.add(new Segment(points.get(pos-1), points.get(pos)));
 			last = pos;
 		}
+		if (points.size() > 0)
+			segs.add(new Segment(points.get(last), points.get(0)));		
 		return segs;
 	}
 
@@ -192,7 +192,7 @@ public class Area implements Serializable {
 		return nb;
 	}
 	
-	// Le premier point est le point la plus grande abcisse et la plus grande ordonnée 
+	// Le premier point est le point la plus grande abcisse et la plus grande ordonnï¿½e 
 	private Point getFirstPoint () {
 		Point ret = new Point();
 		// Point d'interconnexion entre le plan X = 0
@@ -239,7 +239,7 @@ public class Area implements Serializable {
 		Decimal current = step; // position du pas en cours
 		boolean finished = false;
 		while (!finished) {
-			// Récupère le prochain pas
+			// Rï¿½cupï¿½re le prochain pas
 			Decimal len = last.decDistance(next);
 			int comp = len.compareTo(current) ;
 			if (comp > 0) { // Ecart est plus grand
@@ -335,6 +335,22 @@ public class Area implements Serializable {
 			}
 		}
 		return id;
+	}
+
+	/** Applique une transformation Ã  la surface **/
+	public Area transform(Transformation trans) {
+		Area ret = new Area();
+		for (Vecteur pt : points) ret.points.add(trans.transforme(pt));
+		return ret;
+	}
+
+	public int size() {
+		return points.size();
+	}
+
+	public Vecteur lastPoint() {
+		if (points.size() == 0) return null;
+		return points.get(points.size() -1);
 	}
 
 }

@@ -97,7 +97,7 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 		}
 
 		if (dessin == null) {
-			dessin = new Cata();
+			dessin = new Cata("A crÃ©er");
 			arbre.setBoatTree(dessin);
 		}
 
@@ -145,10 +145,10 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 	public void actionPerformed(ActionEvent e) {
 		if ("Ouvre".equals(e.getActionCommand())) {
 			try {
-				/** définition du nom de fichier à produire **/
+				/** dï¿½finition du nom de fichier ï¿½ produire **/
 				JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this.arbre);
-				DialogFileName dial = new DialogFileName (topFrame, this.mngr.getFile(), "Ouvre un fichier de modélisation"); 
-				// Si OK : génération du fichier
+				DialogFileName dial = new DialogFileName (topFrame, this.mngr.getFile(), "Ouvre un fichier de modï¿½lisation"); 
+				// Si OK : gï¿½nï¿½ration du fichier
 				if (dial.isOk) {
 					this.filePath = dial.path;
 					
@@ -206,22 +206,22 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 				}
 			}
 		}
-		/** Génération du composant sous la forme d'un fichier **/
+		/** Gï¿½nï¿½ration du composant sous la forme d'un fichier **/
 		if ("Fichier STL".equals(e.getActionCommand())) {
 			MutableTreeNode node = arbre.getTheNode();
 			if (node != null) {
 				PatchTreeNode nde = (PatchTreeNode) node;
-				/** définition du nom de fichier à produire **/
+				/** dï¿½finition du nom de fichier ï¿½ produire **/
 				JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this.arbre);
 				DialogFileName dial = new DialogFileName (topFrame, this.filePath, "Fichier d'export STL du composant"); 
-				// Si OK : génération du fichier
+				// Si OK : gï¿½nï¿½ration du fichier
 				if (dial.isOk) {
 					this.filePath = dial.path;
 					try {
 						nde.generateSTLFile (dial.filename);
 					} catch (InvalidGeomAction e1) {
 						e1.printStackTrace();
-						this.message.logError("Bp de sérialisation : "+e1.getLocalizedMessage());
+						this.message.logError("Bp de sï¿½rialisation : "+e1.getLocalizedMessage());
 					}
 				}
 			}
@@ -229,11 +229,14 @@ public class Controleur implements ActionListener, TreeSelectionListener, MouseL
 	}
 
 	public void saveContext() {
+		System.out.println("Saving the context");
 		Context ctx = new Context();
 		ctx.lastCataFile = mngr.getFile();
 		ctx.echelle = this.vue.getEchelle();
 		ctx.filePath = this.filePath;
+		System.out.println("Start saving");
 		Context.saveTofile(ctx);
+		System.out.println("Saved");
 	}
 
 	public void showDessin(DesignTreeNode node) {

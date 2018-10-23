@@ -12,7 +12,7 @@ import model.CataScene;
 import model.math.Decimal;
 
 /**
- * Permet de gérer les calculs de stabilité et de dérive sur la coque
+ * Permet de gï¿½rer les calculs de stabilitï¿½ et de dï¿½rive sur la coque
  * 
  * @author olemoyne
  *
@@ -30,8 +30,9 @@ public class StudyTreeNode extends DesignTreeNode {
 		super(up, name);
 		bateau = boat;
 		
-		new StabilityTreeNode( this, boat, "Stabilité");
-		new DeriveTreeNode( this, boat, "Dérive");		
+		new HabitabilityTreeNode( this, boat, "Habitalitï¿½");
+		new StabilityTreeNode( this, boat, "Stabilitï¿½");
+		new DeriveTreeNode( this, boat, "Dï¿½rive");		
 		new DynamismeTreeNode( this, boat, "Dynamisme");
 	}
 	
@@ -46,7 +47,7 @@ public class StudyTreeNode extends DesignTreeNode {
 		
 		if (bateau.mer != null) {
 			ret.add(new TreeNodeProperty ("Pilonnement", bateau.mer.pilonnement, false, ObjectUpdater.DECIMAL) );
-			ret.add(new TreeNodeProperty ("Gîte", bateau.mer.gite, false, ObjectUpdater.DECIMAL) );
+			ret.add(new TreeNodeProperty ("Gï¿½te", bateau.mer.gite, false, ObjectUpdater.DECIMAL) );
 			ret.add(new TreeNodeProperty ("Tangage", bateau.mer.tangage, false, ObjectUpdater.DECIMAL) );
 		}
 		
@@ -60,7 +61,7 @@ public class StudyTreeNode extends DesignTreeNode {
 		if (fld.equals("Pilonnement")) {
 			bateau.mer.pilonnement = (Decimal)value;
 		}
-		if (fld.equals("Gîte")) {
+		if (fld.equals("Gï¿½te")) {
 			bateau.mer.gite= (Decimal)value;
 		}
 		if (fld.equals("Tangage")) {
@@ -74,7 +75,7 @@ public class StudyTreeNode extends DesignTreeNode {
 	 * 
 	 */
 	public PrintableScene getScene () {
-		return CataScene.getNavigationScene(bateau);
+		return CataScene.getNavigationScene(bateau, true);
 	}
 
 
