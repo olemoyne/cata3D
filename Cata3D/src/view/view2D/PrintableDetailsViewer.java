@@ -1,4 +1,4 @@
-package view.gabarits;
+package view.view2D;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,10 +16,16 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import appli.Logger;
-import view.scene.GabaritScene;
+import view.param.DialogExportParameters;
+import view.param.DialogPrintingParameters;
+import view.param.ImageFileCreator;
+import view.param.PrintingParameters;
+import view.param.ScriptFileCreator;
+import view.scene.PrintableScene;
 import view.scene.PrintedGabarit;
+import view.scene.PrintableObject;
 
-public class GabaritDetailsViewer extends JPanel implements MouseWheelListener, ActionListener  {
+public class PrintableDetailsViewer extends JPanel implements MouseWheelListener, ActionListener  {
 
 	/**
 	 * 
@@ -32,20 +38,22 @@ public class GabaritDetailsViewer extends JPanel implements MouseWheelListener, 
 	 *    -> D�tail de visualisation
 	 */
 	
-	private GabaritPlanViewer vue;
-	private GabaritInformation position;
+	protected PrintablePlanViewer vue;
+	protected PrintableInformation position;
 	
-	private PrintingParameters params;
+	protected PrintingParameters params;
 	
-	private GabaritScene scene;
-	private int element; 
+	protected PrintableScene scene;
+	protected int element; 
 	
-	private Logger trace;
+	protected Logger trace;
+	
+	protected JPanel jp;
 	
 	/**
 	 * Creation de la vue 2D
 	 */
-	public GabaritDetailsViewer (Logger log) {
+	public PrintableDetailsViewer (Logger log) {
 		super();
 		trace = log;
 		setBackground(Color.WHITE);
@@ -53,8 +61,16 @@ public class GabaritDetailsViewer extends JPanel implements MouseWheelListener, 
 		// Ajoute les informations et boutons en haut
 		params = new PrintingParameters();
 
-		JPanel jp = new JPanel();
+		jp = new JPanel();
 		jp.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+		position = new PrintableInformation();
+
+		vue = new PrintablePlanViewer (position, this);
+		add(vue, BorderLayout.CENTER);
+				
+		jp.add(position);
+
 		
 		JButton button = new JButton("Imprime");
 		button.setToolTipText("Impression du gabarit");
@@ -73,17 +89,8 @@ public class GabaritDetailsViewer extends JPanel implements MouseWheelListener, 
 		button.setActionCommand("ExporteAll");
 		button.addActionListener(this);
 		jp.add(button);
-
-
-		position = new GabaritInformation();
-		jp.add(position);
-
-		this.add(jp, BorderLayout.NORTH);
 		
-		// Vue du plan du Gabarit
-		vue = new GabaritPlanViewer (position, this);
-		add(vue, BorderLayout.CENTER);
-		
+		this.add(jp, BorderLayout.NORTH);		
 	}
 	
 	/**
@@ -91,12 +98,20 @@ public class GabaritDetailsViewer extends JPanel implements MouseWheelListener, 
 	 * 
 	 * @param gab
 	 */
-	public void setScene (GabaritScene gab) {
+	public void setScene (PrintableScene gab) {
+		if (vue == null) {
+			// Vue du plan du Gabarit
+			vue = new PrintablePlanViewer (position, this);
+			add(vue, BorderLayout.CENTER);
+		}
+		
 		this.scene = gab;
 		element = 0;
 		showElement(null);
 		repaint();
 	}
+	
+	
 
 	public void showElement(Point2D pt) {
 		if (this.scene.allObjects.size() == 0 ) element = 0; 
@@ -105,19 +120,19 @@ public class GabaritDetailsViewer extends JPanel implements MouseWheelListener, 
 			if (element < 0) element = 0;
 		}
 
-		PrintedGabarit gab = (PrintedGabarit) this.scene.allObjects.get(element);
-		this.vue.setGabarit(gab);
-
-		this.position.epaisseur = gab.epaisseur;
-		this.position.id = element;
-		this.position.position = gab.zPosition;
+		if (element >= this.scene.allObjects.size()) return;
+		PrintableObject gab = (PrintableObject) this.scene.allObjects.get(element);
+		this.vue.setObject(gab);
 		
-		if (pt != null) vue.setMousePosition(pt);
+		position.objectData = vue.getData(gab); 
+		
+		if (pt != null) position.mouseData = vue.getMousePosition(gab);
 		position.show();
 
 		vue.repaint();
 	}
 	
+
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int r = e.getWheelRotation();
@@ -193,7 +208,6 @@ public class GabaritDetailsViewer extends JPanel implements MouseWheelListener, 
 			}
 		}
 
-	
 	}
 
 }

@@ -113,6 +113,7 @@ public class ValuesTableModel extends AbstractTableModel {
 
 	
 	public TreeNodeProperty getNewRow () {
+		if (node == null) return null;
 		// Ajoute une nouvelle propriete
 		return node.getNewProperty();
 	}

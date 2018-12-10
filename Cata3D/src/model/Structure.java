@@ -23,11 +23,16 @@ public class Structure implements Serializable {
 	
 	/** Poutres **/
 	public ArrayList<Poutre> poutres;
+	
+	/** gestion de la quille **/
+	public Quille quille;
 
 	public Structure () {
 
 		gabarits = new ArrayList<Gabarit> ();
 		poutres = new ArrayList<Poutre> ();
+		
+		quille = new Quille();  
 	}
 	
     public String toString() {

@@ -19,6 +19,7 @@ public class PatchVideTreeNode extends PatchTreeNode {
 		super(up, "Patch vide : "+name, cmp);
 	    new GabaritsTreeNode(this, cmp);
 	    new PoutresTreeNode(this, cmp);
+	    new QuilleTreeNode(this, cmp);
 	}
 
 	

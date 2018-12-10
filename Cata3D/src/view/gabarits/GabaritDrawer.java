@@ -8,66 +8,52 @@ import java.awt.geom.Point2D;
 import model.Area;
 import model.calcul.CalculSurface;
 import model.math.Axis;
-import model.math.Decimal;
 import model.math.Vecteur;
+import view.scene.PrintableObject;
 import view.scene.PrintedGabarit;
+import view.view2D.ObjectDrawer;
 
-public class GabaritDrawer {
-	private double echelle;
-	private int ctrX;
-	private int ctrY;
+public class GabaritDrawer extends ObjectDrawer{
 
-	private Rectangle dim;
 	private PrintedGabarit gabarit;
-
 	
+	private Vecteur fullPosition;
+	private Vecteur insidePosition;
+
+
+	public GabaritDrawer (Rectangle d){
+		super(d);
+		axis = Axis.ZAxis;
+	}
+
 	public GabaritDrawer (Rectangle d, PrintedGabarit g){
-		this.setGabarit(g, d);
+		super(d, g);
+		axis = Axis.ZAxis;
 	}
 
 	public GabaritDrawer (Rectangle d, PrintedGabarit g, int dpi){
-		this.setGabarit(g, d, dpi);
+		super(d, g, dpi);
+		axis = Axis.ZAxis;
+		gabarit = g;
 	}
-
-	private int getX (Vecteur v) {
-		return (int)Math.round(ctrX + (v.minus(gabarit.bns.getMin())).getX()*echelle);
-	}
-
 	
-	private int getY (Vecteur v) {
-		return (int)Math.round((ctrY + (gabarit.bns.getMax().minus(v)).getY()*echelle));
-	}
 
-	public Vecteur getPosition(Point2D pt) {
-		Decimal x = new Decimal( (pt.getX()-ctrX)/(echelle*Vecteur.LMETER)).add(gabarit.bns.getMin().getDecX());
-		Decimal y = gabarit.bns.getMax().getDecY().minus(new Decimal( (pt.getY()-ctrY)/(echelle*Vecteur.LMETER)));
-		return new Vecteur (x, y, gabarit.zPosition);
-	}
-
+	public void addComment (Graphics gr) {
+		if (gr != null) {
+			if (fullPosition != null) {
+				gr.setColor(Color.RED);
+				drawPoint(gr, fullPosition);			
+			}
 	
-	public void drawArea (Graphics gr, Area surf) {
-		if (surf.points.size()== 0) return;
-		Vecteur v = null;
-		for (int p = 1; p < surf.points.size(); p ++) {
-			v = surf.points.get(p);
-			gr.drawLine(getX(surf.points.get(p-1)), getY(surf.points.get(p-1)),	getX(v), getY(v));
+			if (insidePosition != null) {
+				gr.setColor(Color.CYAN);
+				drawPoint(gr, insidePosition);			
+			}
 		}
-		gr.drawLine(getX(surf.points.get(0)), getY(surf.points.get(0)),	getX(v), getY(v));
-	}
-
-	public void drawPoint (Graphics gr, Vecteur pt) {
-		if (pt == null) return;
-		
-		int x = getX(pt);
-		int y = getY(pt);
-		
-		gr.drawLine(x-5, y, x+5, y);
-		gr.drawLine(x, y-5, x, y+5);
-		
 	}
 
 
-	public void drawGabarit(Graphics gr, boolean quad, boolean fond) {
+	public void drawObject(Graphics gr, boolean quad, boolean fond) {
 		
 		// Affiche le fond en blanc
 		if (fond) {
@@ -76,6 +62,8 @@ public class GabaritDrawer {
 		}
 		
 		if (quad) showQuad(gr);
+		
+		if (gabarit == null) return ;
 
 		// Affiche la limite de flottaison en bleu
 		gr.setColor(Color.BLUE);
@@ -102,72 +90,61 @@ public class GabaritDrawer {
 		}
 		
 		Vecteur pt = CalculSurface.getCentre(gabarit.full.points, Axis.ZAxis);
-		drawPoint(gr, pt);
-
+		drawPoint(gr, pt);		
 		
 	}
 	
-	/***
-	 * affiche le quadrillage 
-	 * **/
-	public void showQuad (Graphics gr) {
+	public void setObject(PrintableObject g, Rectangle d) {
+		super.setObject(g, d);
+		this.gabarit = (PrintedGabarit)g;
+	}
+
+	public String getData(PrintableObject obj) {
+		PrintedGabarit gab = (PrintedGabarit)obj;
 		
-		Decimal gauche = gabarit.bns.getMin().getDecX();
-		Decimal droite = gabarit.bns.getMax().getDecX();
+		// Affiche la position en Z
+		StringBuffer sb = new StringBuffer("Gabarit ");
+		sb.append(gab.position);
+		sb.append(" de position ");
+		sb.append(gab.zPosition.toString());
+		sb.append(" d'épaisseur ");
+		sb.append(gab.epaisseur.toString());
+		sb.append("\n");
 		
-		// affiche le quadrillage tous les CM 
-		Decimal larg = gabarit.bns.getMax().getDecX().minus(gabarit.bns.getMin().getDecX()); 
-		larg = larg.multiply(Decimal.CENT); // Centimetres
+
+    	return sb.toString();
+	}
+	
+	
+	public String getMouseData(PrintableObject obj, Point2D pt) {
+		if (this.gabarit == null) return "";
+		Vecteur pos= getPosition(pt);
+		Vecteur mousePosition = pos;
 		
-		int start = (int)Math.floor(gauche.multiply(Decimal.CENT).doubleValue());
-		double nb = larg.doubleValue(); 
-		
-		Decimal haut = gabarit.bns.getMax().getDecY();
-		Decimal bas = gabarit.bns.getMin().getDecY();
-		
-		gr.setColor(new Color (0.80f, 0.80f, 0.80f));
-		for (int pos = start; pos < start + nb + 1; pos ++) {
-			Vecteur h = new Vecteur (new Decimal(pos*0.01d), haut, Decimal.ZERO);
-			Vecteur b = new Vecteur (new Decimal(pos*0.01d), bas, Decimal.ZERO);
-			gr.drawLine(getX(h), getY(h), getX(b), getY(b));			
+		// D�termine le point du FULL le plus proche
+		int id = gabarit.full.getNearestPoint(pos);
+		fullPosition = gabarit.full.points.get(id);
+		insidePosition = null;
+		if (gabarit.fullInside.points.size() > id) {
+			id = gabarit.fullInside.getNearestPoint(pos);
+			insidePosition = gabarit.fullInside.points.get(id);
 		}
-
-		larg = haut.minus(bas); 
-		larg = larg.multiply(Decimal.CENT); // Centimetres
 		
-		start = (int)Math.floor(bas.multiply(Decimal.CENT).doubleValue());
-		nb = larg.doubleValue(); 
-		
-		for (int pos = start; pos < start + nb + 1; pos ++) {
-			Vecteur g = new Vecteur (gauche, new Decimal(pos*0.01d), Decimal.ZERO);
-			Vecteur d = new Vecteur (droite, new Decimal(pos*0.01d), Decimal.ZERO);
-			gr.drawLine(getX(g), getY(g), getX(d), getY(d));			
+		StringBuilder sb = new StringBuilder();
+		sb.append("Mouse position : ");
+		sb.append(mousePosition.toString());
+		if (fullPosition != null) {
+			sb.append("\n");
+			sb.append("Full nearest point position : ");
+			sb.append(fullPosition.toString());
 		}
+		if (insidePosition != null) {
+			sb.append("\n");
+			sb.append("Inside nearest point position : ");
+			sb.append(insidePosition.toString());
+		}
+				
+		return sb.toString();
 	}
-
-	public void setGabarit(PrintedGabarit g, Rectangle d) {
-		dim = d;
-		this.gabarit = g;
-
-		double echelleX = (dim.getWidth()-20)/(gabarit.bns.getMax().getX() - gabarit.bns.getMin().getX()); 
-		double echelleY = (dim.getHeight()-20) / (gabarit.bns.getMax().getY() - gabarit.bns.getMin().getY());
-		
-		echelle = Math.min(echelleX, echelleY);
-		
-		ctrX = dim.x + 10 + (int)Math.round(( (dim.getWidth()-20) - (gabarit.bns.getMax().getX() - gabarit.bns.getMin().getX())*echelle ) /2);
-		ctrY = dim.y + 10 + (int)Math.round(( (dim.getHeight()-20) - (gabarit.bns.getMax().getY() - gabarit.bns.getMin().getY())*echelle ) /2);
-	}
-
-	public void setGabarit(PrintedGabarit g, Rectangle d, int dpi) {
-		dim = d;
-		this.gabarit = g;
-
-		echelle = 1.2d;
-		
-		ctrX = dim.x + 10 + (int)Math.round(( (dim.getWidth()-20) - (gabarit.bns.getMax().getX() - gabarit.bns.getMin().getX())*echelle ) /2);
-		ctrY = dim.y + 10 + (int)Math.round(( (dim.getHeight()-20) - (gabarit.bns.getMax().getY() - gabarit.bns.getMin().getY())*echelle ) /2);
-	}
-
-
-
+	
 }

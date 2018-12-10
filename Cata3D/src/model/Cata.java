@@ -23,6 +23,7 @@ import model.composants.PatchVide;
  *   * Construction 
  *   --> Liste de gabarits ( )
  *   --> 4 poutres et leur position
+ *   --> Dérive 
  *   
  * @author olemoyne
  *

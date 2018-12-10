@@ -5,7 +5,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import model.composants.PatchComposant;
 import model.composants.PatchVide;
 import model.math.Plan3D;
-import view.scene.GabaritScene;
+import view.gabarits.GabaritScene;
 import view.scene.PrintableScene;
 
 public class PlanTreeNode extends DesignTreeNode {

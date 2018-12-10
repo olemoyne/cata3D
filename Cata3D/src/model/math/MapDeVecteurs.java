@@ -127,7 +127,7 @@ public class MapDeVecteurs implements Serializable {
 	 */
 	public MapDeVecteurs truncate(Plan3D surface) {
 		// Recopie les ï¿½lï¿½ments de la map
-		// Structure de stockage du résultat
+		// Structure de stockage du rï¿½sultat
 		int nextPos = 0;
 		Vecteur[][] map = new Vecteur[xSize][ySize];
 		
@@ -142,7 +142,7 @@ public class MapDeVecteurs implements Serializable {
 			}
 			if (isFull) {
 				if (surface.donneCote(getPoint(0, ypos)) > 0) {// en dessous
-					// on intègre tous les pts dans le résultat
+					// on intï¿½gre tous les pts dans le rï¿½sultat
 					for (int xpos = 0; xpos < this.xSize; xpos ++) {
 						map[xpos][nextPos] = this.getPoint(xpos, ypos);
 					}			
@@ -160,7 +160,7 @@ public class MapDeVecteurs implements Serializable {
 						if (inter == null) {
 							if (xpos > 0) {
 								inter = surface.intersection(this.getPoint(xpos-1, ypos), v);
-								// Parcours tous les points déjà parcourus pour setter l'inter
+								// Parcours tous les points dï¿½jï¿½ parcourus pour setter l'inter
 								for (int p = xpos-1; p >= 0; p--) {
 									if (map[p][nextPos] == null) 
 										map[p][nextPos] = inter;
@@ -195,7 +195,7 @@ public class MapDeVecteurs implements Serializable {
 			if (notNullValues == false) {
 				toRemove.add(ypos);
 			}
-			// Attention, il existe des cas à null
+			// Attention, il existe des cas ï¿½ null
 			if (nullValues) {
 				Vecteur last = null;
 				for (int xpos = this.xSize-1; xpos >= 0 ; xpos --) {
@@ -207,10 +207,10 @@ public class MapDeVecteurs implements Serializable {
 		}
 **/		
 		}
-		// Aucune position au dessous ou à la surface
+		// Aucune position au dessous ou ï¿½ la surface
 		if (nextPos == 0) return null; 
 		
-		// Conversion du résultat
+		// Conversion du rï¿½sultat
 		MapDeVecteurs mps = new MapDeVecteurs(this.xSize, nextPos);
 		for (int ypos = 0; ypos < nextPos; ypos ++) {
 			for (int xpos = 0; xpos < this.xSize; xpos ++) {
@@ -279,7 +279,7 @@ public class MapDeVecteurs implements Serializable {
 		return ret;
 	}
 
-	// Découpe en tranche sur le plan X = pos
+	// Dï¿½coupe en tranche sur le plan X = pos
 	public Area intersectionHorizontaleX(Plan3D pl) {
 		Area ret = new Area();
 		ArrayList<Vecteur> haut = new ArrayList<Vecteur> ();
@@ -289,9 +289,15 @@ public class MapDeVecteurs implements Serializable {
 			Vecteur last = null;
 			boolean ok = false;
 			// calcule la position du plan pour une tranche
-			for (int xpos = 1; xpos < this.xSize; xpos ++) {
-				Vecteur A = this.getPoint(xpos-1, ypos);
-				Vecteur B = this.getPoint(xpos, ypos);
+			// Commence avec la projection
+			Vecteur A = this.getPoint(0, ypos).setDec(Axis.XAxis, Decimal.ZERO);
+			for (int xpos = 0; xpos < this.xSize+1; xpos ++) {
+				Vecteur B = null;
+				if (xpos < this.xSize) {
+					B = this.getPoint(xpos, ypos);
+				} else {
+					B = this.getPoint(xpos-1, ypos).setDec(Axis.XAxis, Decimal.ZERO);
+				}
 				Vecteur v = pl.intersection(A, B);
 				if (v!= null) {
 					if (last == null) { 
@@ -305,15 +311,48 @@ public class MapDeVecteurs implements Serializable {
 						}
 					}
 				}
+				A = B;
 			}
-			if (!ok) { // haut et bas non affectés
+			if (!ok) { // haut et bas non affectï¿½s
 				if( last != null) { // un seul point
 					haut.add(last);
 					bas.add(last);
 				}
 			}
 		}
-		// parcous les liste et ajout les éléments
+		// parcous les liste et ajout les ï¿½lï¿½ments
+		for (Vecteur v : haut) ret.points.add(v);
+		for (int p = bas.size()-1; p >= 0; p--) ret.points.add(bas.get(p));
+		return ret;
+	}
+
+	
+	// Dï¿½coupe en tranche sur le plan X = pos
+	public Area CreateProjection(Plan3D pl) {
+		Area ret = new Area();
+		ArrayList<Vecteur> haut = new ArrayList<Vecteur> ();
+		ArrayList<Vecteur> bas = new ArrayList<Vecteur> ();
+		//Parcours tous les points verticaux. Attention les points entre et sortent de l'eau
+		for (int ypos = 0; ypos < this.ySize; ypos ++) {
+			Vecteur max = null;
+			Vecteur min = null;
+			// calcule la position du plan pour une tranche
+			for (int xpos = 0; xpos < this.xSize; xpos ++) {
+				Vecteur v = this.getPoint(xpos, ypos);
+				if (max == null) max =v;
+				else { 
+					if (max.getY() < v.getY()) max = v;
+				}
+
+				if (min == null) min =v;
+				else { 
+					if (min.getY() > v.getY()) min = v;
+				}
+			} // Fin de la tranche
+			haut.add(max.setDec(Axis.XAxis, Decimal.ZERO));
+			bas.add(min.setDec(Axis.XAxis, Decimal.ZERO));
+		}
+		// parcous les liste et ajout les ï¿½lï¿½ments
 		for (Vecteur v : haut) ret.points.add(v);
 		for (int p = bas.size()-1; p >= 0; p--) ret.points.add(bas.get(p));
 		return ret;
@@ -367,7 +406,7 @@ public class MapDeVecteurs implements Serializable {
     }
     
     /**
-     * détermine le centre géométrique de la map 
+     * dï¿½termine le centre gï¿½omï¿½trique de la map 
      * 
      * @return
      */
@@ -383,7 +422,7 @@ public class MapDeVecteurs implements Serializable {
     }
     
     /**
-     * Construit une MAP redimentionnée de X 
+     * Construit une MAP redimentionnï¿½e de X 
      * 
      * @param ep
      * @return

@@ -1,4 +1,4 @@
-package view.gabarits;
+package view.param;
 
 import java.awt.Dimension;
 

@@ -1,4 +1,4 @@
-package view.gabarits;
+package view.param;
 
 /**
  * Liste des parametres de dessin des �l�ments

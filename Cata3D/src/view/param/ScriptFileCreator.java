@@ -1,4 +1,4 @@
-package view.gabarits;
+package view.param;
 
 
 import java.io.File;
@@ -87,17 +87,18 @@ public class ScriptFileCreator {
 			write.append("App.activeDocument()."+name+".Placement = App.Placement(App.Vector(0.000000,0.000000,0.000000),App.Rotation(0.000000,0.000000,0.000000,1.000000))"+"\n");
 			write.append("Gui.activeDocument().setEdit('"+name+"')\n");
 
-			
+			int pos = 1;
 			for (int i = 1; i < area.points.size(); i ++) {
+				if (!area.points.get(i-1).equals(area.points.get(i))) {
 					write.append(getGeometryLine(area.points.get(i-1), area.points.get(i), Zpos, name));
 					if (i > 1) {
-						write.append("App.ActiveDocument."+name+".addConstraint(Sketcher.Constraint('Coincident',"+(i-2)+",2,"+(i-1)+",1))"+"\n"); 
+						write.append("App.ActiveDocument."+name+".addConstraint(Sketcher.Constraint('Coincident',"+(pos-2)+",2,"+(pos-1)+",1))"+"\n"); 
 					}
+					pos ++;
+				} else { System.out.println("Doulon ! "+i+" "+name); }
 			}
 			int i = area.points.size();
 			write.append(getGeometryLine(area.points.get(i-1) ,area.points.get(0), Zpos, name));
-			
-			write.append("App.ActiveDocument."+name+".addConstraint(Sketcher.Constraint('Coincident',"+(i-1)+",2,0,1))"+"\n");
 	
 			write.append("Gui.activeDocument().resetEdit()\n");
 			write.append("App.activeDocument().recompute()\n");
@@ -114,7 +115,7 @@ public class ScriptFileCreator {
 		/** Activation du WorkBench qui permet de gérer l'extrusion **/
 		write.append("Gui.activateWorkbench(\"PartWorkbench\")\n");
 		write.append("FreeCAD.activeDocument().addObject(\"Part::Extrusion\",\""+object+"\")\n");
-		write.append("FreeCAD.activeDocument()."+object+".Base = FreeCAD.getDocument(\"Unnamed\")."+forme+"\n");
+		write.append("FreeCAD.activeDocument()."+object+".Base = FreeCAD.activeDocument()."+forme+"\n");
 		write.append("FreeCAD.activeDocument()."+object+".Dir = (0,0,"+size.multiply(Decimal.MILLE)+")\n");
 		write.append("FreeCAD.activeDocument()."+object+".Solid = (True)\n");
 		write.append("FreeCAD.activeDocument()."+object+".TaperAngle = (0)\n");
@@ -142,8 +143,6 @@ public class ScriptFileCreator {
 		write.append("App.activeDocument().addObject(\"Part::Cut\",\""+result+"\")\n");
 		write.append("App.activeDocument()."+result+".Base = App.activeDocument()."+toCut+"\n");
 		write.append("App.activeDocument()."+result+".Tool = App.activeDocument()."+cutter+"\n");
-		write.append("App.activeDocument()."+toCut+".Visibility=False\n");
-		write.append("App.activeDocument()."+cutter+".Visibility=False\n");
 		write.append("Gui.ActiveDocument."+result+".ShapeColor=Gui.ActiveDocument."+toCut+".ShapeColor\n");
 		write.append("Gui.ActiveDocument."+result+".DisplayMode=Gui.ActiveDocument."+toCut+".DisplayMode\n");
 		write.append("App.ActiveDocument.recompute()\n");

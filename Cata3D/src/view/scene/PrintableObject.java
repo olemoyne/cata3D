@@ -7,6 +7,7 @@ import com.jogamp.opengl.GL2;
 import model.Position;
 import model.math.Decimal;
 import model.math.Vecteur;
+import model.math.Bounds;
 
 public abstract class PrintableObject {
 	
@@ -68,4 +69,23 @@ public abstract class PrintableObject {
 		 gl.glEndList();
 		
 	}
+
+	public Bounds getBounds() {
+		return new Bounds();
+	}
+
+	public Decimal getZPosition() {
+		return new Decimal();
+	}
+
+	public String getStringDescr() {
+		return "Object";		
+	}
+	
+
+	public String getPlanType() {
+		return "Object";
+	}
+
+
 }

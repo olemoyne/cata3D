@@ -5,9 +5,9 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 import model.math.Decimal;
-import view.gabarits.GabaritDetailsViewer;
-import view.scene.GabaritScene;
+import view.gabarits.GabaritScene;
 import view.scene.PrintableScene;
+import view.view2D.PrintableDetailsViewer;
 import view.view3D.PrintableObjectViewer;
 import view.view3D.PrintableViewUpdate;
 
@@ -22,7 +22,7 @@ public class ActiveView {
 	private JPanel fondDeVue;
 	// Vue 3D
 	private PrintableObjectViewer viewer3D;
-	private GabaritDetailsViewer gabView;
+	private PrintableDetailsViewer gabView;
 
 	private JPanel active;
 	
@@ -35,7 +35,7 @@ public class ActiveView {
 		viewer3D = new PrintableObjectViewer(upd);
 
 		/** Creation de la vue du gabarit **/
-		gabView = new GabaritDetailsViewer(log);
+		gabView = new PrintableDetailsViewer(log);
 		fond.add(gabView, BorderLayout.CENTER);
 		active = gabView;
 		

@@ -8,9 +8,7 @@ import com.jogamp.opengl.GL2;
 import model.Area;
 import model.Gabarit;
 import model.calcul.CalculArea;
-import model.calcul.CalculSurface;
 import model.composants.PatchVide;
-import model.math.Axis;
 import model.math.Bounds;
 import model.math.Decimal;
 import model.math.Plan3D;
@@ -24,6 +22,8 @@ public class PrintedGabarit extends PrintableObject {
 
 	public Area full;
 	public Area fullInside;
+	
+	public Decimal position;
 
 	public Bounds bns;
 	
@@ -43,6 +43,7 @@ public class PrintedGabarit extends PrintableObject {
 		super(n, c, null);
 		
 		name = gab.toString();
+		position = gab.position;
 		
 		bns = Bounds.getBounds(coque.mapAffichage);
 		
@@ -54,6 +55,7 @@ public class PrintedGabarit extends PrintableObject {
 		effacements = new ArrayList<Area>();
 				
 		full = gab.getArea(coque, gab.position, null, false);
+		System.out.println("Working on "+zPosition);
 		fullInside = CalculArea.reduceNormal(full, coque.epaisseurDeBardage);
 		
 		trous = gab.getTrous(coque.structure.poutres);
@@ -71,6 +73,13 @@ public class PrintedGabarit extends PrintableObject {
 	}
 
 	
+	public Bounds getBounds() {
+		return bns;
+	}
+
+	public Decimal getZPosition() {
+		return zPosition;
+	}
 
 
 	/**
@@ -84,4 +93,14 @@ public class PrintedGabarit extends PrintableObject {
 	public String toString() {
 		return name;
 	}
+
+	public String getPlanType() {
+		return "Gabarit";
+	}
+
+	
+	public String getStringDescr() {
+		return "Tranche = "+position+" - "+zPosition+" - "+epaisseur;
+	}
+	
 }

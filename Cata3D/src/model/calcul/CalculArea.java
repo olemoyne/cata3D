@@ -23,6 +23,7 @@ public class CalculArea {
 		// Calcul du centre
 		Vecteur ctr = CalculSurface.getCentre(a.points, Axis.ZAxis);
 		// D�cale les points pour centrer en X
+		if (ctr == null) return a;
 		Translation trans = new Translation(ctr.negat(), null);
 
 		
@@ -149,6 +150,7 @@ public class CalculArea {
 	public static Vecteur getNormal(Segment s, Decimal ep) {
     	Vecteur norme = s.getNormale();
 
+    	if (norme.getNorme().isZero()) return new Vecteur(); 
         Decimal coef = ep.divide(norme.getNorme());
         return norme.multiply(coef);	
 	}
@@ -165,18 +167,25 @@ public class CalculArea {
      */
 
     public static Area reduceNormal(Area a, Decimal ep) {
+    	return reduceNormal(a, ep, Axis.ZAxis);
+    }
+	
+    public static Area reduceNormal(Area a, Decimal ep, int axis) {
         // Tranformation of the area to the center of the area  
 
         // Calcul du centre
-        Vecteur ctr = CalculSurface.getCentre(a.points, Axis.ZAxis);
+        Vecteur c = CalculSurface.getCentre(a.points, axis);
 
+        if (c == null) return a;
         // Dï¿½cale les points pour centrer en Y
-        Translation trans = new Translation(ctr.negat(), null);
+        Translation trans = new Translation(c.negat(), null);
         Area t = a.transform(trans);
-
+		
         Area reduced = new Area();      
         ArrayList<Vecteur> pts = new ArrayList<Vecteur>();
    
+        Vecteur ctr = new Vecteur();
+        
         boolean sens = getTrigo(ctr, t);
 
         // Parcours la liste des points
@@ -207,7 +216,7 @@ public class CalculArea {
                 Segment sg2 = new Segment(ctr, r2);
                 Decimal angle = sg1.getAngle(sg2);
 
-                if ( (angle.isPositive() == sens) && (angle.compareTo(Decimal.PI) < 0)) {
+                if (angle.isPositive() == sens)  {
                     //Ajoute les deux points
                     pts.add(r1); pts.add(r2);
                 } else {
@@ -226,11 +235,13 @@ public class CalculArea {
             } // trop proche de l'axe
         } // Fin de la boucke sur les points
         
+        // Check if the area is well oriented
         reduced.points.addAll(pts);
+        Area clean = checkTrigo(ctr, reduced);
 
         Transformation back = trans.getReverse(null);
-        return reduced.transform(back);
-
+        if (clean != null) return clean.transform(back);
+        return new Area();
     }
 
  
@@ -239,7 +250,7 @@ public class CalculArea {
 
      * @param ctr **/
 
-       private static boolean getTrigo(Vecteur ctr, Area t) {
+       public static boolean getTrigo(Vecteur ctr, Area t) {
 
              if (t.size() < 3) return false;
 
@@ -249,6 +260,34 @@ public class CalculArea {
              return angle.isPositive();
 
        }
+
+       
+       public static Area checkTrigo(Vecteur ctr, Area t) {
+
+           if (t.size() < 3) return null;
+           
+           Area ret = new Area();
+
+           Segment s1 = new Segment(ctr, t.points.get(0));
+           Segment s2 = new Segment(ctr, t.points.get(1));
+           Segment lastSegment = s2;
+    	   ret.points.add(t.points.get(0));
+    	   ret.points.add(t.points.get(1));
+           
+           Decimal angle = s2.getAngle(s1);
+           boolean sens =  angle.isPositive();
+           
+           for (int i = 2; i < t.points.size(); i++) {
+               s1 = new Segment(ctr, t.points.get(i));
+               angle = s1.getAngle(lastSegment);
+               if (angle.isPositive() == sens) {
+            	   ret.points.add(t.points.get(i));
+               }
+               lastSegment = s1;
+           }
+           
+           return ret;
+     }
 
  
 }

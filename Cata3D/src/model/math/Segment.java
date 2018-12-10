@@ -160,6 +160,18 @@ public class Segment {
 		Segment s = s1.intersection(s2);
 		if (s != null) System.out.println(s.toString());
 		else System.out.println("Pas d'intersection");
+		// Calcul d'angles 
+		s1 = new Segment(new Vecteur (), new Vecteur ("4;2;0"));
+		s2 = new Segment(new Vecteur (), new Vecteur ("5;-1;0"));
+		Decimal a = s1.getAngle(s2);
+		System.out.println("Angle = "+a);
+		
+		s1 = new Segment(new Vecteur (), new Vecteur ("-5;-1;0"));
+		s2 = new Segment(new Vecteur (), new Vecteur ("-4;2;0"));
+		a = s1.getAngle(s2);
+		System.out.println("Angle = "+a);
+		
+		
 	}
 
 	public Decimal getAngle(Segment seg2) {
@@ -170,7 +182,9 @@ public class Segment {
 		Decimal d3 = seg2.B.getDecY().minus(seg2.A.getDecY());
 		Decimal d4 = seg2.B.getDecX().minus(seg2.A.getDecX());
 
-		double dble = Math.atan2(d1.doubleValue(), d2.doubleValue()) - Math.atan2(d3.doubleValue(), d4.doubleValue()); 
+		double dble = Math.atan2(d1.doubleValue(), d2.doubleValue()) - Math.atan2(d3.doubleValue(), d4.doubleValue());
+		if (dble > Math.PI) {dble -= Math.PI*2;	}
+		if (dble < -Math.PI) {dble += Math.PI*2;	}
 		return new Decimal(dble); 
 	}
 
