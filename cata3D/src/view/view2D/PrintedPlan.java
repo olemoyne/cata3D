@@ -25,6 +25,10 @@ import view.scene.PrintableObject;
  *
  */
 public class PrintedPlan extends PrintableObject{
+
+	public static int xMargin = 10;
+	public static int yMargin = 10;
+
 	
 	public class PrintedPlanElement {
 		public Object element;
@@ -42,9 +46,8 @@ public class PrintedPlan extends PrintableObject{
 	/**
 	 * Liste des elements affichables
 	 */
-	protected ArrayList<PrintedPlanElement> surfaces;
-	protected ArrayList<PrintedPlanElement> lignes;
-	protected Segment mer;
+	private ArrayList<PrintedPlanElement> surfaces;
+	private ArrayList<PrintedPlanElement> lignes;
 	
 	/**
 	 * Calcul des positions de le souris au survol
@@ -53,7 +56,9 @@ public class PrintedPlan extends PrintableObject{
 	protected Area secondaryPlotingTarget;
 
 	/** Axe de visualisation du plan **/
-	protected int axis;
+	protected int planAxis;
+	protected int xAxis;
+	protected int yAxis;
 	
 	/** zone d'affichage **/
 	protected Bounds3D bnds;
@@ -62,6 +67,8 @@ public class PrintedPlan extends PrintableObject{
 	protected int ctrY;
 
 	protected Rectangle dim;
+	
+	private Plan3D mer;
 
 	
 	/**
@@ -71,15 +78,38 @@ public class PrintedPlan extends PrintableObject{
 	 * @param c
 	 * @param pos
 	 */
-	public PrintedPlan(String n, Bounds3D bounds, int ax) {
+	public PrintedPlan(String n, int ax) {
 		super(n, null, new Position());
-		bnds= bounds;
-		axis = ax;
+		bnds= new Bounds3D();
+		planAxis = ax;
+		if (planAxis == Axis.XAxis) {
+			xAxis = Axis.ZAxis;
+			yAxis = Axis.YAxis;
+		}
+		if (planAxis == Axis.ZAxis) {
+			xAxis = Axis.XAxis;
+			yAxis = Axis.YAxis;
+		}
+		if (planAxis == Axis.YAxis) {
+			xAxis = Axis.ZAxis;
+			yAxis = Axis.XAxis;
+		}
 		
 		surfaces = new ArrayList<PrintedPlanElement>();
 		lignes = new ArrayList<PrintedPlanElement>();
 	}
 	
+	
+	/**
+	 *  Retourne le bounds en fonction de l'angle de vue 
+	 * 
+	 */
+	public Bounds3D getBounds() {
+		Bounds3D b = new Bounds3D();
+		b.addPoint(new Vecteur(bnds.getMax().getDec(this.xAxis), bnds.getMax().getDec(yAxis), Decimal.ZERO));
+		b.addPoint(new Vecteur(bnds.getMin().getDec(this.xAxis), bnds.getMin().getDec(yAxis), Decimal.ZERO));
+		return b;
+	}
 	
 	/***
 	 * Ajoute une surface dans le plan
@@ -89,6 +119,7 @@ public class PrintedPlan extends PrintableObject{
 	 */
 	public void addSurface (Area a, Color c) {
 		surfaces.add(new PrintedPlanElement(a, "Surface", c));
+		bnds.add(a);
 	}
 
 	/***
@@ -99,48 +130,47 @@ public class PrintedPlan extends PrintableObject{
 	 */
 	public void addLigne (Area a, Color c) {
 		surfaces.add(new PrintedPlanElement(a, "Line", c));
+		bnds.add(a);
 	}
 
 
 	/** Calcule la position de la mer **/
 	public void setMer(Plan3D pl) {
+		mer = pl;
+	}
+	
+	private Segment getMer() {
 		Vecteur s = bnds.getMin();
 		Vecteur e = new Vecteur (bnds.getMin().getDecX(), bnds.getMax().getDecY(), bnds.getMin().getDecZ());
-		Vecteur mstart = pl.intersection(e,  s);
+		Vecteur mstart = mer.intersection(e,  s);
 	
 		s = new Vecteur (bnds.getMax().getDecX(), bnds.getMin().getDecY(), bnds.getMin().getDecZ());
 		e = new Vecteur (bnds.getMax().getDecX(), bnds.getMax().getDecY(), bnds.getMin().getDecZ());
-		Vecteur mend= pl.intersection(e,  s);
+		Vecteur mend= mer.intersection(e,  s);
 	
-		mer = new Segment (mstart, mend);
+		return new Segment (mstart, mend);
 	}
 
 	
 	protected int getX (Vecteur v) {
-		if (axis == Axis.ZAxis) {
-			return (int)Math.round(ctrX + (v.minus(bnds.getMin())).getX()*echelle);
-		} else {
-			return (int)Math.round(ctrX + (v.minus(bnds.getMin())).getZ()*echelle);
-		}
+		double x = ctrX + (v.minus(bnds.getMin())).get(xAxis)*echelle;
+		return ((int)Math.round(x));
 	}
 
 	
 	protected int getY (Vecteur v) {
-		return (int)Math.round((ctrY + (bnds.getMax().minus(v)).getY()*echelle));
+		return (int)Math.round((ctrY + (bnds.getMax().minus(v)).get(yAxis)*echelle));
 	}
 	
 	public Vecteur getPosition(Point2D pt) {
 		if (bnds == null) return new Vecteur();
 		if (pt == null) return new Vecteur();
 		
-		Decimal x = null; 
-		Decimal y = bnds.getMax().getDecY().minus(new Decimal( (pt.getY()-ctrY)/(echelle*Vecteur.LMETER)));;
-		if (axis == Axis.ZAxis) {
-			x = new Decimal( (pt.getX()-ctrX)/(echelle*Vecteur.LMETER)).add(bnds.getMin().getDecX()); 
-		} else {
-			x = new Decimal( (pt.getY()-ctrX)/(echelle*Vecteur.LMETER)).add(bnds.getMin().getDecZ());
-		}
-		return new Vecteur (x, y, bnds.getMax().getDecZ());
+		Decimal y = bnds.getMax().getDec(yAxis).minus(new Decimal( (pt.getY()-ctrY)/(echelle*Vecteur.LMETER)));
+		Decimal x = new Decimal( (pt.getX()-ctrX)/(echelle*Vecteur.LMETER)).add(bnds.getMin().getDec(xAxis)); 
+		Decimal z = bnds.getMax().getDec(planAxis);
+		
+		return new Vecteur(x, y, z);
 	}
 
 	
@@ -212,8 +242,19 @@ public class PrintedPlan extends PrintableObject{
 			gr.setColor(elem.color);
 			this.drawLine(gr, (Area)elem.element);
 		}
+		
+		if (mer != null) {
+			Segment m = getMer();
+			gr.setColor(Color.BLUE);
+			this.drawSegment(gr, m);
+		}
 	}
 	
+	private void drawSegment(Graphics gr, Segment m) {
+		gr.drawLine(getX(m.getA()), getY(m.getA()),	getX(m.getB()), getY(m.getB()));		
+	}
+
+
 	/***
 	 * affiche le quadrillage 
 	 * **/
@@ -254,42 +295,28 @@ public class PrintedPlan extends PrintableObject{
 
 	public void setSize(Rectangle d) {
 		dim = d;
-		double echelleX = 0; 
-		if (axis == Axis.ZAxis) {
-			echelleX = (dim.getWidth()-20)/(bnds.getMax().getX() - bnds.getMin().getX());
-		} else {
-			echelleX = (dim.getWidth()-20)/(bnds.getMax().getZ() - bnds.getMin().getZ());
-		}
-		double echelleY = (dim.getHeight()-20) / (bnds.getMax().getY() - bnds.getMin().getY());
+		
+		double echelleX = (dim.getWidth()-2*xMargin)/(bnds.getMax().get(xAxis) - bnds.getMin().get(xAxis));
+		double echelleY = (dim.getHeight()-2*yMargin) / (bnds.getMax().get(yAxis) - bnds.getMin().get(yAxis));
 		
 		echelle = Math.min(echelleX, echelleY);
-		
-		if (axis == Axis.ZAxis) {
-			ctrX = dim.x + 10 + (int)Math.round(( (dim.getWidth()-20) - (bnds.getMax().getX() - bnds.getMin().getX())*echelle ) /2);
-		} else {
-			ctrX = dim.x + 10 + (int)Math.round(( (dim.getWidth()-20) - (bnds.getMax().getZ() - bnds.getMin().getZ())*echelle ) /2);
-		}
-		ctrY = dim.y + 10 + (int)Math.round(( (dim.getHeight()-20) - (bnds.getMax().getY() - bnds.getMin().getY())*echelle ) /2);
+
+		ctrX = dim.x + xMargin + (int)Math.round(( (dim.getWidth()-2*xMargin) - (bnds.getMax().get(xAxis) - bnds.getMin().get(xAxis))*echelle ) /2);
+		ctrY = dim.y + yMargin + (int)Math.round(( (dim.getHeight()-2*yMargin) - (bnds.getMax().get(yAxis) - bnds.getMin().get(yAxis))*echelle ) /2);
 	}
 
 	public void setSize(Rectangle d, int dpi) {
 		dim = d;
-		echelle = 1.2d;
+		echelle = 1;
 
-		if (axis == Axis.ZAxis) {
-			ctrX = dim.x + 10 + (int)Math.round(( (dim.getWidth()-20) - (bnds.getMax().getX() - bnds.getMin().getX())*echelle ) /2);
-		} else {
-			ctrX = dim.x + 10 + (int)Math.round(( (dim.getWidth()-20) - (bnds.getMax().getZ() - bnds.getMin().getZ())*echelle ) /2);
-		}
-		ctrY = dim.y + 10 + (int)Math.round(( (dim.getHeight()-20) - (bnds.getMax().getY() - bnds.getMin().getY())*echelle ) /2);
+		ctrX = dim.x + xMargin + (int)Math.round(( (dim.getWidth()-2*xMargin) - (bnds.getMax().get(xAxis) - bnds.getMin().get(xAxis))*echelle ) /2);
+		ctrY = dim.y + yMargin + (int)Math.round(( (dim.getHeight()-2*yMargin) - (bnds.getMax().get(yAxis) - bnds.getMin().get(yAxis))*echelle ) /2);
 	}
 
 
 	public String getMouseData(Point2D pt) {
 		if (pt != null) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(name);
-			sb.append("\n");
 			sb.append("Position : ");
 			Vecteur pos =this.getPosition(pt); 
 			sb.append(pos.toString());
@@ -326,7 +353,64 @@ public class PrintedPlan extends PrintableObject{
 	public void drawObject(GL2 gl, int mode) {
 		
 	}
+
+
+	public Vecteur getPrimaryPosition(Point2D pt) {
+		Vecteur pos =this.getPosition(pt); 
+		if (this.primaryPlotingTarget != null) {
+			Vecteur p = primaryPlotingTarget.getNearestPoint(pos);
+			return p;
+		}
+		return null;
+	}
+
+	public Vecteur getSecondaryPosition(Point2D pt) {
+		Vecteur pos =this.getPosition(pt); 
+		if (this.secondaryPlotingTarget != null) {
+			Vecteur p = secondaryPlotingTarget.getNearestPoint(pos);
+			return p;
+		}
+		return null;
+	}
+
+
+	/**
+	 * Fonction utilisée pour imprimer en 3D
+	 * @return
+	 */
+	public Decimal getEpaisseur() {
+		return null;
+	}
+
 	
+
+	/**
+	 * Fonction utilisée pour imprimer en 3D
+	 * @return
+	 */
+	public Area getPrintable() {
+		return null;
+	}
+
+
+	/**
+	 * Fonction utilisée pour imprimer en 3D
+	 * @return
+	 */
+	public ArrayList<Area> getTrous() {
+		return null;
+	}
+
+
+	public int getAxis() {
+		return this.planAxis;
+	}
+
+
+	public boolean is3DPrintable() {
+		return true;
+	}
+
 	
 	
 }

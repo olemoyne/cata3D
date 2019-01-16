@@ -18,11 +18,16 @@ import model.math.transfo.Translation;
 
 public class PrintedQuille extends PrintedPlan {	
 	
+	private Decimal epaisseur;
+
+
 	/** 
 	 * Construit les Ã©lÃ©ments du gabarit Ã  afficher 
 	 * **/
 	public PrintedQuille(Quille q, PatchVide coque, Color c) {
-		super(q.toString(), q.getAffichage().getBounds(), Axis.XAxis);
+		super(q.toString(), Axis.XAxis);
+		
+		epaisseur = q.epaisseur;
 
 		setMer(coque.boat.mer.getPlan());
 		
@@ -131,7 +136,32 @@ public class PrintedQuille extends PrintedPlan {
         if (clean != null) return clean.transform(back);
         return new Area();
     }
+	/**
+	 * Fonction utilisée pour imprimer en 3D
+	 * @return
+	 */
+	public Decimal getEpaisseur() {
+		return this.epaisseur;
+	}
 
+	
+
+	/**
+	 * Fonction utilisée pour imprimer en 3D
+	 * @return
+	 */
+	public Area getPrintable() {
+		return primaryPlotingTarget;
+	}
+
+
+	/**
+	 * Fonction utilisée pour imprimer en 3D
+	 * @return
+	 */
+	public ArrayList<Area> getTrous() {
+		return null;
+	}
 
 	
 }

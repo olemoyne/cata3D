@@ -3,8 +3,10 @@ package appli.arbre.nodes;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import javax.swing.Icon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import appli.arbre.DesignTreeRenderer;
 import appli.arbre.TreeNodeProperty;
 import model.Area;
 import model.Gabarit;
@@ -44,6 +46,13 @@ public class StructureTreeNode extends DesignTreeNode {
 		comp = cmp;
 	}
 	
+	
+	// gestion des icones
+	public Icon getImage() {
+		return DesignTreeRenderer.structureImg;
+	}
+
+
 	/**
 	 * Gestion du patch de données
 	 */

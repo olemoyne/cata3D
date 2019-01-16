@@ -18,6 +18,7 @@ import model.math.Vecteur;
 import model.math.transfo.Rotation;
 import model.patch.Patch;
 import view.view2D.PlanScene;
+import view.view2D.PrintedBuildingZone;
 import view.view2D.PrintedGabarit;
 import view.view2D.PrintedQuille;
 
@@ -44,6 +45,7 @@ public class CalculPlan {
 	 * Calcule les plans d'un patch vide : 
 	 *     - dessin des gabarits
 	 *     - dessin de la quille
+	 *     - dessin de la trace de la coque sur le bé
 	 *     
 	 * @param boat
 	 */
@@ -60,8 +62,10 @@ public class CalculPlan {
 			scene.add(pg);
 		}
 		PrintedQuille pq = new PrintedQuille(boat.structure.quille, boat, Color.BLUE);
-		
 		scene.add(pq);
+		
+		PrintedBuildingZone pbz = new PrintedBuildingZone(boat);
+		scene.add(pbz);
 				
 		return scene;
 	}

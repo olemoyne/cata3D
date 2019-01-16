@@ -12,12 +12,7 @@ import model.math.Plan3D;
 
 public class PrintedGabarit extends PrintedPlan {
 
-	public Area full;
-	public Area fullInside;
-	
 	public Decimal position;
-
-	public Area encoche;
 
 	public ArrayList<Area> trous;
 
@@ -30,13 +25,13 @@ public class PrintedGabarit extends PrintedPlan {
 	 * Construit les Ã©lÃ©ments du gabarit Ã  afficher 
 	 * **/
 	public PrintedGabarit(Gabarit gab, PatchVide coque, Plan3D pl, String n, Color c) {
-		super(n, gab.getArea(coque, null, false).getBounds(), Axis.ZAxis);
+		super(n, Axis.ZAxis);
 
 		position = gab.position;
 		setMer(coque.boat.mer.getPlan());
 		
 		// Ajoute les éléments à afficher de type area
-		addSurface(gab.getArea(coque, null, false), Color.BLACK);
+		addSurface(gab.getTranche(), Color.BLACK);
 		addSurface(gab.getContours(), Color.RED);
 		// Ajoute les trous en vert
 		if (gab.getTrous() != null) {
@@ -46,7 +41,7 @@ public class PrintedGabarit extends PrintedPlan {
 		}
 
 		this.primaryPlotingTarget = gab.getContours();
-		this.secondaryPlotingTarget = gab.getArea(coque, null, false);
+		this.secondaryPlotingTarget = gab.getTranche();
 		
 		zPosition = gab.position;
 		epaisseur = gab.epaisseur;		
@@ -67,7 +62,25 @@ public class PrintedGabarit extends PrintedPlan {
 
 	
 	public String getStringDescr() {
-		return "Tranche = "+position+" - "+zPosition+" - "+epaisseur;
+		return "Tranche = "+position+" - "+epaisseur;
 	}
+
+	public ArrayList<Area> getTrous() {
+		return trous;
+	}
+
+	/** Retourne le contours d'impression 3D **/
+	public Area getPrintable() {
+		return this.primaryPlotingTarget;
+	}
+
+	/**
+	 * Fonction utilisée pour imprimer en 3D
+	 * @return
+	 */
+	public Decimal getEpaisseur() {
+		return this.epaisseur;
+	}
+
 	
 }
